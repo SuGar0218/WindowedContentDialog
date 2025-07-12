@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ContentDialogWindow (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "ContentDialogWindow (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
