@@ -11,6 +11,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	  <PlatformTarget>x64</PlatformTarget>
 	  <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -90,9 +91,16 @@
   <PropertyGroup>
     <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
-    <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
+    <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">True</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
     <WindowsPackageType>None</WindowsPackageType>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PublishAot>True</PublishAot>
   </PropertyGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Documents\Code\C#\WinUI3\ContentDialogWindow\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Documents\Code\C#\WinUI3\ContentDialogWindow\.editorconfig" />
+  </ItemGroup>
 </Project>

@@ -17,4 +17,6 @@ public class ContentDialogLikeExampleViewModel
     public ContentDialogButton DefaultButton { get; set; } = ContentDialogButton.Primary;
     public bool IsChild { get; set; } = true;
     public bool IsModal { get; set; } = true;
+    public bool ClickPrimaryButtonToClose { get; set; } = true;
+    public bool ClickSecondaryButtonToClose { get; set; } = true;
 }

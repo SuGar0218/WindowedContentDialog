@@ -3,9 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ContentDialogWindow">
 
-    <Thickness x:Key="ContentDialogTitlePadding">24,24,24,0</Thickness>
-    <Thickness x:Key="ContentDialogContentPadding">24,0,24,24</Thickness>
-    <StaticResource x:Key="ContentDialogTopOverlay" ResourceKey="LayerFillColorDefaultBrush" />
+    <Thickness x:Key="ContentDialogWindowTitlePadding">24,24,24,0</Thickness>
+    <Thickness x:Key="ContentDialogWindowContentPadding">24,0,24,24</Thickness>
+    <StaticResource x:Key="ContentDialogWindowTopOverlay" ResourceKey="LayerFillColorDefaultBrush" />
 
     <Style BasedOn="{StaticResource DefaultContentDialogWindowContentStyle}" TargetType="local:ContentDialogContent" />
 
@@ -18,7 +18,7 @@
         <Setter Property="PrimaryButtonStyle" Value="{ThemeResource DefaultButtonStyle}" />
         <Setter Property="SecondaryButtonStyle" Value="{ThemeResource DefaultButtonStyle}" />
         <Setter Property="CloseButtonStyle" Value="{ThemeResource DefaultButtonStyle}" />
-        <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+        <Setter Property="CornerRadius" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:ContentDialogContent">
@@ -49,7 +49,7 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Grid
-                                        Background="{ThemeResource ContentDialogTopOverlay}"
+                                        Background="{ThemeResource ContentDialogWindowTopOverlay}"
                                         BorderBrush="{ThemeResource ContentDialogSeparatorBorderBrush}"
                                         BorderThickness="{ThemeResource ContentDialogSeparatorThickness}">
                                         <Grid.RowDefinitions>
@@ -65,7 +65,7 @@
                                             <ContentControl
                                                 x:Name="Title"
                                                 Margin="{ThemeResource ContentDialogTitleMargin}"
-                                                Padding="{ThemeResource ContentDialogTitlePadding}"
+                                                Padding="{ThemeResource ContentDialogWindowTitlePadding}"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Content="{TemplateBinding Title}"
@@ -93,7 +93,7 @@
                                         <ScrollViewer
                                             x:Name="ContentScrollViewer"
                                             Grid.Row="1"
-                                            Padding="{ThemeResource ContentDialogContentPadding}"
+                                            Padding="{ThemeResource ContentDialogWindowContentPadding}"
                                             HorizontalScrollBarVisibility="Disabled"
                                             IsTabStop="False"
                                             VerticalScrollBarVisibility="Auto"

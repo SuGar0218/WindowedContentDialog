@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Windows.Foundation;
+
 namespace ContentDialogWindow;
 
 /// <summary>
@@ -26,8 +28,6 @@ public sealed partial class ContentDialogWindow : Window
 {
     public ContentDialogWindow() : base()
     {
-        //InitializeComponent();
-        //SystemBackdrop = new MicaBackdrop();
         ExtendsContentIntoTitleBar = true;
         AppWindow.Closing += (o, e) => AppWindow.Hide();
         Activated += OnActivated;
@@ -37,9 +37,13 @@ public sealed partial class ContentDialogWindow : Window
 
         Closed += (o, e) =>
         {
-            dialog?.Content = null;  // 窗口关闭后，对话框与其子元素脱离，避免再次弹出窗口时因 FrameworkElement 不能被多处共享而崩溃。
+            dialog?.Content = null;  // 窗口关闭后，要让对话框与其子元素脱离，避免再次弹出窗口时因 FrameworkElement 不能被多处共享而崩溃。
         };
     }
+
+    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> PrimaryButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> SecondaryButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> CloseButtonClick;
 
     private void OnActivated(object sender, WindowActivatedEventArgs args)
     {
@@ -214,20 +218,38 @@ public sealed partial class ContentDialogWindow : Window
 
     private void OnCloseButtonClick(object sender, RoutedEventArgs e)
     {
-        Close();
         Result = ContentDialogResult.None;
+        ContentDialogWindowButtonClickEventArgs args = new() { Cancel = false };
+        CloseButtonClick?.Invoke(this, args);
+        if (args.Cancel)  // 事件处理时取消了操作
+        {
+            return;
+        }
+        Close();
     }
 
     private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
     {
-        Close();
         Result = ContentDialogResult.Primary;
+        ContentDialogWindowButtonClickEventArgs args = new() { Cancel = false };
+        PrimaryButtonClick?.Invoke(this, args);
+        if (args.Cancel)  // 事件处理时取消了操作
+        {
+            return;
+        }
+        Close();
     }
 
     private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
     {
-        Close();
         Result = ContentDialogResult.Secondary;
+        ContentDialogWindowButtonClickEventArgs args = new() { Cancel = false };
+        SecondaryButtonClick?.Invoke(this, args);
+        if (args.Cancel)  // 事件处理时取消了操作
+        {
+            return;
+        }
+        Close();
     }
 
     // 64-bit systems

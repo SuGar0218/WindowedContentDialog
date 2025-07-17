@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
 
 using Windows.Foundation;
@@ -58,7 +59,7 @@ public sealed partial class ExamplePage : Page
     private async void ShowMessageBoxButton_Click(object sender, RoutedEventArgs e)
     {
         MessageBoxResult result = await MessageBox.ShowAsync(
-            modal: messageBoxViewModel.IsModal,
+            messageBoxViewModel.IsModal,
             messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
             messageBoxViewModel.Content,
             messageBoxViewModel.Title,
@@ -72,36 +73,88 @@ public sealed partial class ExamplePage : Page
         WindowedContentDialog dialog = new()
         {
             Title = contentDialogViewModel.Title,
-            Content = LazyContentDialogContentTextBox.Value,
+            Content = ContentDialogContentTextBox,
             PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
             SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
             CloseButtonText = contentDialogViewModel.CloseButtonText,
             DefaultButton = contentDialogViewModel.DefaultButton,
             OwnerWindow = contentDialogViewModel.IsChild ? App.Current.MainWindow : null
         };
+        if (!contentDialogViewModel.ClickPrimaryButtonToClose)
+        {
+            dialog.PrimaryButtonClick += (o, e) => e.Cancel = true;
+        }
+        if (!contentDialogViewModel.ClickSecondaryButtonToClose)
+        {
+            dialog.SecondaryButtonClick += (o, e) => e.Cancel = true;
+        }
         ContentDialogResult result = await dialog.ShowAsync(contentDialogViewModel.IsModal);
         ContentDialogResultBox.Text = result.ToString();
     }
 
-    private static readonly Lazy<TextBox> LazyContentDialogContentTextBox = new(() =>
+    private TextBox ContentDialogContentTextBox
     {
-        TextBox textBox = new TextBox
+        get
         {
-            AcceptsReturn = true,
-            FontFamily = new FontFamily("Consolas"),
-            Text = """
-            MessageBoxResult result = await MessageBox.ShowAsync(
-                modal: messageBoxViewModel.IsModal,
-                messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
-                messageBoxViewModel.Content,
-                messageBoxViewModel.Title,
-                messageBoxViewModel.Buttons,
-                messageBoxViewModel.DefaultButton);
-            MessageBoxResultBox.Text = result.ToString();
-            """
-        };
-        ScrollViewer.SetHorizontalScrollBarVisibility(textBox, ScrollBarVisibility.Auto);
-        ScrollViewer.SetVerticalScrollBarVisibility(textBox, ScrollBarVisibility.Auto);
-        return textBox;
-    });
+            TextBox textBox = new()
+            {
+                AcceptsReturn = true,
+                FontFamily = new FontFamily("Consolas"),
+                Text = ContentDialogTextBoxContent
+            };
+            ScrollViewer.SetHorizontalScrollBarVisibility(textBox, ScrollBarVisibility.Auto);
+            ScrollViewer.SetVerticalScrollBarVisibility(textBox, ScrollBarVisibility.Auto);
+            return textBox;
+        }
+    }
+
+    private string MessageBoxContent
+    {
+        get =>
+@$"MessageBoxResult result = await MessageBox.ShowAsync(
+    {messageBoxViewModel.IsModal},
+    {(messageBoxViewModel.IsChild ? "App.Current.MainWindow" : "null")},
+    {messageBoxViewModel.Content},
+    {messageBoxViewModel.Title},
+    {messageBoxViewModel.Buttons},
+    {messageBoxViewModel.DefaultButton});
+MessageBoxResultBox.Text = result.ToString();";
+    }
+
+    private string ContentDialogTextBoxContent
+    {
+        get
+        {
+            StringBuilder stringBuilder = new();
+            stringBuilder.Append(
+@$"WindowedContentDialog dialog = new()
+{{
+    Title = {contentDialogViewModel.Title},
+    Content = ""YourContent"",
+    PrimaryButtonText = {contentDialogViewModel.PrimaryButtonText},
+    SecondaryButtonText = {contentDialogViewModel.SecondaryButtonText},
+    CloseButtonText = {contentDialogViewModel.CloseButtonText},
+    DefaultButton = {contentDialogViewModel.DefaultButton},
+    OwnerWindow = {(contentDialogViewModel.IsChild ? App.Current.MainWindow : null)}
+}};");
+            if (!contentDialogViewModel.ClickPrimaryButtonToClose)
+            {
+                stringBuilder.AppendLine().AppendLine().Append(
+@$"dialog.PrimaryButtonClick += (o, e) =>
+{{
+    e.Cancel = true;
+}};");
+            }
+            if (!contentDialogViewModel.ClickSecondaryButtonToClose)
+            {
+                stringBuilder.AppendLine().AppendLine().Append(
+@$"dialog.SecondaryButtonClick += (o, e) =>
+{{
+    e.Cancel = true;
+}};");
+            }
+            stringBuilder.AppendLine().AppendLine().Append("ContentDialogResultBox.Text = result.ToString();");
+            return stringBuilder.ToString();
+        }
+    }
 }

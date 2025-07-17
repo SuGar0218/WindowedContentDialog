@@ -373,7 +373,7 @@ public sealed partial class ContentDialogContent : ContentControl
             nameof(PrimaryButtonStyle),
             typeof(Style),
             typeof(ContentDialogContent),
-            new PropertyMetadata(default(Style)));
+            new PropertyMetadata(DefaultButtonStyle));
 
     public Style PrimaryButtonStyle
     {
@@ -388,7 +388,7 @@ public sealed partial class ContentDialogContent : ContentControl
             nameof(SecondaryButtonStyle),
             typeof(Style),
             typeof(ContentDialogContent),
-            new PropertyMetadata(default(Style)));
+            new PropertyMetadata(DefaultButtonStyle));
 
     public Style SecondaryButtonStyle
     {
@@ -403,7 +403,7 @@ public sealed partial class ContentDialogContent : ContentControl
             nameof(CloseButtonStyle),
             typeof(Style),
             typeof(ContentDialogContent),
-            new PropertyMetadata(default(Style)));
+            new PropertyMetadata(DefaultButtonStyle));
 
     public Style CloseButtonStyle
     {
@@ -411,4 +411,6 @@ public sealed partial class ContentDialogContent : ContentControl
         set => SetValue(CloseButtonStyleProperty, value);
     }
     #endregion
+
+    private static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
 }

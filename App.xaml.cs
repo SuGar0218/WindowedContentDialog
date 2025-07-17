@@ -31,8 +31,9 @@ public partial class App : Application
     public MainWindow? MainWindow { get; private set; }
 
     /// <summary>
-    /// Initializes the singleton application object.  This is the first line of authored code
-    /// executed, and as such is the logical equivalent of main() or WinMain().
+    /// Initializes the singleton application object.
+    /// This is the first line of authored code executed,
+    /// and as such is the logical equivalent of main() or WinMain().
     /// </summary>
     public App()
     {
@@ -45,23 +46,10 @@ public partial class App : Application
     /// Invoked when the application is launched.
     /// </summary>
     /// <param name="args">Details about the launch request and process.</param>
-    protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         MainWindow = new MainWindow();
+        MainWindow.AppWindow.Resize(new(MainWindow.AppWindow.Size.Width / 2, MainWindow.AppWindow.Size.Height));
         MainWindow.Activate();
-
-        //WindowedContentDialog dialog = new()
-        //{
-        //    Title = "Save your work?",
-        //    PrimaryButtonText = "Save",
-        //    SecondaryButtonText = "Don't Save",
-        //    CloseButtonText = "Cancel",
-        //    DefaultButton = ContentDialogButton.Primary,
-        //    Content = "Lorem ipsum dolor sit amet"
-        //};
-        //ContentDialogResult result = await dialog.ShowAsync();
-
-        //MessageBoxResult result = await MessageBox.ShowAsync("正文", "标题", MessageBoxButtons.YesNo, MessageBoxDefaultButton.Button2);
-        //MessageBoxResult result = MessageBox.ShowAsync("正文", "标题", MessageBoxButtons.YesNo, MessageBoxDefaultButton.Button2);
     }
 }

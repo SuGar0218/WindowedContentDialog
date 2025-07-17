@@ -27,22 +27,7 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         ExtendsContentIntoTitleBar = true;
-    }
-
-    private async void Button_Click(object sender, RoutedEventArgs e)
-    {
-        //await MessageBox.ShowAsync(modal: true, this, "message1", "title", MessageBoxButtons.OKCancel);
-        //await MessageBox.ShowAsync(modal: false, this, "message2", "title", MessageBoxButtons.OKCancel);
-
-        WindowedContentDialog dialog = new()
-        {
-            Title = Title,
-            Content = new TextBox(),
-            OwnerWindow = this,
-        };
-
-        ContentDialogResult result = await dialog.ShowAsync(true);
-        await dialog.ShowAsync(false);
+        AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
     }
 
     private void Frame_Loaded(object sender, RoutedEventArgs e)

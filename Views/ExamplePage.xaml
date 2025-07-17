@@ -18,13 +18,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Spacing="8" Margin="24,36,24,0">
+        <StackPanel
+            Grid.Row="0"
+            Margin="24,36,24,0"
+            Spacing="8">
             <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="窗口化的 ContentDialog" />
-            <TextBlock Text="支持类似 WPF 中的 MessageBox 和类似 WinUI3 ContentDialog 两者调用方式。" />
+            <TextBlock Text="支持类似 WPF 中的 MessageBox 和类似 WinUI 3 中的 ContentDialog 两者调用方式。" />
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" Padding="24,0,24,36">
-            <StackPanel Spacing="24">
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="24,0,24,36" Spacing="24">
                 <StackPanel.Resources>
                     <Style TargetType="Expander">
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -33,7 +36,7 @@
                         <Setter Property="Transitions">
                             <Setter.Value>
                                 <TransitionCollection>
-                                    <ReorderThemeTransition />
+                                    <RepositionThemeTransition />
                                 </TransitionCollection>
                             </Setter.Value>
                         </Setter>
@@ -48,7 +51,7 @@
                             Spacing="8">
                             <Button
                                 Click="ShowMessageBoxButton_Click"
-                                Content="弹出对话框"
+                                Content="await MessageBox.ShowAsync"
                                 Style="{ThemeResource AccentButtonStyle}" />
                             <TextBlock
                                 x:Name="MessageBoxResultBox"
@@ -85,7 +88,7 @@
                             Spacing="8">
                             <Button
                                 Click="ShowContentDialogButton_Click"
-                                Content="弹出对话框"
+                                Content="await windowedContentDialog.ShowAsync"
                                 Style="{ThemeResource AccentButtonStyle}" />
                             <TextBlock
                                 x:Name="ContentDialogResultBox"
@@ -111,6 +114,8 @@
                         </ComboBox>
                         <CheckBox Content="以此为父窗口" IsChecked="{x:Bind contentDialogViewModel.IsChild, Mode=TwoWay}" />
                         <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind contentDialogViewModel.IsModal, Mode=TwoWay}" />
+                        <CheckBox Content="PrimaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickPrimaryButtonToClose, Mode=TwoWay}" />
+                        <CheckBox Content="SecondaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickSecondaryButtonToClose, Mode=TwoWay}" />
                     </StackPanel>
                 </Expander>
             </StackPanel>
