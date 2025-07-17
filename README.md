@@ -7,6 +7,7 @@ To use windowed ContentDialog, just copy these files:
 - Themes\Generics.xaml
 - ContentDialogContent.cs
 - ContentDialogWindow.cs
+- ContentDialogWindowButtonClickEventArgs.cs
 - MessageBox.cs
 - WindowedContentDialog.cs
 
