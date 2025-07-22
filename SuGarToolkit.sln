@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36310.24 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuGarToolkit.Controls.Dialogs", "SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj", "{4C7667E6-208A-4778-ADBD-1191A5E0FADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuGarToolkit.Sample.Dialogs", "SuGarToolkit.Sample.Dialogs\SuGarToolkit.Sample.Dialogs.csproj", "{E8840826-6650-4B9A-91DD-06879C57701A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C7667E6-208A-4778-ADBD-1191A5E0FADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7667E6-208A-4778-ADBD-1191A5E0FADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7667E6-208A-4778-ADBD-1191A5E0FADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7667E6-208A-4778-ADBD-1191A5E0FADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8840826-6650-4B9A-91DD-06879C57701A}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E8840826-6650-4B9A-91DD-06879C57701A}.Debug|Any CPU.Build.0 = Debug|x64
+		{E8840826-6650-4B9A-91DD-06879C57701A}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{E8840826-6650-4B9A-91DD-06879C57701A}.Release|Any CPU.ActiveCfg = Release|x64
+		{E8840826-6650-4B9A-91DD-06879C57701A}.Release|Any CPU.Build.0 = Release|x64
+		{E8840826-6650-4B9A-91DD-06879C57701A}.Release|Any CPU.Deploy.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0C56859-CC46-4753-8E79-AC17EDAAB939}
+	EndGlobalSection
+EndGlobal

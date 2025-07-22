@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SuGarToolkit.Sample.Dialogs (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "SuGarToolkit.Sample.Dialogs (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
