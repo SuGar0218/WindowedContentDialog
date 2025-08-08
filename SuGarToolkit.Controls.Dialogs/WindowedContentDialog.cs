@@ -2,10 +2,6 @@
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Windows.Foundation;
@@ -53,6 +49,7 @@ public class WindowedContentDialog
     /// </summary>
     public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> CloseButtonClick;
 
+    public Window SelfWindow => window;
     public Window? OwnerWindow { get; set; }
     public bool IsModel { get; set; }
 
@@ -66,34 +63,36 @@ public class WindowedContentDialog
     /// </summary>
     /// <param name="modal">阻塞所属窗口。默认为 true，但是当 OwnerWindow is null 时不会起作用，仍然弹出普通窗口。</param>
     /// <returns>用户选择结果</returns>
-    public async Task<ContentDialogResult> ShowAsync(bool modal)
+    public async Task<ContentDialogResult> ShowAsync(bool modal = true)
     {
-        ContentDialogWindow window = new()
-        {
-            Title = Title ?? string.Empty,
-            Content = Content,
+        window.Title = Title ?? string.Empty;
+        window.Content = Content;
 
-            SystemBackdrop = SystemBackdrop,
-            PrimaryButtonText = PrimaryButtonText,
-            SecondaryButtonText = SecondaryButtonText,
-            CloseButtonText = CloseButtonText,
-            DefaultButton = DefaultButton,
-            IsPrimaryButtonEnabled = IsPrimaryButtonEnabled,
-            IsSecondaryButtonEnabled = IsSecondaryButtonEnabled,
+        window.SystemBackdrop = SystemBackdrop;
+        window.PrimaryButtonText = PrimaryButtonText;
+        window.SecondaryButtonText = SecondaryButtonText;
+        window.CloseButtonText = CloseButtonText;
+        window.DefaultButton = DefaultButton;
+        window.IsPrimaryButtonEnabled = IsPrimaryButtonEnabled;
+        window.IsSecondaryButtonEnabled = IsSecondaryButtonEnabled;
 
-            PrimaryButtonStyle = PrimaryButtonStyle,
-            SecondaryButtonStyle = SecondaryButtonStyle,
-            CloseButtonStyle = CloseButtonStyle,
+        window.PrimaryButtonStyle = PrimaryButtonStyle;
+        window.SecondaryButtonStyle = SecondaryButtonStyle;
+        window.CloseButtonStyle = CloseButtonStyle;
 
-            OwnerWindow = OwnerWindow,
-            IsModal = modal,
-            RequestedTheme = RequestedTheme
-        };
+        window.OwnerWindow = OwnerWindow;
+        window.IsModal = modal;
+
+        window.RequestedTheme = RequestedTheme;
+
         window.PrimaryButtonClick += PrimaryButtonClick;
         window.SecondaryButtonClick += SecondaryButtonClick;
         window.CloseButtonClick += CloseButtonClick;
+
         return await window.ShowAsync();
     }
+
+    private readonly ContentDialogWindow window = new();
 
     private static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
 }

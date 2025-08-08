@@ -92,13 +92,13 @@
                                         <ScrollViewer
                                             x:Name="ContentScrollViewer"
                                             Grid.Row="1"
-                                            Padding="{ThemeResource ContentDialogWindowContentPadding}"
                                             HorizontalScrollBarVisibility="Disabled"
                                             IsTabStop="False"
-                                            VerticalScrollBarVisibility="Auto"
+                                            VerticalScrollBarVisibility="Visible"
                                             ZoomMode="Disabled">
                                             <ContentPresenter
                                                 x:Name="Content"
+                                                Padding="{ThemeResource ContentDialogWindowContentPadding}"
                                                 Content="{TemplateBinding Content}"
                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                                 FontFamily="{StaticResource ContentControlThemeFontFamily}"

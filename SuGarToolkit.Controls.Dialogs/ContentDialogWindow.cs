@@ -14,7 +14,7 @@ using Windows.Foundation;
 namespace SuGarToolkit.Controls.Dialogs;
 
 /// <summary>
-/// 容纳 ContentDialog 的窗口
+/// 容纳 ContentDialog 的窗口，但是通常不直接用这个，而是用 WindowedContentDialog.
 /// <br/>
 /// 请不要在此调用 Activate 或其他直接显示窗口的操作，因为只有在 ShowAsync 中才会初始化显示内容。
 /// <br/>
@@ -105,8 +105,8 @@ public sealed partial class ContentDialogWindow : Window
         content.PrimaryButtonClick += OnPrimaryButtonClick;
         content.SecondaryButtonClick += OnSecondaryButtonClick;
         base.Content = content;
-        using SemaphoreSlim closed = new(0, 1);
-        void ClosedEventHandler(object sender, WindowEventArgs args) => closed.Release();
+        using SemaphoreSlim closed = new(0);
+        void ClosedEventHandler(object sender, WindowEventArgs args) => DispatcherQueue.TryEnqueue(() => closed.Release());
         Closed += ClosedEventHandler;
         await closed.WaitAsync();  // await 过程中，会开始加载根元素，加载完成后进入 DialogLoaded，在此最后 AppWindow.Show();
         Closed -= ClosedEventHandler;
@@ -147,23 +147,23 @@ public sealed partial class ContentDialogWindow : Window
     }
 
     public ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
-    public Brush Foreground { get; set; } = (Brush) Application.Current.Resources["ApplicationForegroundThemeBrush"];
-    public Brush Background { get; set; }
-    public Brush BorderBrush { get; set; }
+    public Brush? Foreground { get; set; } = (Brush) Application.Current.Resources["ApplicationForegroundThemeBrush"];
+    public Brush? Background { get; set; }
+    public Brush? BorderBrush { get; set; }
     public Thickness BorderThickness { get; set; }
     public CornerRadius CornerRadius { get; set; }
     public FlowDirection FlowDirection { get; set; }
-    public DataTemplate TitleTemplate { get; set; }
-    public DataTemplate ContentTemplate { get; set; }
-    public string PrimaryButtonText { get; set; }
-    public string SecondaryButtonText { get; set; }
-    public string CloseButtonText { get; set; }
+    public DataTemplate? TitleTemplate { get; set; }
+    public DataTemplate? ContentTemplate { get; set; }
+    public string? PrimaryButtonText { get; set; }
+    public string? SecondaryButtonText { get; set; }
+    public string? CloseButtonText { get; set; }
     public bool IsPrimaryButtonEnabled { get; set; }
     public bool IsSecondaryButtonEnabled { get; set; }
     public ContentDialogButton DefaultButton { get; set; } = ContentDialogButton.Close;
-    public Style PrimaryButtonStyle { get; set; }
-    public Style SecondaryButtonStyle { get; set; }
-    public Style CloseButtonStyle { get; set; }
+    public Style? PrimaryButtonStyle { get; set; }
+    public Style? SecondaryButtonStyle { get; set; }
+    public Style? CloseButtonStyle { get; set; }
 
     public ContentDialogResult Result { get; private set; }
 

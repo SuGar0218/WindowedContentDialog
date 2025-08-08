@@ -41,7 +41,9 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
-    <PackageReference Include="SuGarToolkit.Controls.Dialogs" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj" />
   </ItemGroup>
 
   <!--
