@@ -1,11 +1,5 @@
 ﻿using SuGarToolkit.Controls.Dialogs;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SuGarToolkit.Sample.Dialogs.ViewModels;
 
 public partial class MessageBoxLikeExampleViewModel
@@ -16,4 +10,6 @@ public partial class MessageBoxLikeExampleViewModel
     public MessageBoxDefaultButton DefaultButton { get; set; } = MessageBoxDefaultButton.Button1;
     public bool IsChild { get; set; } = true;
     public bool IsModal { get; set; } = true;
+    public bool IsTitleBarVisible { get; set; } = true;
+    public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Arcylic;
 }

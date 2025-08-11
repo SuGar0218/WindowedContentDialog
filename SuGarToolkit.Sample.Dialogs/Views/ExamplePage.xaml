@@ -31,7 +31,7 @@
                 BorderThickness="0"
                 Click="ThemeToggleButton_Click"
                 CornerRadius="0">
-                <FontIcon Glyph="&#xE793;" FontSize="16" />
+                <FontIcon FontSize="16" Glyph="&#xE793;" />
             </Button>
         </StackPanel>
 
@@ -98,8 +98,13 @@
                                 Header="默认按钮"
                                 ItemsSource="{x:Bind messageBoxDefaultButtons}"
                                 SelectedItem="{x:Bind messageBoxViewModel.DefaultButton, Mode=TwoWay}" />
+                            <ComboBox
+                                Header="材质"
+                                ItemsSource="{x:Bind local:ExamplePage.backdropTypes}"
+                                SelectedItem="{x:Bind messageBoxViewModel.BackdropType, Mode=TwoWay}" />
                             <CheckBox Content="以此为父窗口" IsChecked="{x:Bind messageBoxViewModel.IsChild, Mode=TwoWay}" />
                             <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind messageBoxViewModel.IsModal, Mode=TwoWay}" />
+                            <CheckBox Content="显示标题栏" IsChecked="{x:Bind messageBoxViewModel.IsTitleBarVisible, Mode=TwoWay}" />
                         </StackPanel>
                     </Expander>
 
@@ -135,8 +140,13 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
+                            <ComboBox
+                                Header="材质"
+                                ItemsSource="{x:Bind local:ExamplePage.backdropTypes}"
+                                SelectedItem="{x:Bind contentDialogViewModel.BackdropType, Mode=TwoWay}" />
                             <CheckBox Content="以此为父窗口" IsChecked="{x:Bind contentDialogViewModel.IsChild, Mode=TwoWay}" />
                             <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind contentDialogViewModel.IsModal, Mode=TwoWay}" />
+                            <CheckBox Content="显示标题栏" IsChecked="{x:Bind contentDialogViewModel.IsTitleBarVisible, Mode=TwoWay}" />
                             <CheckBox Content="PrimaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickPrimaryButtonToClose, Mode=TwoWay}" />
                             <CheckBox Content="SecondaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickSecondaryButtonToClose, Mode=TwoWay}" />
                         </StackPanel>

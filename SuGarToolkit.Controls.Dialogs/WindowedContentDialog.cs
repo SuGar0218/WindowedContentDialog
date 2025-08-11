@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
@@ -29,6 +30,8 @@ public class WindowedContentDialog
     public bool IsPrimaryButtonEnabled { get; set; } = true;
     public bool IsSecondaryButtonEnabled { get; set; } = true;
     public ContentDialogButton DefaultButton { get; set; } = ContentDialogButton.Close;
+    public bool IsTitleBarVisible { get; set; } = true;
+    public bool CenterInParent { get; set; } = true;
 
     public Style PrimaryButtonStyle { get; set; } = DefaultButtonStyle;
     public Style SecondaryButtonStyle { get; set; } = DefaultButtonStyle;
@@ -37,21 +40,19 @@ public class WindowedContentDialog
     /// <summary>
     /// 底部第一个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 Cancel = true.
     /// </summary>
-    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> PrimaryButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? PrimaryButtonClick;
 
     /// <summary>
     /// 底部第二个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 Cancel = true.
     /// </summary>
-    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> SecondaryButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? SecondaryButtonClick;
 
     /// <summary>
     /// 底部关闭按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 Cancel = true.
     /// </summary>
-    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs> CloseButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? CloseButtonClick;
 
-    public Window SelfWindow => window;
     public Window? OwnerWindow { get; set; }
-    public bool IsModel { get; set; }
 
     /// <summary>
     /// 显示对话框窗口，关闭时返回用户选择结果。
@@ -65,34 +66,55 @@ public class WindowedContentDialog
     /// <returns>用户选择结果</returns>
     public async Task<ContentDialogResult> ShowAsync(bool modal = true)
     {
-        window.Title = Title ?? string.Empty;
-        window.Content = Content;
+        ContentDialogWindow window = new()
+        {
+            Title = Title ?? string.Empty,
+            Content = Content,
 
-        window.SystemBackdrop = SystemBackdrop;
-        window.PrimaryButtonText = PrimaryButtonText;
-        window.SecondaryButtonText = SecondaryButtonText;
-        window.CloseButtonText = CloseButtonText;
-        window.DefaultButton = DefaultButton;
-        window.IsPrimaryButtonEnabled = IsPrimaryButtonEnabled;
-        window.IsSecondaryButtonEnabled = IsSecondaryButtonEnabled;
+            PrimaryButtonText = PrimaryButtonText,
+            SecondaryButtonText = SecondaryButtonText,
+            CloseButtonText = CloseButtonText,
+            DefaultButton = DefaultButton,
+            IsPrimaryButtonEnabled = IsPrimaryButtonEnabled,
+            IsSecondaryButtonEnabled = IsSecondaryButtonEnabled,
 
-        window.PrimaryButtonStyle = PrimaryButtonStyle;
-        window.SecondaryButtonStyle = SecondaryButtonStyle;
-        window.CloseButtonStyle = CloseButtonStyle;
+            PrimaryButtonStyle = PrimaryButtonStyle,
+            SecondaryButtonStyle = SecondaryButtonStyle,
+            CloseButtonStyle = CloseButtonStyle,
 
-        window.OwnerWindow = OwnerWindow;
-        window.IsModal = modal;
+            IsTitleBarVisible = IsTitleBarVisible,
 
-        window.RequestedTheme = RequestedTheme;
+            SystemBackdrop = SystemBackdrop,
+            RequestedTheme = RequestedTheme
+        };
 
         window.PrimaryButtonClick += PrimaryButtonClick;
         window.SecondaryButtonClick += SecondaryButtonClick;
         window.CloseButtonClick += CloseButtonClick;
 
-        return await window.ShowAsync();
-    }
+        window.SetParent(OwnerWindow, modal, CenterInParent);
 
-    private readonly ContentDialogWindow window = new();
+        // 如果是模态窗口，则禁用父窗口内所有控件，强化视觉效果。
+        window.Loaded += (window, e) =>
+        {
+            window.AppWindow.Show();
+            if (OwnerWindow?.Content is Control control)
+            {
+                control.IsEnabled = !((OverlappedPresenter) window.AppWindow.Presenter).IsModal;
+            }
+        };
+
+        TaskCompletionSource<ContentDialogResult> resultCompletionSource = new();
+        window.Closed += (o, e) =>
+        {
+            resultCompletionSource.SetResult(window.Result);
+            if (OwnerWindow?.Content is Control control)
+            {
+                control.IsEnabled = true;
+            }
+        };
+        return await resultCompletionSource.Task;
+    }
 
     private static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
 }

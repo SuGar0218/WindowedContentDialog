@@ -1,56 +1,80 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
 public class MessageBox
 {
+    public static SystemBackdrop? SystemBackdrop { get; set; } = new MicaBackdrop();
+    public static ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
+
     public static async Task<MessageBoxResult> ShowAsync(
         object content,
         string? title = null)
-        => await ShowAsync(false, null, content, title, MessageBoxButtons.OK);
+        => await ShowAsync(false, null, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
 
     public static async Task<MessageBoxResult> ShowAsync(
         object content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1)
-        => await ShowAsync(false, null, content, title, buttons, defaultButton);
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
+        => await ShowAsync(false, null, content, title, buttons, defaultButton, isTitleBarVisible);
 
     public static async Task<MessageBoxResult> ShowAsync(
         bool modal,
         Window owner,
         object content,
-        string? title = null) 
-        => await ShowAsync(modal, owner, content, title, MessageBoxButtons.OK);
+        string? title = null)
+        => await ShowAsync(modal, owner, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
 
     public static async Task<MessageBoxResult> ShowAsync(
         bool modal,
         Window? owner,
         object? content, string? title,
         MessageBoxButtons buttons,
-        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1)
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
     {
-        FrameworkElement? root = owner?.Content as FrameworkElement;
+        ElementTheme theme;
+        if (RequestedTheme is not ElementTheme.Default)
+        {
+            theme = RequestedTheme;
+        }
+        else if (owner is not null)
+        {
+            if (owner.Content is FrameworkElement root)
+            {
+                theme = root.ActualTheme;
+            }
+            else
+            {
+                theme = owner.AppWindow.TitleBar.PreferredTheme switch
+                {
+                    Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode => ElementTheme.Default,
+                    Microsoft.UI.Windowing.TitleBarTheme.Light => ElementTheme.Light,
+                    Microsoft.UI.Windowing.TitleBarTheme.Dark => ElementTheme.Dark,
+                    _ => ElementTheme.Default
+                };
+            }
+        }
+        else
+        {
+            theme = ElementTheme.Default;
+        }
+
         WindowedContentDialog dialog = new()
         {
             Title = title ?? string.Empty,
             Content = content,
             OwnerWindow = owner,
-            RequestedTheme = root is not null ? root.ActualTheme : owner is null ? ElementTheme.Default : owner.AppWindow.TitleBar.PreferredTheme switch
-            {
-                Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode => ElementTheme.Default,
-                Microsoft.UI.Windowing.TitleBarTheme.Light => ElementTheme.Light,
-                Microsoft.UI.Windowing.TitleBarTheme.Dark => ElementTheme.Dark,
-                _ => ElementTheme.Default
-            }
+            IsTitleBarVisible = isTitleBarVisible,
+            SystemBackdrop = SystemBackdrop,
+            RequestedTheme = theme
         };
 
         ContentDialogButton contentDialogDefaultButton = defaultButton switch
@@ -66,7 +90,8 @@ public class MessageBox
         switch (buttons)
         {
             case MessageBoxButtons.OK:
-                dialog.PrimaryButtonText = "OK";
+                dialog.CloseButtonText = "OK";
+                dialog.DefaultButton = ContentDialogButton.Close;
                 break;
 
             case MessageBoxButtons.OKCancel:

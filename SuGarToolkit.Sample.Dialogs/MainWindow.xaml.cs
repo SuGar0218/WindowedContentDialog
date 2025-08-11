@@ -3,10 +3,7 @@ using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-using SuGarToolkit.Controls.Dialogs;
 using SuGarToolkit.Sample.Dialogs.Views;
-
-using System.Threading.Tasks;
 
 using WinRT;
 
@@ -73,9 +70,8 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private async void Frame_Loaded(object sender, RoutedEventArgs e)
+    private void Frame_Loaded(object sender, RoutedEventArgs e)
     {
-        await MessageBox.ShowAsync("");
         Frame frame = (Frame) sender;
         frame.Navigate(typeof(ExamplePage));
     }

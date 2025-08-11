@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SuGarToolkit.Controls.Dialogs;
+﻿namespace SuGarToolkit.Controls.Dialogs;
 
 /// <summary>
 /// 点击窗口化的 ContentDialog 自带的底部按钮事件的信息，若要防止点击后关闭窗口，请处理此参数，设置 Cancel 为 true

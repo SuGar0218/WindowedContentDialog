@@ -1,46 +1,38 @@
-using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-
-using Windows.Foundation;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-public sealed partial class ContentDialogContent : ContentControl
+internal sealed partial class ContentDialogContent : ContentControl
 {
     public ContentDialogContent() : base()
     {
         DefaultStyleKey = typeof(ContentDialogContent);
+
+        PrimaryButton = null!;
+        SecondaryButton = null!;
+        CloseButton = null!;
+        TitleArea = null!;
     }
 
     private Button PrimaryButton;
     private Button SecondaryButton;
     private Button CloseButton;
 
-    public event RoutedEventHandler PrimaryButtonClick;
-    public event RoutedEventHandler SecondaryButtonClick;
-    public event RoutedEventHandler CloseButtonClick;
+    public event RoutedEventHandler? PrimaryButtonClick;
+    public event RoutedEventHandler? SecondaryButtonClick;
+    public event RoutedEventHandler? CloseButtonClick;
 
     public UIElement TitleArea { get; private set; }
-    private Border Container;
+    public Grid CommandSpace { get; private set; }
 
     protected override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
 
-        Container = (Border) GetTemplateChild(nameof(Container));
         TitleArea = (UIElement) GetTemplateChild(nameof(TitleArea));
+        CommandSpace = (Grid) GetTemplateChild(nameof(CommandSpace));
 
         PrimaryButton = (Button) GetTemplateChild(nameof(PrimaryButton));
         SecondaryButton = (Button) GetTemplateChild(nameof(SecondaryButton));
@@ -49,8 +41,6 @@ public sealed partial class ContentDialogContent : ContentControl
         PrimaryButton.Click += PrimaryButtonClick;
         SecondaryButton.Click += SecondaryButtonClick;
         CloseButton.Click += CloseButtonClick;
-
-        //Container.RequestedTheme = RequestedTheme;
 
         VisualStateManager.GoToState(this, "DialogShowingWithoutSmokeLayer", false);
         DetermineButtonsVisibilityState();
@@ -108,6 +98,10 @@ public sealed partial class ContentDialogContent : ContentControl
             }
             IsPrimaryButtonEnabled = false;
             //IsSecondaryButtonEnabled = true;
+        }
+        else if (!string.IsNullOrEmpty(CloseButtonText))
+        {
+            VisualStateManager.GoToState(this, "CloseVisible", false);
         }
         else
         {
@@ -257,9 +251,9 @@ public sealed partial class ContentDialogContent : ContentControl
             typeof(ContentDialogContent),
             new PropertyMetadata(default(DataTemplate)));
 
-    public DataTemplate TitleTemplate
+    public DataTemplate? TitleTemplate
     {
-        get => (DataTemplate) GetValue(TitleTemplateProperty);
+        get => (DataTemplate?) GetValue(TitleTemplateProperty);
         set => SetValue(TitleTemplateProperty, value);
     }
     #endregion
@@ -287,9 +281,9 @@ public sealed partial class ContentDialogContent : ContentControl
             typeof(ContentDialogContent),
             new PropertyMetadata(default(string)));
 
-    public string PrimaryButtonText
+    public string? PrimaryButtonText
     {
-        get => (string) GetValue(PrimaryButtonTextProperty);
+        get => (string?) GetValue(PrimaryButtonTextProperty);
         set => SetValue(PrimaryButtonTextProperty, value);
     }
     #endregion
@@ -302,9 +296,9 @@ public sealed partial class ContentDialogContent : ContentControl
             typeof(ContentDialogContent),
             new PropertyMetadata(default(string)));
 
-    public string SecondaryButtonText
+    public string? SecondaryButtonText
     {
-        get => (string) GetValue(SecondaryButtonTextProperty);
+        get => (string?) GetValue(SecondaryButtonTextProperty);
         set => SetValue(SecondaryButtonTextProperty, value);
     }
     #endregion
@@ -315,11 +309,11 @@ public sealed partial class ContentDialogContent : ContentControl
             nameof(CloseButtonText),
             typeof(string),
             typeof(ContentDialogContent),
-            new PropertyMetadata("Close"));
+            new PropertyMetadata(default(string)));
 
-    public string CloseButtonText
+    public string? CloseButtonText
     {
-        get => (string) GetValue(CloseButtonTextProperty);
+        get => (string?) GetValue(CloseButtonTextProperty);
         set => SetValue(CloseButtonTextProperty, value);
     }
     #endregion
@@ -377,9 +371,9 @@ public sealed partial class ContentDialogContent : ContentControl
             typeof(ContentDialogContent),
             new PropertyMetadata(DefaultButtonStyle));
 
-    public Style PrimaryButtonStyle
+    public Style? PrimaryButtonStyle
     {
-        get => (Style) GetValue(PrimaryButtonStyleProperty);
+        get => (Style?) GetValue(PrimaryButtonStyleProperty);
         set => SetValue(PrimaryButtonStyleProperty, value);
     }
     #endregion
@@ -392,9 +386,9 @@ public sealed partial class ContentDialogContent : ContentControl
             typeof(ContentDialogContent),
             new PropertyMetadata(DefaultButtonStyle));
 
-    public Style SecondaryButtonStyle
+    public Style? SecondaryButtonStyle
     {
-        get => (Style) GetValue(SecondaryButtonStyleProperty);
+        get => (Style?) GetValue(SecondaryButtonStyleProperty);
         set => SetValue(SecondaryButtonStyleProperty, value);
     }
     #endregion
@@ -407,9 +401,9 @@ public sealed partial class ContentDialogContent : ContentControl
             typeof(ContentDialogContent),
             new PropertyMetadata(DefaultButtonStyle));
 
-    public Style CloseButtonStyle
+    public Style? CloseButtonStyle
     {
-        get => (Style) GetValue(CloseButtonStyleProperty);
+        get => (Style?) GetValue(CloseButtonStyleProperty);
         set => SetValue(CloseButtonStyleProperty, value);
     }
     #endregion
