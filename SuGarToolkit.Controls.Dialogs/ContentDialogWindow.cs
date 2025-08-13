@@ -13,10 +13,14 @@ using Windows.UI;
 namespace SuGarToolkit.Controls.Dialogs;
 
 /// <summary>
-/// 容纳 ContentDialog 的窗口
+/// The window that contains ContentDialogContent.
 /// <br/>
-/// 请不要构造后立即显示窗口，因为此时窗口大小和位置尚未完成计算。
-/// 请在 Loaded 事件中通过 AppWindow.Show 显示窗口，否则模态窗口的效果不起作用。
+/// Never show window immediately after construction,
+/// <br/>
+/// because the size and position have not been computed.
+/// Please consider use AppWindow.Show() when handling Loaded event.
+/// Don't use Activate() only,
+/// it will not make window modal even if OverlappedPresenter.IsModal is true.
 /// </summary>
 public partial class ContentDialogWindow : Window
 {
@@ -31,16 +35,7 @@ public partial class ContentDialogWindow : Window
         Activated += OnActivated;
         Closed += OnClosed;
 
-        _content = new()
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-
-            MinWidth = (double) Application.Current.Resources["ContentDialogMinWidth"],
-            //MinHeight = (double) Application.Current.Resources["ContentDialogMinHeight"],
-            MaxWidth = (double) Application.Current.Resources["ContentDialogMaxWidth"],
-            MaxHeight = (double) Application.Current.Resources["ContentDialogMaxHeight"],
-        };
+        _content = new();
         _content.Loaded += DialogLoaded;
         _content.CloseButtonClick += OnCloseButtonClick;
         _content.PrimaryButtonClick += OnPrimaryButtonClick;
@@ -82,10 +77,8 @@ public partial class ContentDialogWindow : Window
     }
 
     /// <summary>
-    /// 设置父窗口，此窗口会显示在父窗口中间。
+    /// Set parent window, whether modal, whether to show at center of parent.
     /// </summary>
-    /// <param name="parent">父窗口的 Window 对象。如果是相对于桌面，设置为 null，此时模态窗口设置不起作用。</param>
-    /// <param name="modal">模态窗口，阻止操作父窗口。</param>
     public void SetParent(Window? parent, bool modal = true, bool center = true)
     {
         _center = center;
@@ -108,7 +101,7 @@ public partial class ContentDialogWindow : Window
             SetWindowLong(ownedHwnd, -8, ownerHwnd); // -8 = GWL_HWNDPARENT
         }
 
-        // 必须在设置好父窗口之后设置，否则将因为没有父窗口引发异常。
+        // IsModal must be set after set parent window; otherwise, it will cause exception.
         _presenter.IsModal = parent is not null && modal;
     }
 
@@ -240,10 +233,6 @@ public partial class ContentDialogWindow : Window
 
     public bool IsTitleBarVisible { get; set; } = true;
 
-    /// <summary>
-    /// 初始时设置好 Min/Max Width/Height，并且横竖不拉伸，为了让对话框出现时的尺寸符合 ContentDialog 的行为。
-    /// 窗口大小适应后，改为横竖都可拉伸，取消 Max Width/Height 限制，以跟随窗口大小。
-    /// </summary>
     private void DialogLoaded(object sender, RoutedEventArgs e)
     {
         _presenter.SetBorderAndTitleBar(hasBorder: true, IsTitleBarVisible);
@@ -252,10 +241,6 @@ public partial class ContentDialogWindow : Window
         AppWindow.ResizeClient(new Windows.Graphics.SizeInt32(
             (int) (_content.ActualWidth * _content.XamlRoot.RasterizationScale) + 1,
             (int) (_content.ActualHeight * _content.XamlRoot.RasterizationScale) + 1));
-        _content.HorizontalAlignment = HorizontalAlignment.Stretch;
-        _content.VerticalAlignment = VerticalAlignment.Stretch;
-        _content.MaxHeight = double.PositiveInfinity;
-        _content.MaxWidth = double.PositiveInfinity;
         SetTitleBar(_content.TitleArea);
 
         if (_center)
@@ -293,6 +278,32 @@ public partial class ContentDialogWindow : Window
             _content.CommandSpace.Background.Opacity = 0.5;
         }
 
+        // When showing accent color in title bar is enabled,
+        // title bar buttons in the default custom title bar in WinUI3
+        // will become white like system title bar.
+        // But there is no accent color background here..
+        switch (_content.ActualTheme)
+        {
+            case ElementTheme.Light:
+                AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
+                break;
+            case ElementTheme.Dark:
+                AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
+                break;
+        };
+        _content.ActualThemeChanged += (sender, args) =>
+        {
+            switch (sender.ActualTheme)
+            {
+                case ElementTheme.Light:
+                    AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
+                    break;
+                case ElementTheme.Dark:
+                    AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
+                    break;
+            };
+        };
+
         Loaded?.Invoke(this, EventArgs.Empty);
     }
 
@@ -322,7 +333,7 @@ public partial class ContentDialogWindow : Window
 
     private void AfterCommandBarButtonClick(ContentDialogWindowButtonClickEventArgs args)
     {
-        if (args.Cancel)  // 事件处理时取消了操作
+        if (args.Cancel)
             return;
 
         AppWindow.Hide();

@@ -2,6 +2,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 
+using System;
+
 namespace SuGarToolkit.Controls.Dialogs;
 
 internal sealed partial class ContentDialogContent : ContentControl
@@ -10,6 +12,10 @@ internal sealed partial class ContentDialogContent : ContentControl
     {
         DefaultStyleKey = typeof(ContentDialogContent);
 
+        VerticalAlignment = VerticalAlignment.Center;
+        HorizontalAlignment = HorizontalAlignment.Center;
+
+        CommandSpace = null!;
         PrimaryButton = null!;
         SecondaryButton = null!;
         CloseButton = null!;
@@ -45,6 +51,7 @@ internal sealed partial class ContentDialogContent : ContentControl
         VisualStateManager.GoToState(this, "DialogShowingWithoutSmokeLayer", false);
         DetermineButtonsVisibilityState();
         DetermineDefaultButtonStates();
+        DetermineWidthLimit();
     }
 
     public void AfterGotFocus()
@@ -136,6 +143,59 @@ internal sealed partial class ContentDialogContent : ContentControl
             default:
                 break;
         }
+    }
+
+    /// <summary>
+    /// Determine min/max width.
+    /// Should be used after DetermineDefaultButtonStates() because it depends on visibilies of buttons.
+    /// </summary>
+    private void DetermineWidthLimit()
+    {
+        int countButtons = 0;
+        double buttonLongestWidth = 0.0;
+        double buttonMaxWidth = (double) Application.Current.Resources["ContentDialogButtonMaxWidth"];
+        if (PrimaryButton.Visibility is Visibility.Visible)
+        {
+            PrimaryButton.InvalidateMeasure();
+            PrimaryButton.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            buttonLongestWidth = Math.Min(Math.Max(buttonLongestWidth, PrimaryButton.DesiredSize.Width), buttonMaxWidth);
+            countButtons++;
+        }
+        if (SecondaryButton.Visibility is Visibility.Visible)
+        {
+            SecondaryButton.InvalidateMeasure();
+            SecondaryButton.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            buttonLongestWidth = Math.Min(Math.Max(buttonLongestWidth, SecondaryButton.DesiredSize.Width), buttonMaxWidth);
+            countButtons++;
+        }
+        if (CloseButton.Visibility is Visibility.Visible)
+        {
+            CloseButton.InvalidateMeasure();
+            CloseButton.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            buttonLongestWidth = Math.Min(Math.Max(buttonLongestWidth, CloseButton.DesiredSize.Width), buttonMaxWidth);
+            countButtons++;
+        }
+
+        Thickness padding = (Thickness) Application.Current.Resources["ContentDialogPadding"];
+        double commandSpaceExpectedWidth = padding.Left + padding.Right;
+        commandSpaceExpectedWidth += countButtons * buttonLongestWidth;
+        commandSpaceExpectedWidth += (countButtons - 1) * ((GridLength) Application.Current.Resources["ContentDialogButtonSpacing"]).Value;
+
+        MinWidth = Math.Max(commandSpaceExpectedWidth, (double) Application.Current.Resources["ContentDialogMinWidth"]);
+        MaxWidth = Math.Max(commandSpaceExpectedWidth, (double) Application.Current.Resources["ContentDialogMaxWidth"]);
+
+        Loaded += (o, e) => RemoveSizeLimit();
+    }
+
+    private void RemoveSizeLimit()
+    {
+        MaxWidth = double.PositiveInfinity;
+        MaxHeight = double.PositiveInfinity;
+        MinWidth = 0.0;
+        MinHeight = 0.0;
+
+        VerticalAlignment = VerticalAlignment.Stretch;
+        HorizontalAlignment = HorizontalAlignment.Stretch;
     }
 
     #region Title Property

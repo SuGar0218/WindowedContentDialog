@@ -14,6 +14,9 @@
     <LangVersion>preview</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Views\LoremIpsumPage.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -44,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\LoremIpsumPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--

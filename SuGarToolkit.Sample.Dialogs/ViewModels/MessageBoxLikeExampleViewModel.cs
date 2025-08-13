@@ -11,5 +11,5 @@ public partial class MessageBoxLikeExampleViewModel
     public bool IsChild { get; set; } = true;
     public bool IsModal { get; set; } = true;
     public bool IsTitleBarVisible { get; set; } = true;
-    public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Arcylic;
+    public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Mica;
 }

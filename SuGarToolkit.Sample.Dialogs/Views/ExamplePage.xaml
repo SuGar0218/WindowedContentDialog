@@ -73,9 +73,16 @@
                                 Orientation="Horizontal"
                                 Spacing="8">
                                 <Button
-                                    Click="ShowMessageBoxButton_Click"
+                                    Click="{x:Bind ShowMessageBox}"
                                     Content="await MessageBox.ShowAsync"
-                                    Style="{ThemeResource AccentButtonStyle}" />
+                                    Style="{ThemeResource AccentButtonStyle}">
+                                    <Button.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Click="{x:Bind ShowMessageBox}" Text="WindowedMessageBox" />
+                                            <MenuFlyoutItem Click="{x:Bind ShowInWindowMessageBox}" Text="InWindowMessageBox" />
+                                        </MenuFlyout>
+                                    </Button.ContextFlyout>
+                                </Button>
                                 <TextBlock
                                     x:Name="MessageBoxResultBox"
                                     VerticalAlignment="Center"
@@ -115,9 +122,16 @@
                                 Orientation="Horizontal"
                                 Spacing="8">
                                 <Button
-                                    Click="ShowContentDialogButton_Click"
+                                    Click="{x:Bind ShowContentDialog}"
                                     Content="await windowedContentDialog.ShowAsync"
-                                    Style="{ThemeResource AccentButtonStyle}" />
+                                    Style="{ThemeResource AccentButtonStyle}">
+                                    <Button.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Click="{x:Bind ShowContentDialog}" Text="WindowedContentDialog" />
+                                            <MenuFlyoutItem Click="{x:Bind ShowInWindowContentDialog}" Text="InWindowContentDialog" />
+                                        </MenuFlyout>
+                                    </Button.ContextFlyout>
+                                </Button>
                                 <TextBlock
                                     x:Name="ContentDialogResultBox"
                                     VerticalAlignment="Center"

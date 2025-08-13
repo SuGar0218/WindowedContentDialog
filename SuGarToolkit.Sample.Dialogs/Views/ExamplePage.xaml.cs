@@ -46,7 +46,7 @@ public sealed partial class ExamplePage : Page
         ContentDialogButton.Close
     ];
 
-    private async void ShowMessageBoxButton_Click(object sender, RoutedEventArgs e)
+    private async void ShowMessageBox()
     {
         MessageBox.SystemBackdrop = messageBoxViewModel.BackdropType switch
         {
@@ -66,12 +66,23 @@ public sealed partial class ExamplePage : Page
         MessageBoxResultBox.Text = result.ToString();
     }
 
-    private async void ShowContentDialogButton_Click(object sender, RoutedEventArgs e)
+    private async void ShowInWindowMessageBox()
+    {
+        MessageBoxResult result = await InWindowMessageBox.ShowAsync(
+            App.Current.MainWindow!,
+            messageBoxViewModel.Content,
+            messageBoxViewModel.Title,
+            messageBoxViewModel.Buttons,
+            messageBoxViewModel.DefaultButton);
+        MessageBoxResultBox.Text = result.ToString();
+    }
+
+    private async void ShowContentDialog()
     {
         WindowedContentDialog dialog = new()
         {
             Title = contentDialogViewModel.Title,
-            Content = ContentDialogContentTextBox,
+            Content = new LoremIpsumPage(),
             PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
             SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
             CloseButtonText = contentDialogViewModel.CloseButtonText,
@@ -96,6 +107,28 @@ public sealed partial class ExamplePage : Page
             dialog.SecondaryButtonClick += (o, e) => e.Cancel = true;
         }
         ContentDialogResult result = await dialog.ShowAsync(contentDialogViewModel.IsModal);
+        ContentDialogResultBox.Text = result.ToString();
+    }
+
+    private async void ShowInWindowContentDialog()
+    {
+        ContentDialog dialog = new()
+        {
+            Title = contentDialogViewModel.Title,
+            Content = new LoremIpsumPage(),
+            PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
+            SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
+            CloseButtonText = contentDialogViewModel.CloseButtonText,
+            DefaultButton = contentDialogViewModel.DefaultButton,
+            RequestedTheme = App.Current.MainWindow!.RequestedTheme,
+            XamlRoot = XamlRoot,
+            Style = new Style
+            {
+                TargetType = typeof(ContentDialog),
+                BasedOn = (Style) Application.Current.Resources["DefaultContentDialogStyle"]
+            }
+        };
+        ContentDialogResult result = await dialog.ShowAsync();
         ContentDialogResultBox.Text = result.ToString();
     }
 
@@ -187,6 +220,6 @@ MessageBoxResultBox.Text = result.ToString();";
             Right = App.Current.MainWindow!.AppWindow.TitleBar.RightInset / XamlRoot.RasterizationScale
         };
 
-        //await MessageBox.ShowAsync(modal: true, App.Current.MainWindow, "嗨，别来无恙啊！", "与君初相识，犹如故人归");
+        //await ShowAsync.ShowAsync(modal: true, App.Current.MainWindow, "嗨，别来无恙啊！", "与君初相识，犹如故人归");
     }
 }

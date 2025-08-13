@@ -26,10 +26,7 @@
                 <ControlTemplate TargetType="local:ContentDialogContent">
                     <Border x:Name="Container" RequestedTheme="{TemplateBinding RequestedTheme}">
                         <Grid x:Name="LayoutRoot" Visibility="Collapsed">
-
                             <!--<Rectangle x:Name="SmokeLayerBackground" Fill="{ThemeResource ContentDialogSmokeFill}" />-->
-
-                            <!--  Min/Max Width/Height 拿到 Window 里去了，便于对其尺寸操作  -->
                             <Border
                                 x:Name="BackgroundElement"
                                 HorizontalAlignment="Stretch"
@@ -41,24 +38,29 @@
                                 FlowDirection="{TemplateBinding FlowDirection}"
                                 RenderTransformOrigin="0.5,0.5"
                                 TabFocusNavigation="Cycle">
-                                <Border.RenderTransform>
+
+                                <!--<Border.RenderTransform>
                                     <ScaleTransform x:Name="ScaleTransform" />
-                                </Border.RenderTransform>
-                                <!--  ScrollViewer 移到了 Grid.Row=1 里  -->
+                                </Border.RenderTransform>-->
+
+                                <!--  ScrollViewer is moved to the outside of ContentControl in Grid where Grid.Row=1  -->
+
                                 <Grid x:Name="DialogSpace">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
+
                                     <Grid
                                         Background="{ThemeResource LayerFillColorDefaultBrush}"
                                         BorderBrush="{StaticResource ContentDialogWindowSeparatorBorderBrush}"
                                         BorderThickness="{ThemeResource ContentDialogSeparatorThickness}">
+
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-                                        <!--  包一层 Border 是为了得到标题区域以设置标题栏  -->
+
                                         <Border
                                             x:Name="TitleArea"
                                             Grid.Row="0"
@@ -92,6 +94,7 @@
                                                 </ContentControl.Template>
                                             </ContentControl>
                                         </Border>
+
                                         <ScrollViewer
                                             x:Name="ContentScrollViewer"
                                             Grid.Row="1"
@@ -110,6 +113,7 @@
                                                 TextWrapping="Wrap" />
                                         </ScrollViewer>
                                     </Grid>
+
                                     <Grid
                                         x:Name="CommandSpace"
                                         Grid.Row="1"
@@ -132,7 +136,8 @@
                                             ElementSoundMode="FocusOnly"
                                             IsEnabled="{TemplateBinding IsPrimaryButtonEnabled}"
                                             IsTabStop="True"
-                                            Style="{TemplateBinding PrimaryButtonStyle}" />
+                                            Style="{TemplateBinding PrimaryButtonStyle}"
+                                            ToolTipService.ToolTip="{TemplateBinding PrimaryButtonText}" />
                                         <Button
                                             x:Name="SecondaryButton"
                                             HorizontalAlignment="Stretch"
@@ -140,7 +145,8 @@
                                             ElementSoundMode="FocusOnly"
                                             IsEnabled="{TemplateBinding IsSecondaryButtonEnabled}"
                                             IsTabStop="True"
-                                            Style="{TemplateBinding SecondaryButtonStyle}" />
+                                            Style="{TemplateBinding SecondaryButtonStyle}"
+                                            ToolTipService.ToolTip="{TemplateBinding SecondaryButtonText}" />
                                         <Button
                                             x:Name="CloseButton"
                                             Grid.Column="4"
@@ -148,7 +154,8 @@
                                             Content="{TemplateBinding CloseButtonText}"
                                             ElementSoundMode="FocusOnly"
                                             IsTabStop="True"
-                                            Style="{TemplateBinding CloseButtonStyle}">
+                                            Style="{TemplateBinding CloseButtonStyle}"
+                                            ToolTipService.ToolTip="{TemplateBinding CloseButtonText}">
                                             <Button.KeyboardAccelerators>
                                                 <KeyboardAccelerator Key="Escape" />
                                             </Button.KeyboardAccelerators>
@@ -293,6 +300,7 @@
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
+                            <!--  Setting KeyboardAccelerators in XAML will cause program crash.  -->
                             <VisualStateGroup x:Name="DefaultButtonStates">
                                 <VisualState x:Name="NoDefaultButton" />
                                 <VisualState x:Name="PrimaryAsDefaultButton">

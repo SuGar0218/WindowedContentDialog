@@ -14,5 +14,5 @@ public class ContentDialogLikeExampleViewModel
     public bool IsTitleBarVisible { get; set; } = true;
     public bool ClickPrimaryButtonToClose { get; set; } = true;
     public bool ClickSecondaryButtonToClose { get; set; } = true;
-    public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Arcylic;
+    public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Mica;
 }

@@ -10,5 +10,8 @@
     Closed="Window_Closed"
     mc:Ignorable="d">
 
-    <Frame Loaded="Frame_Loaded" />
+    <Frame
+        x:Name="RootFrame"
+        x:FieldModifier="private"
+        Loaded="Frame_Loaded" />
 </Window>

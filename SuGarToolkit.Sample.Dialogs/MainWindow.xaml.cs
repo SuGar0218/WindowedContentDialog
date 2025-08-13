@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Composition;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
@@ -16,6 +17,20 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         ExtendsContentIntoTitleBar = true;
         AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
+
+        // 当 Windows 设置 > 个性化 中，打开了在标题栏上显示强调色时，WinUI 3 标题栏按钮颜色显示不正确。
+        RootFrame.ActualThemeChanged += (sender, args) =>
+        {
+            switch (sender.ActualTheme)
+            {
+                case ElementTheme.Light:
+                    AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
+                    break;
+                case ElementTheme.Dark:
+                    AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
+                    break;
+            }
+        };
 
         AppWindow.Closing += (appWindow, e) =>
         {
@@ -74,6 +89,17 @@ public sealed partial class MainWindow : Window
     {
         Frame frame = (Frame) sender;
         frame.Navigate(typeof(ExamplePage));
+
+        // 当 Windows 设置 > 个性化 中，打开了在标题栏上显示强调色时，WinUI 3 标题栏按钮颜色显示不正确。
+        switch (frame.ActualTheme)
+        {
+            case ElementTheme.Light:
+                AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
+                break;
+            case ElementTheme.Dark:
+                AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
+                break;
+        }
     }
 
     private void Window_Closed(object sender, WindowEventArgs args)
