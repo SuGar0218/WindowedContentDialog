@@ -9,6 +9,15 @@ namespace SuGarToolkit.Controls.Dialogs;
 
 public class MessageBox
 {
+    /// <summary>
+    /// Disable the content of window behind when dialog window shows.
+    /// </summary>
+    public static bool DisableBehind { get; set; }
+
+    public static WindowedContentDialogSmokeLayerKind SmokeLayerKind { get; set; }
+
+    public static UIElement? CustomSmokeLayer { get; set; }
+
     public static SystemBackdrop? SystemBackdrop { get; set; } = new MicaBackdrop();
     public static ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
 
@@ -74,7 +83,10 @@ public class MessageBox
             OwnerWindow = owner,
             IsTitleBarVisible = isTitleBarVisible,
             SystemBackdrop = SystemBackdrop,
-            RequestedTheme = theme
+            RequestedTheme = theme,
+            DisableBehind = DisableBehind,
+            SmokeLayerKind = SmokeLayerKind,
+            CustomSmokeLayer = CustomSmokeLayer,
         };
 
         ContentDialogButton contentDialogDefaultButton = defaultButton switch

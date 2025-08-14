@@ -18,22 +18,21 @@ namespace SuGarToolkit.Controls.Dialogs;
 /// Never show window immediately after construction,
 /// <br/>
 /// because the size and position have not been computed.
-/// Please consider use AppWindow.Show() when handling Loaded event.
+/// Please use Open() when handling Loaded event.
 /// Don't use Activate() only,
 /// it will not make window modal even if OverlappedPresenter.IsModal is true.
 /// </summary>
 public partial class ContentDialogWindow : Window
 {
-    public ContentDialogWindow()
+    public ContentDialogWindow() : base()
     {
         ExtendsContentIntoTitleBar = true;
         _presenter = (OverlappedPresenter) AppWindow.Presenter;
         _presenter.IsMinimizable = false;
         _presenter.IsMaximizable = false;
 
-        AppWindow.Closing += (appWindow, e) => appWindow.Hide();
+        AppWindow.Closing += (appWindow, e) => OnClosingRequestedBySystem();
         Activated += OnActivated;
-        Closed += OnClosed;
 
         _content = new();
         _content.Loaded += DialogLoaded;
@@ -48,6 +47,7 @@ public partial class ContentDialogWindow : Window
     public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? CloseButtonClick;
 
     public event TypedEventHandler<ContentDialogWindow, EventArgs>? Loaded;
+    public event TypedEventHandler<ContentDialogWindow, EventArgs>? Opened;
 
     private void OnActivated(object sender, WindowActivatedEventArgs args)
     {
@@ -64,9 +64,22 @@ public partial class ContentDialogWindow : Window
         }
     }
 
-    private void OnClosed(object sender, WindowEventArgs args)
+    /// <summary>
+    /// AppWindow.Closing event happens when title bar close button clicked or ALT+F4 pressed.
+    /// </summary>
+    private void OnClosingRequestedBySystem()
     {
         _parent?.Activate();
+        AppWindow.Hide();
+    }
+
+    /// <summary>
+    /// Close() will not make AppWindow.Closing event happen.
+    /// </summary>
+    private void OnClosingRequstedByCode()
+    {
+        _parent?.Activate();
+        AppWindow.Hide();
     }
 
     private void OnParentClosed(object sender, WindowEventArgs args)
@@ -304,7 +317,13 @@ public partial class ContentDialogWindow : Window
             };
         };
 
-        Loaded?.Invoke(this, EventArgs.Empty);
+        DispatcherQueue.TryEnqueue(() => Loaded?.Invoke(this, EventArgs.Empty));
+    }
+
+    public void Open()
+    {
+        AppWindow.Show();
+        DispatcherQueue.TryEnqueue(() => Opened?.Invoke(this, EventArgs.Empty));
     }
 
     private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
@@ -336,7 +355,7 @@ public partial class ContentDialogWindow : Window
         if (args.Cancel)
             return;
 
-        AppWindow.Hide();
+        OnClosingRequstedByCode();
         DispatcherQueue.TryEnqueue(Close);
     }
 
@@ -347,6 +366,9 @@ public partial class ContentDialogWindow : Window
     // 32-bit systems
     [LibraryImport("user32.dll", EntryPoint = "SetWindowLongW")]
     private static partial IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+    [LibraryImport("user32.dll", EntryPoint = "SetFocus")]
+    private static partial IntPtr SetFocus(IntPtr hWnd);
 
     private readonly ContentDialogContent _content;
 

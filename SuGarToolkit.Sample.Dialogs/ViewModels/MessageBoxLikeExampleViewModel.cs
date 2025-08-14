@@ -1,4 +1,6 @@
-﻿using SuGarToolkit.Controls.Dialogs;
+﻿using Microsoft.UI.Xaml;
+
+using SuGarToolkit.Controls.Dialogs;
 
 namespace SuGarToolkit.Sample.Dialogs.ViewModels;
 
@@ -12,4 +14,13 @@ public partial class MessageBoxLikeExampleViewModel
     public bool IsModal { get; set; } = true;
     public bool IsTitleBarVisible { get; set; } = true;
     public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Mica;
+
+    /// <summary>
+    /// Disable the content of window behind when dialog window shows.
+    /// </summary>
+    public bool DisableBehind { get; set; }
+
+    public WindowedContentDialogSmokeLayerKind BehindOverlayKind { get; set; }
+
+    //public UIElement? CustomSmokeLayer { get; set; }
 }

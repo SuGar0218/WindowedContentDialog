@@ -74,7 +74,7 @@
                                 Spacing="8">
                                 <Button
                                     Click="{x:Bind ShowMessageBox}"
-                                    Content="await MessageBox.ShowAsync"
+                                    Content="MessageBox"
                                     Style="{ThemeResource AccentButtonStyle}">
                                     <Button.ContextFlyout>
                                         <MenuFlyout>
@@ -90,7 +90,7 @@
                             </StackPanel>
                         </Expander.Header>
 
-                        <StackPanel Spacing="16">
+                        <StackPanel Spacing="12">
                             <TextBox Header="标题" Text="{x:Bind messageBoxViewModel.Title, Mode=TwoWay}" />
                             <TextBox
                                 AcceptsReturn="True"
@@ -107,11 +107,17 @@
                                 SelectedItem="{x:Bind messageBoxViewModel.DefaultButton, Mode=TwoWay}" />
                             <ComboBox
                                 Header="材质"
-                                ItemsSource="{x:Bind local:ExamplePage.backdropTypes}"
+                                ItemsSource="{x:Bind local:ExamplePage.systemBackdropTypes}"
                                 SelectedItem="{x:Bind messageBoxViewModel.BackdropType, Mode=TwoWay}" />
-                            <CheckBox Content="以此为父窗口" IsChecked="{x:Bind messageBoxViewModel.IsChild, Mode=TwoWay}" />
-                            <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind messageBoxViewModel.IsModal, Mode=TwoWay}" />
-                            <CheckBox Content="显示标题栏" IsChecked="{x:Bind messageBoxViewModel.IsTitleBarVisible, Mode=TwoWay}" />
+                            <ComboBox
+                                Header="父窗口叠层"
+                                ItemsSource="{x:Bind local:ExamplePage.behindOverlayTypes}"
+                                SelectedItem="{x:Bind messageBoxViewModel.BehindOverlayKind, Mode=TwoWay}" />
+                            <StackPanel Spacing="8">
+                                <CheckBox Content="显示标题栏" IsChecked="{x:Bind messageBoxViewModel.IsTitleBarVisible, Mode=TwoWay}" />
+                                <CheckBox Content="以此为父窗口" IsChecked="{x:Bind messageBoxViewModel.IsChild, Mode=TwoWay}" />
+                                <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind messageBoxViewModel.IsModal, Mode=TwoWay}" />
+                            </StackPanel>
                         </StackPanel>
                     </Expander>
 
@@ -123,7 +129,7 @@
                                 Spacing="8">
                                 <Button
                                     Click="{x:Bind ShowContentDialog}"
-                                    Content="await windowedContentDialog.ShowAsync"
+                                    Content="WindowedContentDialog"
                                     Style="{ThemeResource AccentButtonStyle}">
                                     <Button.ContextFlyout>
                                         <MenuFlyout>
@@ -139,7 +145,7 @@
                             </StackPanel>
                         </Expander.Header>
 
-                        <StackPanel Spacing="16">
+                        <StackPanel Spacing="12">
                             <TextBox Header="标题" Text="{x:Bind contentDialogViewModel.Title, Mode=TwoWay}" />
                             <TextBox Header="PrimaryButtonText" Text="{x:Bind contentDialogViewModel.PrimaryButtonText, Mode=TwoWay}" />
                             <TextBox Header="SecondaryButtonText" Text="{x:Bind contentDialogViewModel.SecondaryButtonText, Mode=TwoWay}" />
@@ -156,13 +162,20 @@
                             </ComboBox>
                             <ComboBox
                                 Header="材质"
-                                ItemsSource="{x:Bind local:ExamplePage.backdropTypes}"
+                                ItemsSource="{x:Bind local:ExamplePage.systemBackdropTypes}"
                                 SelectedItem="{x:Bind contentDialogViewModel.BackdropType, Mode=TwoWay}" />
-                            <CheckBox Content="以此为父窗口" IsChecked="{x:Bind contentDialogViewModel.IsChild, Mode=TwoWay}" />
-                            <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind contentDialogViewModel.IsModal, Mode=TwoWay}" />
-                            <CheckBox Content="显示标题栏" IsChecked="{x:Bind contentDialogViewModel.IsTitleBarVisible, Mode=TwoWay}" />
-                            <CheckBox Content="PrimaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickPrimaryButtonToClose, Mode=TwoWay}" />
-                            <CheckBox Content="SecondaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickSecondaryButtonToClose, Mode=TwoWay}" />
+                            <ComboBox
+                                Header="父窗口叠层"
+                                ItemsSource="{x:Bind local:ExamplePage.behindOverlayTypes}"
+                                SelectedItem="{x:Bind contentDialogViewModel.BehindOverlayKind, Mode=TwoWay}" />
+                            <StackPanel Spacing="8">
+                                <CheckBox Content="显示标题栏" IsChecked="{x:Bind contentDialogViewModel.IsTitleBarVisible, Mode=TwoWay}" />
+                                <CheckBox Content="PrimaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickPrimaryButtonToClose, Mode=TwoWay}" />
+                                <CheckBox Content="SecondaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickSecondaryButtonToClose, Mode=TwoWay}" />
+                                <CheckBox Content="以此为父窗口" IsChecked="{x:Bind contentDialogViewModel.IsChild, Mode=TwoWay}" />
+                                <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind contentDialogViewModel.IsModal, Mode=TwoWay}" />
+                                <CheckBox Content="禁用父窗口（无父窗口时无效）" IsChecked="{x:Bind contentDialogViewModel.DisableBehind, Mode=TwoWay}" />
+                            </StackPanel>
                         </StackPanel>
                     </Expander>
                 </StackPanel>

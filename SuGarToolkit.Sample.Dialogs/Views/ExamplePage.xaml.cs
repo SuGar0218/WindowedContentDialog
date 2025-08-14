@@ -55,6 +55,8 @@ public sealed partial class ExamplePage : Page
             BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
             _ => null
         };
+        MessageBox.SmokeLayerKind = messageBoxViewModel.BehindOverlayKind;
+        MessageBox.DisableBehind = messageBoxViewModel.DisableBehind;
         MessageBoxResult result = await MessageBox.ShowAsync(
             messageBoxViewModel.IsModal,
             messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
@@ -90,6 +92,8 @@ public sealed partial class ExamplePage : Page
             OwnerWindow = contentDialogViewModel.IsChild ? App.Current.MainWindow : null,
             RequestedTheme = App.Current.MainWindow!.RequestedTheme,
             IsTitleBarVisible = contentDialogViewModel.IsTitleBarVisible,
+            SmokeLayerKind = contentDialogViewModel.BehindOverlayKind,
+            DisableBehind = contentDialogViewModel.DisableBehind,
             SystemBackdrop = contentDialogViewModel.BackdropType switch
             {
                 BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
@@ -148,7 +152,13 @@ public sealed partial class ExamplePage : Page
         }
     }
 
-    internal static readonly BuiltInSystemBackdropType[] backdropTypes = Enum.GetValues<BuiltInSystemBackdropType>();
+    internal static readonly BuiltInSystemBackdropType[] systemBackdropTypes = Enum.GetValues<BuiltInSystemBackdropType>();
+
+    internal static readonly WindowedContentDialogSmokeLayerKind[] behindOverlayTypes =
+    [
+        WindowedContentDialogSmokeLayerKind.None,
+        WindowedContentDialogSmokeLayerKind.Darken,
+    ];
 
     private string MessageBoxContent
     {
@@ -219,7 +229,5 @@ MessageBoxResultBox.Text = result.ToString();";
         {
             Right = App.Current.MainWindow!.AppWindow.TitleBar.RightInset / XamlRoot.RasterizationScale
         };
-
-        //await ShowAsync.ShowAsync(modal: true, App.Current.MainWindow, "嗨，别来无恙啊！", "与君初相识，犹如故人归");
     }
 }

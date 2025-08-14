@@ -28,10 +28,10 @@ public partial class App : Application
     /// Invoked when the application is launched.
     /// </summary>
     /// <param name="args">Details about the launch request and process.</param>
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         MainWindow = new MainWindow();
-        MainWindow.AppWindow.Resize(new(MainWindow.AppWindow.Size.Width / 2, MainWindow.AppWindow.Size.Height));
+        MainWindow.AppWindow.Resize(new Windows.Graphics.SizeInt32(MainWindow.AppWindow.Size.Height * 3 / 4, MainWindow.AppWindow.Size.Height));
         MainWindow.Activate();
     }
 }
