@@ -23,7 +23,6 @@ public class WindowedContentDialog
     public Brush? Background { get; set; }
     public Brush? BorderBrush { get; set; }
     public Thickness BorderThickness { get; set; }
-    public CornerRadius CornerRadius { get; set; }
     public FlowDirection FlowDirection { get; set; }
     public DataTemplate? TitleTemplate { get; set; }
     public DataTemplate? ContentTemplate { get; set; }

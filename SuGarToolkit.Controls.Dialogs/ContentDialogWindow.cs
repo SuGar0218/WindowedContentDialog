@@ -294,7 +294,7 @@ public partial class ContentDialogWindow : Window
         // When showing accent color in title bar is enabled,
         // title bar buttons in the default custom title bar in WinUI3
         // will become white like system title bar.
-        // But there is no accent color background here..
+        // But there is no accent color background here.
         switch (_content.ActualTheme)
         {
             case ElementTheme.Light:
@@ -316,7 +316,6 @@ public partial class ContentDialogWindow : Window
                     AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
                     break;
             }
-            ;
         };
 
         DispatcherQueue.TryEnqueue(() => Loaded?.Invoke(this, EventArgs.Empty));
