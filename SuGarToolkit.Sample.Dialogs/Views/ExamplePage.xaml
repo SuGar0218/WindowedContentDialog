@@ -46,7 +46,7 @@
                 Margin="24,0"
                 Spacing="8">
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="窗口化的 ContentDialog" />
-                <TextBlock Text="支持类似 WPF 中的 MessageBox 和类似 WinUI 3 中的 ContentDialog 两者调用方式。" />
+                <TextBlock Text="支持类似 WPF 中的 MessageBox 和类似 WinUI 3 中的 ContentDialog 两者调用方式。" TextWrapping="Wrap" />
             </StackPanel>
 
             <ScrollViewer Grid.Row="1">
@@ -112,11 +112,12 @@
                             <ComboBox
                                 Header="父窗口叠层"
                                 ItemsSource="{x:Bind local:ExamplePage.behindOverlayTypes}"
-                                SelectedItem="{x:Bind messageBoxViewModel.BehindOverlayKind, Mode=TwoWay}" />
+                                SelectedItem="{x:Bind messageBoxViewModel.SmokeLayerKind, Mode=TwoWay}" />
                             <StackPanel Spacing="8">
                                 <CheckBox Content="显示标题栏" IsChecked="{x:Bind messageBoxViewModel.IsTitleBarVisible, Mode=TwoWay}" />
                                 <CheckBox Content="以此为父窗口" IsChecked="{x:Bind messageBoxViewModel.IsChild, Mode=TwoWay}" />
                                 <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind messageBoxViewModel.IsModal, Mode=TwoWay}" />
+                                <CheckBox Content="禁用父窗口（无父窗口时无效）" IsChecked="{x:Bind messageBoxViewModel.DisableBehind, Mode=TwoWay}" />
                             </StackPanel>
                         </StackPanel>
                     </Expander>
@@ -167,7 +168,7 @@
                             <ComboBox
                                 Header="父窗口叠层"
                                 ItemsSource="{x:Bind local:ExamplePage.behindOverlayTypes}"
-                                SelectedItem="{x:Bind contentDialogViewModel.BehindOverlayKind, Mode=TwoWay}" />
+                                SelectedItem="{x:Bind contentDialogViewModel.SmokeLayerKind, Mode=TwoWay}" />
                             <StackPanel Spacing="8">
                                 <CheckBox Content="显示标题栏" IsChecked="{x:Bind contentDialogViewModel.IsTitleBarVisible, Mode=TwoWay}" />
                                 <CheckBox Content="PrimaryButton 点击后关闭" IsChecked="{x:Bind contentDialogViewModel.ClickPrimaryButtonToClose, Mode=TwoWay}" />

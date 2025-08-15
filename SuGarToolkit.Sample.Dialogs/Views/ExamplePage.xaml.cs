@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -8,6 +9,8 @@ using SuGarToolkit.Sample.Dialogs.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+
+using Windows.UI;
 
 namespace SuGarToolkit.Sample.Dialogs.Views;
 
@@ -48,23 +51,34 @@ public sealed partial class ExamplePage : Page
 
     private async void ShowMessageBox()
     {
-        MessageBox.SystemBackdrop = messageBoxViewModel.BackdropType switch
+        if (messageBoxViewModel.SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
         {
-            BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
-            BuiltInSystemBackdropType.MicaAlt => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt },
-            BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
-            _ => null
-        };
-        MessageBox.SmokeLayerKind = messageBoxViewModel.BehindOverlayKind;
-        MessageBox.DisableBehind = messageBoxViewModel.DisableBehind;
-        MessageBoxResult result = await MessageBox.ShowAsync(
-            messageBoxViewModel.IsModal,
-            messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
-            messageBoxViewModel.Content,
-            messageBoxViewModel.Title,
-            messageBoxViewModel.Buttons,
-            messageBoxViewModel.DefaultButton,
-            messageBoxViewModel.IsTitleBarVisible);
+            SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
+        }
+        MessageBoxResult result = await MessageBox.ShowAsync(new MessageBoxOptions
+        {
+            Title = messageBoxViewModel.Title,
+            Content = messageBoxViewModel.Content,
+
+            IsModal = messageBoxViewModel.IsModal,
+            OwnerWindow = messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
+
+            Buttons = messageBoxViewModel.Buttons,
+            DefaultButton = messageBoxViewModel.DefaultButton,
+            IsTitleBarVisible = messageBoxViewModel.IsTitleBarVisible,
+
+            DisableBehind = messageBoxViewModel.DisableBehind,
+            SmokeLayerKind = messageBoxViewModel.SmokeLayerKind,
+            CustomSmokeLayer = LazyCustomSmokeLayer.Value,
+
+            SystemBackdrop = messageBoxViewModel.BackdropType switch
+            {
+                BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
+                BuiltInSystemBackdropType.MicaAlt => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt },
+                BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
+                _ => null
+            }
+        });
         MessageBoxResultBox.Text = result.ToString();
     }
 
@@ -81,19 +95,28 @@ public sealed partial class ExamplePage : Page
 
     private async void ShowContentDialog()
     {
+        if (contentDialogViewModel.SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
+        {
+            SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
+        }
         WindowedContentDialog dialog = new()
         {
             Title = contentDialogViewModel.Title,
             Content = new LoremIpsumPage(),
+
             PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
             SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
             CloseButtonText = contentDialogViewModel.CloseButtonText,
             DefaultButton = contentDialogViewModel.DefaultButton,
+
             OwnerWindow = contentDialogViewModel.IsChild ? App.Current.MainWindow : null,
-            RequestedTheme = App.Current.MainWindow!.RequestedTheme,
             IsTitleBarVisible = contentDialogViewModel.IsTitleBarVisible,
-            SmokeLayerKind = contentDialogViewModel.BehindOverlayKind,
+
             DisableBehind = contentDialogViewModel.DisableBehind,
+            SmokeLayerKind = contentDialogViewModel.SmokeLayerKind,
+            CustomSmokeLayer = LazyCustomSmokeLayer.Value,
+
+            RequestedTheme = App.Current.MainWindow!.RequestedTheme,
             SystemBackdrop = contentDialogViewModel.BackdropType switch
             {
                 BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
@@ -158,7 +181,22 @@ public sealed partial class ExamplePage : Page
     [
         WindowedContentDialogSmokeLayerKind.None,
         WindowedContentDialogSmokeLayerKind.Darken,
+        WindowedContentDialogSmokeLayerKind.Custom
     ];
+
+    private readonly Lazy<FrameworkElement> LazyCustomSmokeLayer = new(() => new Border
+    {
+        Background = new SolidColorBrush((Color) Application.Current.Resources["SystemAccentColorDark3"]) { Opacity = 0.618 },
+        Child = new TextBlock
+        {
+            Text = "Dialog is opened",
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = new SolidColorBrush(Colors.White),
+            VerticalAlignment = VerticalAlignment.Bottom,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Style = (Style) Application.Current.Resources["TitleTextBlockStyle"]
+        }
+    });
 
     private string MessageBoxContent
     {
@@ -229,5 +267,11 @@ MessageBoxResultBox.Text = result.ToString();";
         {
             Right = App.Current.MainWindow!.AppWindow.TitleBar.RightInset / XamlRoot.RasterizationScale
         };
+    }
+
+    private static void SizeToWindow(FrameworkElement element, Window window)
+    {
+        element.Width = window.Content.XamlRoot.Size.Width;
+        element.Height = window.Content.XamlRoot.Size.Height;
     }
 }

@@ -135,30 +135,33 @@ public class WindowedContentDialog
             };
             if (SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Darken)
             {
-                behindOverlayPopup.Child = new Border
+                Rectangle darkLayer = new()
                 {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
                     Width = OwnerWindow.Content.XamlRoot.Size.Width,
                     Height = OwnerWindow.Content.XamlRoot.Size.Height,
                     Opacity = 0.0,
                     OpacityTransition = new ScalarTransition { Duration = TimeSpan.FromSeconds(0.25) },
-                    Background = new SolidColorBrush(SmokeFillColor),
+                    Fill = new SolidColorBrush(SmokeFillColor),
                 };
+                behindOverlayPopup.Child = darkLayer;
+
+                void OnOwnerWindowSizeChanged(object sender, WindowSizeChangedEventArgs args) => SizeToWindow(darkLayer, OwnerWindow);
 
                 dialogWindow.Loaded += (o, e) =>
                 {
                     behindOverlayPopup.IsOpen = true;
                     behindOverlayPopup.Child.Opacity = 1.0;
+                    OwnerWindow.SizeChanged += OnOwnerWindowSizeChanged;
                 };
                 dialogWindow.Closed += async (o, e) =>
                 {
                     behindOverlayPopup.Child.Opacity = 0.0;
                     await Task.Delay(behindOverlayPopup.Child.OpacityTransition.Duration);
                     behindOverlayPopup.IsOpen = false;
+                    OwnerWindow.SizeChanged -= OnOwnerWindowSizeChanged;
                 };
             }
-            else if (CustomSmokeLayer is not null)
+            else if (SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && CustomSmokeLayer is not null)
             {
                 behindOverlayPopup.Child = CustomSmokeLayer;
 
@@ -170,8 +173,9 @@ public class WindowedContentDialog
                 dialogWindow.Closed += async (o, e) =>
                 {
                     behindOverlayPopup.Child.Opacity = 0.0;
-                    await Task.Delay(behindOverlayPopup.Child.OpacityTransition.Duration);
+                    await Task.Delay(behindOverlayPopup.Child.OpacityTransition?.Duration ?? new TimeSpan(0));
                     behindOverlayPopup.IsOpen = false;
+                    behindOverlayPopup.Child = null;  // remove CustomSmokeLayer from visual tree
                 };
             }
         }
@@ -180,6 +184,12 @@ public class WindowedContentDialog
         dialogWindow.Loaded += (window, e) => window.Open();
         dialogWindow.Closed += (o, e) => resultCompletionSource.SetResult(dialogWindow.Result);
         return await resultCompletionSource.Task;
+    }
+
+    private static void SizeToWindow(FrameworkElement element, Window window)
+    {
+        element.Width = window.Content.XamlRoot.Size.Width;
+        element.Height = window.Content.XamlRoot.Size.Height;
     }
 
     private static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];

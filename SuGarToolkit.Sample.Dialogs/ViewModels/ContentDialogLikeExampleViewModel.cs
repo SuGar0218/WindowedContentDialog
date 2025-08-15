@@ -24,7 +24,7 @@ public class ContentDialogLikeExampleViewModel
     /// </summary>
     public bool DisableBehind { get; set; }
 
-    public WindowedContentDialogSmokeLayerKind BehindOverlayKind { get; set; }
+    public WindowedContentDialogSmokeLayerKind SmokeLayerKind { get; set; }
 
     //public UIElement? CustomSmokeLayer { get; set; }
 }
