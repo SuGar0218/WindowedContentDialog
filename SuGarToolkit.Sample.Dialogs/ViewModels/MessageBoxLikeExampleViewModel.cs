@@ -1,6 +1,4 @@
-﻿using Microsoft.UI.Xaml;
-
-using SuGarToolkit.Controls.Dialogs;
+﻿using SuGarToolkit.Controls.Dialogs;
 
 namespace SuGarToolkit.Sample.Dialogs.ViewModels;
 

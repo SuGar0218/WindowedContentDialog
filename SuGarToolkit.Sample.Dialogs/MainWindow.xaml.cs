@@ -19,6 +19,19 @@ public sealed partial class MainWindow : Window
         AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
 
         // 当 Windows 设置 > 个性化 中，打开了在标题栏上显示强调色时，WinUI 3 标题栏按钮颜色显示不正确。
+        RootFrame.Loaded += (sender, e) =>
+        {
+            switch (((FrameworkElement) sender).ActualTheme)
+            {
+                case ElementTheme.Light:
+                    AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
+                    break;
+                case ElementTheme.Dark:
+                    AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
+                    break;
+            }
+
+        };
         RootFrame.ActualThemeChanged += (sender, args) =>
         {
             switch (sender.ActualTheme)
@@ -37,14 +50,14 @@ public sealed partial class MainWindow : Window
             appWindow.Hide();
         };
 
-        systemBackdropController = new MicaController();
+        micaController = new MicaController();
         systemBackdropTarget = this.As<ICompositionSupportsSystemBackdrop>();
         systemBackdropConfig = new SystemBackdropConfiguration
         {
             Theme = SystemBackdropTheme.Default
         };
-        systemBackdropController.AddSystemBackdropTarget(systemBackdropTarget);
-        systemBackdropController.SetSystemBackdropConfiguration(systemBackdropConfig);
+        micaController.AddSystemBackdropTarget(systemBackdropTarget);
+        micaController.SetSystemBackdropConfiguration(systemBackdropConfig);
 
         Activated += (o, e) =>
         {
@@ -89,25 +102,14 @@ public sealed partial class MainWindow : Window
     {
         Frame frame = (Frame) sender;
         frame.Navigate(typeof(ExamplePage));
-
-        // 当 Windows 设置 > 个性化 中，打开了在标题栏上显示强调色时，WinUI 3 标题栏按钮颜色显示不正确。
-        switch (frame.ActualTheme)
-        {
-            case ElementTheme.Light:
-                AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
-                break;
-            case ElementTheme.Dark:
-                AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
-                break;
-        }
     }
 
     private void Window_Closed(object sender, WindowEventArgs args)
     {
-        systemBackdropController.Dispose();
+        micaController.Dispose();
     }
 
-    private readonly ISystemBackdropControllerWithTargets systemBackdropController;
+    private readonly MicaController micaController;
     private readonly ICompositionSupportsSystemBackdrop systemBackdropTarget;
     private readonly SystemBackdropConfiguration systemBackdropConfig;
 }

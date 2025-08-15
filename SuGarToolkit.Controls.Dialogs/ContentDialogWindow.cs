@@ -303,7 +303,8 @@ public partial class ContentDialogWindow : Window
             case ElementTheme.Dark:
                 AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
                 break;
-        };
+        }
+        ;
         _content.ActualThemeChanged += (sender, args) =>
         {
             switch (sender.ActualTheme)
@@ -314,7 +315,8 @@ public partial class ContentDialogWindow : Window
                 case ElementTheme.Dark:
                     AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
                     break;
-            };
+            }
+            ;
         };
 
         DispatcherQueue.TryEnqueue(() => Loaded?.Invoke(this, EventArgs.Empty));
