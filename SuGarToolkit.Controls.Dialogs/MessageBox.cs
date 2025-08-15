@@ -1,6 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 
 using System;
 using System.Threading.Tasks;
@@ -9,18 +8,6 @@ namespace SuGarToolkit.Controls.Dialogs;
 
 public class MessageBox
 {
-    /// <summary>
-    /// Disable the content of window behind when dialog window shows.
-    /// </summary>
-    public static bool DisableBehind { get; set; }
-
-    public static WindowedContentDialogSmokeLayerKind SmokeLayerKind { get; set; }
-
-    public static UIElement? CustomSmokeLayer { get; set; }
-
-    public static SystemBackdrop? SystemBackdrop { get; set; } = new MicaBackdrop();
-    public static ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
-
     public static async Task<MessageBoxResult> ShowAsync(
         object content,
         string? title = null)
@@ -35,34 +22,42 @@ public class MessageBox
         => await ShowAsync(false, null, content, title, buttons, defaultButton, isTitleBarVisible);
 
     public static async Task<MessageBoxResult> ShowAsync(
-        bool modal,
+        bool isModal,
         Window owner,
         object content,
         string? title = null)
-        => await ShowAsync(modal, owner, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
+        => await ShowAsync(isModal, owner, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
 
-    public static async Task<MessageBoxResult> ShowAsync(
-        bool modal,
-        Window? owner,
-        object? content, string? title,
-        MessageBoxButtons buttons,
-        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
-        bool isTitleBarVisible = true)
+    public static async Task<MessageBoxResult> ShowAsync(bool isModal, Window? owner, object? content, string? title, MessageBoxButtons buttons, MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1, bool isTitleBarVisible = true)
+    {
+        return await ShowAsync(new MessageBoxOptions
+        {
+            IsModal = isModal,
+            OwnerWindow = owner,
+            Content = content,
+            Title = title,
+            Buttons = buttons,
+            DefaultButton = defaultButton,
+            IsTitleBarVisible = isTitleBarVisible
+        });
+    }
+
+    public static async Task<MessageBoxResult> ShowAsync(MessageBoxOptions options)
     {
         ElementTheme theme;
-        if (RequestedTheme is not ElementTheme.Default)
+        if (options.RequestedTheme is not ElementTheme.Default)
         {
-            theme = RequestedTheme;
+            theme = options.RequestedTheme;
         }
-        else if (owner is not null)
+        else if (options.OwnerWindow is not null)
         {
-            if (owner.Content is FrameworkElement root)
+            if (options.OwnerWindow.Content is FrameworkElement root)
             {
                 theme = root.ActualTheme;
             }
             else
             {
-                theme = owner.AppWindow.TitleBar.PreferredTheme switch
+                theme = options.OwnerWindow.AppWindow.TitleBar.PreferredTheme switch
                 {
                     Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode => ElementTheme.Default,
                     Microsoft.UI.Windowing.TitleBarTheme.Light => ElementTheme.Light,
@@ -78,18 +73,20 @@ public class MessageBox
 
         WindowedContentDialog dialog = new()
         {
-            Title = title ?? string.Empty,
-            Content = content,
-            OwnerWindow = owner,
-            IsTitleBarVisible = isTitleBarVisible,
-            SystemBackdrop = SystemBackdrop,
+            Title = options.Title ?? string.Empty,
+            Content = options.Content,
+            OwnerWindow = options.OwnerWindow,
+            SystemBackdrop = options.SystemBackdrop,
             RequestedTheme = theme,
-            DisableBehind = DisableBehind,
-            SmokeLayerKind = SmokeLayerKind,
-            CustomSmokeLayer = CustomSmokeLayer,
+            IsTitleBarVisible = options.IsTitleBarVisible,
+            FlowDirection = options.FlowDirection,
+            CenterInParent = options.CenterInParent,
+            SmokeLayerKind = options.SmokeLayerKind,
+            CustomSmokeLayer = options.CustomSmokeLayer,
+            DisableBehind = options.DisableBehind,
         };
 
-        ContentDialogButton contentDialogDefaultButton = defaultButton switch
+        ContentDialogButton contentDialogDefaultButton = options.DefaultButton switch
         {
             MessageBoxDefaultButton.Button1 => ContentDialogButton.Primary,
             MessageBoxDefaultButton.Button2 => ContentDialogButton.Secondary,
@@ -99,7 +96,7 @@ public class MessageBox
         };
         dialog.DefaultButton = contentDialogDefaultButton;
 
-        switch (buttons)
+        switch (options.Buttons)
         {
             case MessageBoxButtons.OK:
                 dialog.CloseButtonText = "OK";
@@ -141,16 +138,8 @@ public class MessageBox
                 break;
         }
 
-        ContentDialogResult result = await dialog.ShowAsync(modal);
-        // None    0
-        // 未点击任何按钮 或 CloseButton (ESC)
-
-        // Primary 1
-        // 用户已点击主按钮
-
-        // Secondary   2
-        // 用户点击了辅助按钮
-        var results = MessageBoxResultsOf(buttons);
+        ContentDialogResult result = await dialog.ShowAsync(options.IsModal);
+        var results = MessageBoxResultsOf(options.Buttons);
         return results[result switch
         {
             ContentDialogResult.Primary => 0,
