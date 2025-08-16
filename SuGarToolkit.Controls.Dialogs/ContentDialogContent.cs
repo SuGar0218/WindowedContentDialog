@@ -20,6 +20,7 @@ internal sealed partial class ContentDialogContent : ContentControl
         SecondaryButton = null!;
         CloseButton = null!;
         TitleArea = null!;
+        ContentScrollViewer = null!;
     }
 
     private Button PrimaryButton;
@@ -31,6 +32,8 @@ internal sealed partial class ContentDialogContent : ContentControl
     public event RoutedEventHandler? CloseButtonClick;
 
     public UIElement TitleArea { get; private set; }
+    public ContentControl ContentScrollViewer { get; private set; }
+    public ContentPresenter ContentArea { get; private set; }
     public Grid CommandSpace { get; private set; }
 
     protected override void OnApplyTemplate()
@@ -39,6 +42,7 @@ internal sealed partial class ContentDialogContent : ContentControl
 
         TitleArea = (UIElement) GetTemplateChild(nameof(TitleArea));
         CommandSpace = (Grid) GetTemplateChild(nameof(CommandSpace));
+        ContentScrollViewer = (ContentControl) GetTemplateChild(nameof(ContentScrollViewer));
 
         PrimaryButton = (Button) GetTemplateChild(nameof(PrimaryButton));
         SecondaryButton = (Button) GetTemplateChild(nameof(SecondaryButton));
@@ -177,14 +181,17 @@ internal sealed partial class ContentDialogContent : ContentControl
         }
 
         Thickness padding = (Thickness) Application.Current.Resources["ContentDialogPadding"];
-        double commandSpaceExpectedWidth = padding.Left + padding.Right;
-        commandSpaceExpectedWidth += countButtons * buttonLongestWidth;
-        commandSpaceExpectedWidth += (countButtons - 1) * ((GridLength) Application.Current.Resources["ContentDialogButtonSpacing"]).Value;
+        double expectedWidth = padding.Left + padding.Right;
+        expectedWidth += countButtons * buttonLongestWidth;
+        expectedWidth += (countButtons - 1) * ((GridLength) Application.Current.Resources["ContentDialogButtonSpacing"]).Value;
 
-        MinWidth = Math.Max(commandSpaceExpectedWidth, (double) Application.Current.Resources["ContentDialogMinWidth"]);
-        MaxWidth = Math.Max(commandSpaceExpectedWidth, (double) Application.Current.Resources["ContentDialogMaxWidth"]);
+        MinWidth = Math.Max(expectedWidth, (double) Application.Current.Resources["ContentDialogMinWidth"]);
+        MaxWidth = Math.Max(expectedWidth, (double) Application.Current.Resources["ContentDialogMaxWidth"]);
 
-        Loaded += (o, e) => RemoveSizeLimit();
+        Loaded += (o, e) =>
+        {
+            RemoveSizeLimit();
+        };
     }
 
     private void RemoveSizeLimit()
