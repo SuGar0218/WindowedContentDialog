@@ -8,39 +8,314 @@ namespace SuGarToolkit.Controls.Dialogs;
 
 public class InWindowMessageBox
 {
-    public static ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
+    public static async Task ShowAsync(Window ownerWindow, object? content, string? title) => await ShowAsync(ownerWindow, content, title, MessageBoxButtons.OK, MessageBoxImage.None, MessageBoxDefaultButton.Button1);
+    public static async Task ShowAsync(UIElement rootElement, object? content, string? title) => await ShowAsync(rootElement, content, title, MessageBoxButtons.OK, MessageBoxImage.None, MessageBoxDefaultButton.Button1);
 
-    public static async Task ShowAsync(Window parent, object content, string? title = null) => await ShowAsync(parent.Content.XamlRoot, content, title, MessageBoxButtons.OK);
-    public static async Task ShowAsync(UIElement parent, object content, string? title = null) => await ShowAsync(parent.XamlRoot, content, title, MessageBoxButtons.OK);
-
+    /// <summary>
+    /// Show text messages in a MessageBox with xaml root is ownerWindow.Content.XamlRoot.
+    /// <br/>
+    /// Overload #15:
+    /// Invoke overload #13 with default options.
+    /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
-        Window parent,
-        object content, string? title,
+        Window ownerWindow,
+        string? message,
+        string? title,
         MessageBoxButtons buttons,
-        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1)
-        => await ShowAsync(parent.Content.XamlRoot, content, title, buttons, defaultButton);
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(ownerWindow, message, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+    }
 
+    /// <summary>
+    /// Show a MessageBox with xaml root is ownerWindow.Content.XamlRoot.
+    /// <br/>
+    /// Overload #14:
+    /// Invoke overload #12 with default options.
+    /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
-        UIElement parent,
-        object content, string? title,
+        Window ownerWindow,
+        object? content,
+        string? title,
         MessageBoxButtons buttons,
-        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1)
-        => await ShowAsync(parent.XamlRoot, content, title, buttons, defaultButton);
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(ownerWindow, content, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+    }
 
+    /// <summary>
+    /// Show a MessageBox with xaml root is ownerWindow.Content.XamlRoot.
+    /// <br/>
+    /// Overload #13:
+    /// Invoke overload #1 with xaml root is ownerWindow.Content.XamlRoot.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        Window ownerWindow,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        InWindowMessageBoxOptions options)
+    {
+        return await ShowAsync(ownerWindow.Content.XamlRoot, message, title, buttons, image, defaultButton, options);
+    }
+
+    /// <summary>
+    /// Show a MessageBox with xaml root is ownerWindow.Content.XamlRoot.
+    /// <br/>
+    /// Overload #12:
+    /// Invoke overload #0 with xaml root is ownerWindow.Content.XamlRoot.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        Window ownerWindow,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        InWindowMessageBoxOptions options)
+    {
+        return await ShowAsync(ownerWindow.Content.XamlRoot, content, title, buttons, image, defaultButton, options);
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox with xaml root of UIElement.
+    /// <br/>
+    /// Overload #11:
+    /// Invoke overload #9 with default options.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        UIElement rootElement,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(rootElement, message, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+    }
+
+    /// <summary>
+    /// Show a MessageBox with xaml root of UIElement.
+    /// <br/>
+    /// Overload #10:
+    /// Invoke overload #8 with default options.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        UIElement rootElement,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(rootElement, content, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox with xaml root of UIElement.
+    /// <br/>
+    /// Overload #9:
+    /// Invoke overload #1 with xaml root of UIElement.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        UIElement rootElement,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        InWindowMessageBoxOptions options)
+    {
+        return await ShowAsync(rootElement.XamlRoot, message, title, buttons, image, defaultButton, options);
+    }
+
+    /// <summary>
+    /// Show a MessageBox with xaml root of UIElement.
+    /// <br/>
+    /// Overload #8:
+    /// Invoke overload #0 with xaml root of UIElement.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        UIElement rootElement,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        InWindowMessageBoxOptions options)
+    {
+        return await ShowAsync(rootElement.XamlRoot, content, title, buttons, image, defaultButton, options);
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox without icon image.
+    /// <br/>
+    /// Overload #7:
+    /// Invoke overload #6 with content is a SelectableTextBox.
+    /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
         XamlRoot xamlRoot,
-        object content, string? title,
-        MessageBoxButtons buttons,
-        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1)
+        string? message,
+        string? title)
     {
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1);
+    }
 
-        ContentDialog dialog = new ContentDialog
+    /// <summary>
+    /// Show a MessageBox with only OK button.
+    /// <br/>
+    /// Overload #6:
+    /// Invoke overload #4.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        object? content,
+        string? title)
+    {
+        return await ShowAsync(xamlRoot, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1);
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox without icon image.
+    /// <br/>
+    /// Overload #5:
+    /// Invoke overload #4 with content is a SelectableTextBox.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, MessageBoxImage.None, defaultButton);
+    }
+
+    /// <summary>
+    /// Show a MessageBox without icon image.
+    /// <br/>
+    /// Overload #4:
+    /// Invoke overload #2 with image = MessageBoxImage.None.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(xamlRoot, content, title, buttons, MessageBoxImage.None, defaultButton);
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox.
+    /// <br/>
+    /// Overload #3:
+    /// Invoke overload #2 with content is a SelectableTextBox.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, image, defaultButton);
+    }
+
+    /// <summary>
+    /// Show a MessageBox.
+    /// <br/>
+    /// Overload #2:
+    /// Invoke overload #0 with default options.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton)
+    {
+        return await ShowAsync(xamlRoot, content, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox with a similar appearance to WinUI 3 ContentDialog.
+    /// <br/>
+    /// Overload #1:
+    /// Invoke overload #0 with content is a SelectableTextBox.
+    /// </summary>
+    /// <param name="xamlRoot">XamlRoot of Popup, cannot be null, otherwise, it will cause exception.</param>
+    /// <param name="message">Text message displayed in body area</param>
+    /// <param name="title">Text text displayed in header area</param>
+    /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
+    /// <param name="image">MessageBox icon image</param>
+    /// <param name="defaultButton">Which button should be focused initially</param>
+    /// <param name="options">Other style settings like SystemBackdrop.</param>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        InWindowMessageBoxOptions options)
+    {
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, options);
+    }
+
+    /// <summary>
+    /// Show a MessageBox with a similar appearance to WinUI 3 ContentDialog.
+    /// <br/>
+    /// Overload #0:
+    /// The main overload of ShowAsync with full parameters.
+    /// </summary>
+    /// <param name="xamlRoot">XamlRoot of Popup, cannot be null, otherwise, it will cause exception.</param>
+    /// <param name="content">DialogContent displayed in body area, which can be string or UIElement</param>
+    /// <param name="title">Text text displayed in header area</param>
+    /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
+    /// <param name="image">MessageBox icon image</param>
+    /// <param name="defaultButton">Which button should be focused initially</param>
+    /// <param name="options">Other style settings like SystemBackdrop.</param>
+    /// <returns>The button selected by user.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Will not happen under normal circumstances. It happens when judging which button user selected.</exception>
+    public static async Task<MessageBoxResult> ShowAsync(
+        XamlRoot xamlRoot,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        InWindowMessageBoxOptions options)
+    {
+        ElementTheme theme;
+        if (options.RequestedTheme is not ElementTheme.Default)
         {
-            Title = title,
+            theme = options.RequestedTheme;
+        }
+        else if (xamlRoot.Content is FrameworkElement root)
+        {
+            theme = root.ActualTheme;
+        }
+        else
+        {
+            theme = ElementTheme.Default;
+        }
+
+        ContentDialog dialog = new()
+        {
+            Title = new MessageBoxHeader { Text = title, Image = image },
             Content = content,
             XamlRoot = xamlRoot,
             Style = defaultStyle,
-            RequestedTheme = RequestedTheme
+            RequestedTheme = theme,
+            FlowDirection = options.FlowDirection
         };
 
         ContentDialogButton contentDialogDefaultButton = defaultButton switch
@@ -49,7 +324,7 @@ public class InWindowMessageBox
             MessageBoxDefaultButton.Button2 => ContentDialogButton.Secondary,
             MessageBoxDefaultButton.Button3 => ContentDialogButton.Close,
             null => ContentDialogButton.None,
-            _ => throw new ArgumentException("MessageBoxDefaultButton defaultButton should be in {Button1=0, Button2=256, Button3=512}")
+            _ => ContentDialogButton.None
         };
         dialog.DefaultButton = contentDialogDefaultButton;
 
@@ -155,15 +430,19 @@ public class InWindowMessageBox
 
         }
 
-        ContentDialogResult result = await dialog.ShowAsync();
-        // None    0
-        // 未点击任何按钮 或 CloseButton (ESC)
+        ContentDialogResult result;
+        if (options.DisableBehind && xamlRoot.Content is Control control)
+        {
+            bool isOriginallyEnabled = control.IsEnabled;
+            control.IsEnabled = false;
+            result = await dialog.ShowAsync();
+            control.IsEnabled = isOriginallyEnabled;
+        }
+        else
+        {
+            result = await dialog.ShowAsync();
+        }
 
-        // Primary 1
-        // 用户已点击主按钮
-
-        // Secondary   2
-        // 用户点击了辅助按钮
         var results = MessageBoxResultsOf(buttons);
         return results[result switch
         {
@@ -190,6 +469,21 @@ public class InWindowMessageBox
     {
         TargetType = typeof(ContentDialog),
         BasedOn = Application.Current.Resources["DefaultContentDialogStyle"] as Style
+    };
+
+    /// <summary>
+    /// Create a readonly TextBox that allows user to select the message text.
+    /// <br/>
+    /// Why not use TextBlock with IsTextSelectionEnabled=true ?
+    /// Currently (WindowsAppSDK 1.7), once user selected text,
+    /// TextBlock with IsTextSelectionEnabled=true and TextWrapping=TextWrapping.Wrap
+    /// cannot update text wrapping automatically until the next time user selects text.
+    /// </summary>
+    private static SelectableTextBlock CreateSelectableTextBlock(string? text) => new()
+    {
+        Text = text,
+        TextWrapping = TextWrapping.Wrap,
+        HorizontalAlignment = HorizontalAlignment.Stretch
     };
 }
 

@@ -8,56 +8,222 @@ namespace SuGarToolkit.Controls.Dialogs;
 
 public class MessageBox
 {
-    public static async Task<MessageBoxResult> ShowAsync(
-        object content,
-        string? title = null)
-        => await ShowAsync(false, null, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
+    /// <summary>
+    /// Show text messages in a MessageBox with only OK button.
+    /// <br/>
+    /// Overload #11:
+    /// Invoke overload #9 with without owner/parent window.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(string? message, string? title = null) => await ShowAsync(false, null, message, title);
 
+    /// <summary>
+    /// Show text messages in a MessageBox with only OK button.
+    /// <br/>
+    /// Overload #10:
+    /// Invoke overload #8 without owner/parent window.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(object? content, string? title = null) => await ShowAsync(false, null, content, title);
+
+    /// <summary>
+    /// Show text messages in a MessageBox with only OK button.
+    /// <br/>
+    /// Overload #9:
+    /// Invoke overload #5 with buttons is MessageBoxButtons.OK.
+    /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
-        object content,
+        bool isModal,
+        Window? owner,
+        string? message,
+        string? title = null)
+        => await ShowAsync(isModal, owner, message, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
+
+    /// <summary>
+    /// Show text messages in a MessageBox with only OK button.
+    /// <br/>
+    /// Overload #8:
+    /// Invoke overload #4 with buttons is MessageBoxButtons.OK.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        bool isModal,
+        Window? owner,
+        object? content,
+        string? title = null)
+        => await ShowAsync(isModal, owner, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
+
+    /// <summary>
+    /// Show text messages in a MessageBox without icon image.
+    /// <br/>
+    /// Overload #7:
+    /// Invoke overload #6 with content is a SelectableTextBox.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
+        => await ShowAsync(false, null, CreateSelectableTextBlock(message), title, buttons, defaultButton, isTitleBarVisible);
+
+    /// <summary>
+    /// Show a MessageBox without icon image.
+    /// <br/>
+    /// Overload #6:
+    /// Invoke overload #4 without owner/parent window.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        object? content,
         string? title,
         MessageBoxButtons buttons,
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
         => await ShowAsync(false, null, content, title, buttons, defaultButton, isTitleBarVisible);
 
+    /// <summary>
+    /// Show text messages in a MessageBox without icon image.
+    /// <br/>
+    /// Overload #5:
+    /// Invoke overload #4 with content is a SelectableTextBox.
+    /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
         bool isModal,
-        Window owner,
-        object content,
-        string? title = null)
-        => await ShowAsync(isModal, owner, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
-
-    public static async Task<MessageBoxResult> ShowAsync(bool isModal, Window? owner, object? content, string? title, MessageBoxButtons buttons, MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1, bool isTitleBarVisible = true)
+        Window? owner,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
     {
-        return await ShowAsync(new MessageBoxOptions
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, MessageBoxImage.None, defaultButton, isTitleBarVisible);
+    }
+
+    /// <summary>
+    /// Show a MessageBox without icon image.
+    /// <br/>
+    /// Overload #4:
+    /// Invoke overload #2 with image = MessageBoxImage.None.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        bool isModal,
+        Window? owner,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
+    {
+        return await ShowAsync(isModal, owner, content, title, buttons, MessageBoxImage.None, defaultButton, isTitleBarVisible);
+    }
+
+    /// <summary>
+    /// Determine whether to show title bar (mainly the close button) and show text messages in a MessageBox.
+    /// <br/>
+    /// Overload #3:
+    /// Invoke overload #2 with content is a SelectableTextBox.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        bool isModal,
+        Window? owner,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
+    {
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, new MessageBoxOptions
         {
-            IsModal = isModal,
-            OwnerWindow = owner,
-            Content = content,
-            Title = title,
-            Buttons = buttons,
-            DefaultButton = defaultButton,
             IsTitleBarVisible = isTitleBarVisible
         });
     }
 
-    public static async Task<MessageBoxResult> ShowAsync(MessageBoxOptions options)
+    /// <summary>
+    /// Determine whether to show title bar (mainly the close button) and show a MessageBox.
+    /// <br/>
+    /// Overload #2:
+    /// Invoke overload #0 and only set IsTitleBarVisible in options.
+    /// </summary>
+    public static async Task<MessageBoxResult> ShowAsync(
+        bool isModal,
+        Window? owner,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
+        bool isTitleBarVisible = true)
+    {
+        return await ShowAsync(isModal, owner, content, title, buttons, image, defaultButton, new MessageBoxOptions
+        {
+            IsTitleBarVisible = isTitleBarVisible
+        });
+    }
+
+    /// <summary>
+    /// Show text messages in a MessageBox with a similar appearance to WinUI 3 ContentDialog.
+    /// Overload #1:
+    /// Invoke overload #0 with content is a SelectableTextBox.
+    /// </summary>
+    /// <param name="isModal">Whether the MessageBox is a modal window.</param>
+    /// <param name="owner">Owner/Parent window of the MessageBox</param>
+    /// <param name="message">Text message displayed in body area</param>
+    /// <param name="title">Text text displayed in header area</param>
+    /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
+    /// <param name="image">MessageBox icon image</param>
+    /// <param name="defaultButton">Which button should be focused initially</param>
+    /// <param name="options">Other style settings like SystemBackdrop.</param>
+    public static async Task<MessageBoxResult> ShowAsync(
+        bool isModal,
+        Window? owner,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        MessageBoxOptions options)
+    {
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, options);  // Overload #0
+    }
+
+    /// <summary>
+    /// Show a MessageBox with a similar appearance to WinUI 3 ContentDialog.
+    /// <br/>
+    /// Overload #0:
+    /// The main overload of ShowAsync with full parameters.
+    /// </summary>
+    /// <param name="isModal">Whether the MessageBox is a modal window.</param>
+    /// <param name="owner">Owner/Parent window of the MessageBox</param>
+    /// <param name="content">DialogContent displayed in body area, which can be string or UIElement</param>
+    /// <param name="title">Text text displayed in header area</param>
+    /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
+    /// <param name="image">MessageBox icon image</param>
+    /// <param name="defaultButton">Which button should be focused initially</param>
+    /// <param name="options">Other style settings like SystemBackdrop.</param>
+    /// <returns>The button selected by user.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Will not happen under normal circumstances. It happens when judging which button user selected.</exception>
+    public static async Task<MessageBoxResult> ShowAsync(
+        bool isModal,
+        Window? owner,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxImage image,
+        MessageBoxDefaultButton? defaultButton,
+        MessageBoxOptions options)
     {
         ElementTheme theme;
         if (options.RequestedTheme is not ElementTheme.Default)
         {
             theme = options.RequestedTheme;
         }
-        else if (options.OwnerWindow is not null)
+        else if (owner is not null)
         {
-            if (options.OwnerWindow.Content is FrameworkElement root)
+            if (owner.Content is FrameworkElement root)
             {
                 theme = root.ActualTheme;
             }
             else
             {
-                theme = options.OwnerWindow.AppWindow.TitleBar.PreferredTheme switch
+                theme = owner.AppWindow.TitleBar.PreferredTheme switch
                 {
                     Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode => ElementTheme.Default,
                     Microsoft.UI.Windowing.TitleBarTheme.Light => ElementTheme.Light,
@@ -73,9 +239,10 @@ public class MessageBox
 
         WindowedContentDialog dialog = new()
         {
-            Title = options.Title ?? string.Empty,
-            Content = options.Content,
-            OwnerWindow = options.OwnerWindow,
+            WindowTitle = title,
+            Title = new MessageBoxHeader { Text = title, Image = image },
+            Content = content,
+            OwnerWindow = owner,
             SystemBackdrop = options.SystemBackdrop,
             RequestedTheme = theme,
             IsTitleBarVisible = options.IsTitleBarVisible,
@@ -86,17 +253,17 @@ public class MessageBox
             DisableBehind = options.DisableBehind,
         };
 
-        ContentDialogButton contentDialogDefaultButton = options.DefaultButton switch
+        ContentDialogButton contentDialogDefaultButton = defaultButton switch
         {
             MessageBoxDefaultButton.Button1 => ContentDialogButton.Primary,
             MessageBoxDefaultButton.Button2 => ContentDialogButton.Secondary,
             MessageBoxDefaultButton.Button3 => ContentDialogButton.Close,
             null => ContentDialogButton.None,
-            _ => throw new ArgumentException("MessageBoxDefaultButton defaultButton should be in {Button1=0, Button2=256, Button3=512}")
+            _ => ContentDialogButton.None
         };
         dialog.DefaultButton = contentDialogDefaultButton;
 
-        switch (options.Buttons)
+        switch (buttons)
         {
             case MessageBoxButtons.OK:
                 dialog.CloseButtonText = "OK";
@@ -138,8 +305,8 @@ public class MessageBox
                 break;
         }
 
-        ContentDialogResult result = await dialog.ShowAsync(options.IsModal);
-        var results = MessageBoxResultsOf(options.Buttons);
+        ContentDialogResult result = await dialog.ShowAsync(isModal);
+        MessageBoxResult[] results = MessageBoxResultsOf(buttons);
         return results[result switch
         {
             ContentDialogResult.Primary => 0,
@@ -160,73 +327,20 @@ public class MessageBox
     ];
 
     private static MessageBoxResult[] MessageBoxResultsOf(MessageBoxButtons buttons) => resultGroups[(int) buttons];
+
+    /// <summary>
+    /// Create a readonly TextBox that allows user to select the message text.
+    /// <br/>
+    /// Why not use TextBlock with IsTextSelectionEnabled=true ?
+    /// Currently (WindowsAppSDK 1.7), once user selected text,
+    /// TextBlock with IsTextSelectionEnabled=true and TextWrapping=TextWrapping.Wrap
+    /// cannot update text wrapping automatically until the next time user selects text.
+    /// </summary>
+    private static SelectableTextBlock CreateSelectableTextBlock(string? text) => new()
+    {
+        Text = text,
+        TextWrapping = TextWrapping.Wrap,
+        HorizontalAlignment = HorizontalAlignment.Stretch
+    };
 }
 
-public enum MessageBoxButtons
-{
-    OK = 0,
-    // 消息框包含“确定”按钮。
-
-    OKCancel = 1,
-    // 消息框包含“确定”和“取消”按钮。
-
-    AbortRetryIgnore = 2,
-    // 消息框包含“中止”、“重试”和“忽略”按钮。
-
-    YesNoCancel = 3,
-    // 消息框包含“是”、“否”和“取消”按钮。
-
-    YesNo = 4,
-    // 消息框包含“是”和“否”按钮。
-
-    RetryCancel = 5,
-    // 消息框包含“重试”和“取消”按钮。
-
-    CancelTryContinue = 6,
-    // 指定消息框包含“取消”、“重试”和“继续”按钮。
-}
-
-public enum MessageBoxResult
-{
-    None = 0,
-    // 从对话框返回了 Nothing。 这表明有模式对话框继续运行。
-
-    OK = 1,
-    // 对话框的返回值是 OK（通常从标签为“确定”的按钮发送）。
-
-    Cancel = 2,
-    // 对话框的返回值是 Cancel（通常从标签为“取消”的按钮发送）。
-
-    Abort = 3,
-    // 对话框的返回值是 Abort（通常从标签为“中止”的按钮发送）。
-
-    Retry = 4,
-    // 对话框的返回值是 Retry（通常从标签为“重试”的按钮发送）。
-
-    Ignore = 5,
-    // 对话框的返回值是 Ignore（通常从标签为“忽略”的按钮发送）。
-
-    Yes = 6,
-    // 对话框的返回值是 Yes（通常从标签为“是”的按钮发送）
-
-    No = 7,
-    // 对话框的返回值是 No（通常从标签为“否”的按钮发送）。
-
-    TryAgain = 10,
-    // 对话框返回值是“重试” (通常从标记为“重试”的按钮发送) 。
-
-    Continue = 11,
-    // 对话框返回值是“继续” (通常从标记为“继续”) 的按钮发送。
-}
-
-public enum MessageBoxDefaultButton
-{
-    Button1 = 0,
-    // 消息框上的第一个按钮是默认按钮。
-
-    Button2 = 256,
-    // 消息框上的第二个按钮是默认按钮。
-
-    Button3 = 512,
-    // 消息框上的第三个按钮是默认按钮。
-}

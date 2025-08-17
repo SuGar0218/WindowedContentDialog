@@ -72,17 +72,29 @@
                                 Margin="0,16"
                                 Orientation="Horizontal"
                                 Spacing="8">
-                                <Button
-                                    Click="{x:Bind ShowMessageBox}"
-                                    Content="MessageBox"
-                                    Style="{ThemeResource AccentButtonStyle}">
-                                    <Button.ContextFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem Click="{x:Bind ShowMessageBox}" Text="WindowedMessageBox" />
-                                            <MenuFlyoutItem Click="{x:Bind ShowInWindowMessageBox}" Text="InWindowMessageBox" />
-                                        </MenuFlyout>
-                                    </Button.ContextFlyout>
-                                </Button>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <DropDownButton
+                                        Grid.Column="1"
+                                        MinWidth="0"
+                                        Margin="-10,0,0,0"
+                                        VerticalAlignment="Stretch">
+                                        <DropDownButton.Flyout>
+                                            <MenuFlyout Placement="Bottom">
+                                                <MenuFlyoutItem Click="{x:Bind ShowMessageBox}" Text="WindowedMessageBox" />
+                                                <MenuFlyoutItem Click="{x:Bind ShowInWindowMessageBox}" Text="InWindowMessageBox" />
+                                            </MenuFlyout>
+                                        </DropDownButton.Flyout>
+                                    </DropDownButton>
+                                    <Button
+                                        Grid.Column="0"
+                                        Click="{x:Bind ShowMessageBox}"
+                                        Content="MessageBox"
+                                        Style="{ThemeResource AccentButtonStyle}" />
+                                </Grid>
                                 <TextBlock
                                     x:Name="MessageBoxResultBox"
                                     VerticalAlignment="Center"
@@ -91,12 +103,17 @@
                         </Expander.Header>
 
                         <StackPanel Spacing="12">
-                            <TextBox Header="标题" Text="{x:Bind messageBoxViewModel.Title, Mode=TwoWay}" />
+                            <TextBox
+                                AcceptsReturn="True"
+                                Header="标题"
+                                Text="{x:Bind messageBoxViewModel.Title, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
                             <TextBox
                                 AcceptsReturn="True"
                                 Header="内容"
                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                Text="{x:Bind messageBoxViewModel.Content, Mode=TwoWay}" />
+                                Text="{x:Bind messageBoxViewModel.Content, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
                             <ComboBox
                                 Header="按扭组合"
                                 ItemsSource="{x:Bind messageBoxButtons}"
@@ -105,6 +122,10 @@
                                 Header="默认按钮"
                                 ItemsSource="{x:Bind messageBoxDefaultButtons}"
                                 SelectedItem="{x:Bind messageBoxViewModel.DefaultButton, Mode=TwoWay}" />
+                            <ComboBox
+                                Header="图标"
+                                ItemsSource="{x:Bind messageBoxImages}"
+                                SelectedItem="{x:Bind messageBoxViewModel.Image, Mode=TwoWay}" />
                             <ComboBox
                                 Header="材质"
                                 ItemsSource="{x:Bind local:ExamplePage.systemBackdropTypes}"
@@ -128,17 +149,29 @@
                                 Margin="0,16"
                                 Orientation="Horizontal"
                                 Spacing="8">
-                                <Button
-                                    Click="{x:Bind ShowContentDialog}"
-                                    Content="WindowedContentDialog"
-                                    Style="{ThemeResource AccentButtonStyle}">
-                                    <Button.ContextFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem Click="{x:Bind ShowContentDialog}" Text="WindowedContentDialog" />
-                                            <MenuFlyoutItem Click="{x:Bind ShowInWindowContentDialog}" Text="InWindowContentDialog" />
-                                        </MenuFlyout>
-                                    </Button.ContextFlyout>
-                                </Button>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <DropDownButton
+                                        Grid.Column="1"
+                                        MinWidth="0"
+                                        Margin="-10,0,0,0"
+                                        VerticalAlignment="Stretch">
+                                        <DropDownButton.Flyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem Click="{x:Bind ShowContentDialog}" Text="WindowedContentDialog" />
+                                                <MenuFlyoutItem Click="{x:Bind ShowInWindowContentDialog}" Text="InWindowContentDialog" />
+                                            </MenuFlyout>
+                                        </DropDownButton.Flyout>
+                                    </DropDownButton>
+                                    <Button
+                                        Grid.Column="0"
+                                        Click="{x:Bind ShowContentDialog}"
+                                        Content="WindowedContentDialog"
+                                        Style="{ThemeResource AccentButtonStyle}" />
+                                </Grid>
                                 <TextBlock
                                     x:Name="ContentDialogResultBox"
                                     VerticalAlignment="Center"
@@ -147,7 +180,11 @@
                         </Expander.Header>
 
                         <StackPanel Spacing="12">
-                            <TextBox Header="标题" Text="{x:Bind contentDialogViewModel.Title, Mode=TwoWay}" />
+                            <TextBox
+                                AcceptsReturn="True"
+                                Header="标题"
+                                Text="{x:Bind contentDialogViewModel.Title, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
                             <TextBox Header="PrimaryButtonText" Text="{x:Bind contentDialogViewModel.PrimaryButtonText, Mode=TwoWay}" />
                             <TextBox Header="SecondaryButtonText" Text="{x:Bind contentDialogViewModel.SecondaryButtonText, Mode=TwoWay}" />
                             <TextBox Header="CloseButtonText" Text="{x:Bind contentDialogViewModel.CloseButtonText, Mode=TwoWay}" />

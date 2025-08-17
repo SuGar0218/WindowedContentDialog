@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SuGarToolkit.Controls.Dialogs">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/MessageBoxHeader/MessageBoxHeader_themeresources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="local:MessageBoxHeader">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MessageBoxHeader">
+                    <Grid
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid
+                            x:Name="StandardIconArea"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed">
+
+                            <TextBlock
+                                x:Name="IconBackground"
+                                Margin="{StaticResource MessageBoxHeaderIconMargin}"
+                                VerticalAlignment="Top"
+                                AutomationProperties.AccessibilityView="Raw"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                FontSize="{StaticResource MessageBoxHeaderIconFontSize}"
+                                Foreground="{ThemeResource MessageBoxHeaderInformationalSeverityIconBackground}"
+                                Text="{StaticResource MessageBoxHeaderIconBackgroundGlyph}" />
+
+                            <TextBlock
+                                x:Name="StandardIcon"
+                                Margin="{StaticResource MessageBoxHeaderIconMargin}"
+                                VerticalAlignment="Top"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                FontSize="{StaticResource MessageBoxHeaderIconFontSize}"
+                                Foreground="{ThemeResource MessageBoxHeaderInformationalSeverityIconForeground}"
+                                Text="{StaticResource MessageBoxHeaderInformationalIconGlyph}" />
+                        </Grid>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Foreground="{TemplateBinding Foreground}"
+                            Text="{TemplateBinding Text}"
+                            TextWrapping="Wrap" />
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="SeverityLevels">
+                                <VisualState x:Name="Informational" />
+                                <VisualState x:Name="Questional">
+                                    <VisualState.Setters>
+                                        <!--<Setter Target="ContentRoot.Background" Value="{ThemeResource MessageBoxHeaderQuestionalSeverityBackgroundBrush}" />-->
+                                        <Setter Target="IconBackground.Foreground" Value="{ThemeResource MessageBoxHeaderQuestionalSeverityIconBackground}" />
+                                        <Setter Target="StandardIcon.Text" Value="{StaticResource MessageBoxHeaderQuestionalIconGlyph}" />
+                                        <Setter Target="StandardIcon.Foreground" Value="{ThemeResource MessageBoxHeaderQuestionalSeverityIconForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Error">
+                                    <VisualState.Setters>
+                                        <!--<Setter Target="ContentRoot.Background" Value="{ThemeResource MessageBoxHeaderErrorSeverityBackgroundBrush}" />-->
+                                        <Setter Target="IconBackground.Foreground" Value="{ThemeResource MessageBoxHeaderErrorSeverityIconBackground}" />
+                                        <Setter Target="StandardIcon.Text" Value="{StaticResource MessageBoxHeaderErrorIconGlyph}" />
+                                        <Setter Target="StandardIcon.Foreground" Value="{ThemeResource MessageBoxHeaderErrorSeverityIconForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Warning">
+                                    <VisualState.Setters>
+                                        <!--<Setter Target="ContentRoot.Background" Value="{ThemeResource MessageBoxHeaderWarningSeverityBackgroundBrush}" />-->
+                                        <Setter Target="IconBackground.Text" Value="{ThemeResource MessageBoxHeaderWarningBackgroundGlyph}" />
+                                        <Setter Target="IconBackground.Foreground" Value="{ThemeResource MessageBoxHeaderWarningSeverityIconBackground}" />
+                                        <Setter Target="StandardIcon.Text" Value="{StaticResource MessageBoxHeaderWarningIconGlyph}" />
+                                        <Setter Target="StandardIcon.Foreground" Value="{ThemeResource MessageBoxHeaderWarningSeverityIconForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Success">
+                                    <VisualState.Setters>
+                                        <!--<Setter Target="ContentRoot.Background" Value="{ThemeResource MessageBoxHeaderSuccessSeverityBackgroundBrush}" />-->
+                                        <Setter Target="IconBackground.Foreground" Value="{ThemeResource MessageBoxHeaderSuccessSeverityIconBackground}" />
+                                        <Setter Target="StandardIcon.Text" Value="{StaticResource MessageBoxHeaderSuccessIconGlyph}" />
+                                        <Setter Target="StandardIcon.Foreground" Value="{ThemeResource MessageBoxHeaderSuccessSeverityIconForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="IconStates">
+                                <VisualState x:Name="StandardIconVisible">
+                                    <VisualState.Setters>
+                                        <Setter Target="StandardIconArea.Visibility" Value="Visible" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="NoIconVisible" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

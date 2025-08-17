@@ -22,24 +22,14 @@ public sealed partial class ExamplePage : Page
     }
 
     private readonly MessageBoxLikeExampleViewModel messageBoxViewModel = new();
+
     private readonly ContentDialogLikeExampleViewModel contentDialogViewModel = new();
 
-    private readonly List<MessageBoxButtons> messageBoxButtons =
-    [
-        MessageBoxButtons.OK,
-        MessageBoxButtons.OKCancel,
-        MessageBoxButtons.AbortRetryIgnore,
-        MessageBoxButtons.YesNoCancel,
-        MessageBoxButtons.YesNo,
-        MessageBoxButtons.RetryCancel
-    ];
+    private readonly MessageBoxButtons[] messageBoxButtons = Enum.GetValues<MessageBoxButtons>();
 
-    private readonly List<MessageBoxDefaultButton> messageBoxDefaultButtons =
-    [
-        MessageBoxDefaultButton.Button1,
-        MessageBoxDefaultButton.Button2,
-        MessageBoxDefaultButton.Button3
-    ];
+    private readonly MessageBoxDefaultButton[] messageBoxDefaultButtons = Enum.GetValues<MessageBoxDefaultButton>();
+
+    private readonly MessageBoxImage[] messageBoxImages = Enum.GetValues<MessageBoxImage>();
 
     private readonly List<ContentDialogButton> contentDialogButtons =
     [
@@ -55,41 +45,48 @@ public sealed partial class ExamplePage : Page
         {
             SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
         }
-        MessageBoxResult result = await MessageBox.ShowAsync(new MessageBoxOptions
-        {
-            Title = messageBoxViewModel.Title,
-            Content = messageBoxViewModel.Content,
-
-            IsModal = messageBoxViewModel.IsModal,
-            OwnerWindow = messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
-
-            Buttons = messageBoxViewModel.Buttons,
-            DefaultButton = messageBoxViewModel.DefaultButton,
-            IsTitleBarVisible = messageBoxViewModel.IsTitleBarVisible,
-
-            DisableBehind = messageBoxViewModel.DisableBehind,
-            SmokeLayerKind = messageBoxViewModel.SmokeLayerKind,
-            CustomSmokeLayer = LazyCustomSmokeLayer.Value,
-
-            SystemBackdrop = messageBoxViewModel.BackdropType switch
+        MessageBoxResult result = await MessageBox.ShowAsync(
+            messageBoxViewModel.IsModal,
+            messageBoxViewModel.IsChild ? App.Current.MainWindow : null,
+            messageBoxViewModel.Content,
+            messageBoxViewModel.Title,
+            messageBoxViewModel.Buttons,
+            messageBoxViewModel.Image,
+            messageBoxViewModel.DefaultButton,
+            new MessageBoxOptions
             {
-                BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
-                BuiltInSystemBackdropType.MicaAlt => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt },
-                BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
-                _ => null
-            }
-        });
+                IsTitleBarVisible = messageBoxViewModel.IsTitleBarVisible,
+
+                DisableBehind = messageBoxViewModel.DisableBehind,
+                SmokeLayerKind = messageBoxViewModel.SmokeLayerKind,
+                CustomSmokeLayer = LazyCustomSmokeLayer.Value,
+
+                RequestedTheme = ActualTheme,
+                SystemBackdrop = messageBoxViewModel.BackdropType switch
+                {
+                    BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
+                    BuiltInSystemBackdropType.MicaAlt => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt },
+                    BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
+                    _ => null
+                }
+            });
         MessageBoxResultBox.Text = result.ToString();
     }
 
     private async void ShowInWindowMessageBox()
     {
         MessageBoxResult result = await InWindowMessageBox.ShowAsync(
-            App.Current.MainWindow!,
+            this,
             messageBoxViewModel.Content,
             messageBoxViewModel.Title,
             messageBoxViewModel.Buttons,
-            messageBoxViewModel.DefaultButton);
+            messageBoxViewModel.Image,
+            messageBoxViewModel.DefaultButton,
+            new InWindowMessageBoxOptions
+            {
+                DisableBehind = messageBoxViewModel.DisableBehind,
+                RequestedTheme = ActualTheme
+            });
         MessageBoxResultBox.Text = result.ToString();
     }
 
@@ -186,7 +183,7 @@ public sealed partial class ExamplePage : Page
 
     private readonly Lazy<FrameworkElement> LazyCustomSmokeLayer = new(() => new Border
     {
-        Background = new SolidColorBrush((Color) Application.Current.Resources["SystemAccentColorDark3"]) { Opacity = 0.618 },
+        Background = new SolidColorBrush((Color) Application.Current.Resources["SystemAccentColorDark2"]) { Opacity = 0.618 },
         Child = new TextBlock
         {
             Text = "Dialog is opened",

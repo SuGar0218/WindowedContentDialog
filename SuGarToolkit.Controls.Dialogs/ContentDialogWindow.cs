@@ -40,7 +40,7 @@ public partial class ContentDialogWindow : Window
         _content.PrimaryButtonClick += OnPrimaryButtonClick;
         _content.SecondaryButtonClick += OnSecondaryButtonClick;
         base.Content = _content;
-        base.Title = _content.Title;
+        //base.DialogTitle = _content.DialogTitle;
 
         // When showing accent color in title bar is enabled,
         // title bar buttons in the default custom title bar in WinUI3
@@ -60,7 +60,7 @@ public partial class ContentDialogWindow : Window
             ;
         }
         _content.Loaded += (o, e) => DetermineTitleBarButtonForegroundColor();
-        _content.ActualThemeChanged += (sender, args) => DetermineTitleBarButtonForegroundColor();
+        _content.ActualThemeChanged += (o, e) => DetermineTitleBarButtonForegroundColor();
     }
 
     public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? PrimaryButtonClick;
@@ -257,22 +257,21 @@ public partial class ContentDialogWindow : Window
     public ContentDialogResult Result { get; private set; }
 
     /// <summary>
-    /// 此 Content 表示对话框正文部分的内容，而不是整个窗口的内容。
+    /// 此 DialogContent 表示对话框正文部分的内容，而不是整个窗口的内容。
     /// </summary>
-    public new object? Content
+    public object? DialogContent
     {
         get => _content.Content;
         set => _content.Content = value;
     }
 
-    public new string Title
+    /// <summary>
+    /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是UI。
+    /// </summary>
+    public object? DialogTitle
     {
         get => _content.Title;
-        set
-        {
-            _content.Title = value;
-            base.Title = value;
-        }
+        set => _content.Title = value;
     }
 
     public bool IsTitleBarVisible { get; set; } = true;
@@ -286,8 +285,8 @@ public partial class ContentDialogWindow : Window
         // AppWindow.ResizeCilent is accurate in width but there is an extra height of title bar (30 DIP) when ExtendsContentInfoTitleBar = true.
         // No matter whether ExtendsContentInfoTitleBar, the size is the same after use AppWindow.ResizeCilent.
         AppWindow.ResizeClient(new Windows.Graphics.SizeInt32(
-            (int) ((_content.ActualWidth + 1) * _content.XamlRoot.RasterizationScale),
-            (int) ((_content.ActualHeight - 30) * _content.XamlRoot.RasterizationScale)));
+            (int) ((_content.ActualWidth + 1) * _content.XamlRoot.RasterizationScale) + 1,
+            (int) ((_content.ActualHeight - 30) * _content.XamlRoot.RasterizationScale) + 1));
         SetTitleBar(_content.TitleArea);
 
         if (_center)

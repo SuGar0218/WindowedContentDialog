@@ -14,7 +14,8 @@ namespace SuGarToolkit.Controls.Dialogs;
 
 public class WindowedContentDialog
 {
-    public string? Title { get; set; }
+    public string? WindowTitle { get; set; }
+    public object? Title { get; set; }
     public object? Content { get; set; }
 
     public ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
@@ -70,8 +71,8 @@ public class WindowedContentDialog
     /// <br/>
     /// 不用注意了，窗口关闭时已经脱离了父级控件。
     /// 注意：FrameworkElement 不能多处共享。
-    /// 如果 Content 是 FrameworkElement，那么此 FrameworkElement 不能已被其他父级持有，例如 new MainWindow().Content；
-    /// 下次更改 Content 前，此弹窗也只能弹出一次，因为每次弹窗都创建一个新的窗口示例，使得同一个 FrameworkElement 被多处共享。
+    /// 如果 DialogContent 是 FrameworkElement，那么此 FrameworkElement 不能已被其他父级持有，例如 new MainWindow().DialogContent；
+    /// 下次更改 DialogContent 前，此弹窗也只能弹出一次，因为每次弹窗都创建一个新的窗口示例，使得同一个 FrameworkElement 被多处共享。
     /// </summary>
     /// <param name="modal">阻塞所属窗口。默认为 true，但是当 OwnerWindow is null 时不会起作用，仍然弹出普通窗口。</param>
     /// <returns>用户选择结果</returns>
@@ -79,8 +80,9 @@ public class WindowedContentDialog
     {
         ContentDialogWindow dialogWindow = new()
         {
-            Title = Title ?? string.Empty,
-            Content = Content,
+            Title = WindowTitle,
+            DialogTitle = Title,
+            DialogContent = Content,
 
             PrimaryButtonText = PrimaryButtonText,
             SecondaryButtonText = SecondaryButtonText,
@@ -105,21 +107,16 @@ public class WindowedContentDialog
 
         dialogWindow.SetParent(OwnerWindow, modal, CenterInParent);
 
-        if (DisableBehind && OwnerWindow?.Content is not null)
+        if (DisableBehind && OwnerWindow?.Content is not null && OwnerWindow.Content is Control control)
         {
+            bool isOriginallyEnabled = control.IsEnabled;
             dialogWindow.Opened += (window, e) =>
             {
-                if (OwnerWindow.Content is Control control)
-                {
-                    control.IsEnabled = false;
-                }
+                control.IsEnabled = false;
             };
             dialogWindow.Closed += (o, e) =>
             {
-                if (OwnerWindow.Content is Control control)
-                {
-                    control.IsEnabled = true;
-                }
+                control.IsEnabled = isOriginallyEnabled;
             };
         }
 
@@ -143,7 +140,6 @@ public class WindowedContentDialog
                 behindOverlayPopup.Child = darkLayer;
 
                 void OnOwnerWindowSizeChanged(object sender, WindowSizeChangedEventArgs args) => SizeToWindow(darkLayer, OwnerWindow);
-
                 dialogWindow.Loaded += (o, e) =>
                 {
                     behindOverlayPopup.IsOpen = true;

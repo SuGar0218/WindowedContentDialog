@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SuGarToolkit.Controls.Dialogs">
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <StaticResource x:Key="ContentDialogWindowTopOverlay" ResourceKey="LayerFillColorDefaultBrush" />
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="Light">
+            <StaticResource x:Key="ContentDialogWindowTopOverlay" ResourceKey="LayerFillColorDefaultBrush" />
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="HighContrast">
+            <StaticResource x:Key="ContentDialogWindowTopOverlay" ResourceKey="SystemControlTransparentBrush" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <Thickness x:Key="ContentDialogWindowTitlePadding">24,24,24,0</Thickness>
+    <Thickness x:Key="ContentDialogWindowContentPadding">24,0,24,24</Thickness>
+    <Color x:Key="ContentDialogWindowCommandSpaceBackground">#0F000000</Color>
+    <Color x:Key="ContentDialogWindowSeparatorBorderColor">#19000000</Color>
+    <SolidColorBrush x:Key="ContentDialogWindowCommandSpaceBackgroundBrush" Color="{StaticResource ContentDialogWindowCommandSpaceBackground}" />
+    <SolidColorBrush x:Key="ContentDialogWindowSeparatorBorderBrush" Color="{StaticResource ContentDialogWindowSeparatorBorderColor}" />
+</ResourceDictionary>

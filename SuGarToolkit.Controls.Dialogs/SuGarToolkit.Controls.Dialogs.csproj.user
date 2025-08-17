@@ -3,6 +3,18 @@
   <PropertyGroup>
     <_LastSelectedProfileId>D:\Documents\Code\C#\WinUI3\SuGarToolkit\SuGarToolkit.Controls.Dialogs\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Page Update="Themes\ContentDialogContent\ContentDialogContent_themeresources.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Themes\ContentDialogContent\ContentDialogContent.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <ItemGroup>
     <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
