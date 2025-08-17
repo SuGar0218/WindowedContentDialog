@@ -15,10 +15,9 @@ WindowedContentDialog dialog = new()
     SecondaryButtonText = "YourSecondaryButtonText",
     CloseButtonText = "YourCloseButtonText",
     DefaultButton = ContentDialogButton.Primary,
-    OwnerWindow = App.Current.MainWindow,
-    RequestedTheme = ElementTheme.Dark
+    OwnerWindow = App.Current.MainWindow
 };
-ContentDialogResult result = await dialog.ShowAsync(modal: true);
+ContentDialogResult result = await dialog.ShowAsync();
 ```
 
 If you want to prevent dialog from closing after buttons clicked, please handle click event and set ```e.Cancel = true``` where ```e``` is ```ContentDialogWindowButtonClickEventArgs```.
@@ -41,4 +40,4 @@ MessageBoxResult result = await MessageBox.ShowAsync(
 
 ## Use WindowedContentDialog in your projects
 
-Download nupkg in Github release page.
+Download nupkg from releases page or https://www.nuget.org/packages/SuGarToolkit.Controls.Dialogs.
