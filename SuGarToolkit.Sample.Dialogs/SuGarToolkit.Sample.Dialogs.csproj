@@ -49,6 +49,11 @@
     <ProjectReference Include="..\SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="Assets\WindowedContentDialogSampleIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Views\LoremIpsumPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -72,5 +77,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <WindowsPackageType>None</WindowsPackageType>
     <PublishAot>True</PublishAot>
+    <ApplicationIcon>Assets\WindowedContentDialogSampleIcon.ico</ApplicationIcon>
   </PropertyGroup>
 </Project>

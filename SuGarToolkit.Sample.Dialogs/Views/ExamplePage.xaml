@@ -160,7 +160,7 @@
                                         Margin="-10,0,0,0"
                                         VerticalAlignment="Stretch">
                                         <DropDownButton.Flyout>
-                                            <MenuFlyout>
+                                            <MenuFlyout Placement="Bottom">
                                                 <MenuFlyoutItem Click="{x:Bind ShowWindowedContentDialog}" Text="WindowedContentDialog" />
                                                 <MenuFlyoutItem Click="{x:Bind ShowInWindowContentDialog}" Text="InWindowContentDialog" />
                                             </MenuFlyout>
@@ -187,7 +187,7 @@
                                 TextWrapping="Wrap" />
                             <TextBox
                                 AcceptsReturn="True"
-                                Header="内容（为空时显示默认内容）"
+                                Header="内容（为空时显示本示例提供的默认内容）"
                                 Text="{x:Bind contentDialogViewModel.Message, Mode=TwoWay}"
                                 TextWrapping="Wrap" />
                             <TextBox Header="PrimaryButtonText" Text="{x:Bind contentDialogViewModel.PrimaryButtonText, Mode=TwoWay}" />

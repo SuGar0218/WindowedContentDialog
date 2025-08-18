@@ -27,9 +27,9 @@ public partial class ContentDialogWindow : Window
     public ContentDialogWindow() : base()
     {
         ExtendsContentIntoTitleBar = true;
-        _presenter = (OverlappedPresenter) AppWindow.Presenter;
-        _presenter.IsMinimizable = false;
-        _presenter.IsMaximizable = false;
+        _presenter = OverlappedPresenter.CreateForDialog();
+        _presenter.IsResizable = true;
+        AppWindow.SetPresenter(_presenter);
 
         AppWindow.Closing += (appWindow, e) => OnClosingRequestedBySystem();
         Activated += OnActivated;
@@ -39,7 +39,7 @@ public partial class ContentDialogWindow : Window
         _content.CloseButtonClick += OnCloseButtonClick;
         _content.PrimaryButtonClick += OnPrimaryButtonClick;
         _content.SecondaryButtonClick += OnSecondaryButtonClick;
-        base.Content = _content;
+        Content = _content;
         //base.DialogTitle = _content.DialogTitle;
 
         // When showing accent color in title bar is enabled,
