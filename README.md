@@ -1,6 +1,6 @@
 # WindowedContentDialog
 
-<img width="4400" height="2635" alt="WindowedContentDialogBanner" src="https://github.com/user-attachments/assets/0d984f70-32c2-450a-b129-923e08cc12b3" />
+<img width="2891" height="2813" alt="MessageBox_1 1 0" src="https://github.com/user-attachments/assets/311a43c4-f55e-4d12-a82a-80f0078a80bf" />
 
 Show ContentDialog in separate window.
 
