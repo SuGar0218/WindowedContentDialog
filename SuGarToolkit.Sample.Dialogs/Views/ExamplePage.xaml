@@ -161,14 +161,14 @@
                                         VerticalAlignment="Stretch">
                                         <DropDownButton.Flyout>
                                             <MenuFlyout>
-                                                <MenuFlyoutItem Click="{x:Bind ShowContentDialog}" Text="WindowedContentDialog" />
+                                                <MenuFlyoutItem Click="{x:Bind ShowWindowedContentDialog}" Text="WindowedContentDialog" />
                                                 <MenuFlyoutItem Click="{x:Bind ShowInWindowContentDialog}" Text="InWindowContentDialog" />
                                             </MenuFlyout>
                                         </DropDownButton.Flyout>
                                     </DropDownButton>
                                     <Button
                                         Grid.Column="0"
-                                        Click="{x:Bind ShowContentDialog}"
+                                        Click="{x:Bind ShowWindowedContentDialog}"
                                         Content="WindowedContentDialog"
                                         Style="{ThemeResource AccentButtonStyle}" />
                                 </Grid>
@@ -184,6 +184,11 @@
                                 AcceptsReturn="True"
                                 Header="标题"
                                 Text="{x:Bind contentDialogViewModel.Title, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
+                            <TextBox
+                                AcceptsReturn="True"
+                                Header="内容（为空时显示默认内容）"
+                                Text="{x:Bind contentDialogViewModel.Message, Mode=TwoWay}"
                                 TextWrapping="Wrap" />
                             <TextBox Header="PrimaryButtonText" Text="{x:Bind contentDialogViewModel.PrimaryButtonText, Mode=TwoWay}" />
                             <TextBox Header="SecondaryButtonText" Text="{x:Bind contentDialogViewModel.SecondaryButtonText, Mode=TwoWay}" />

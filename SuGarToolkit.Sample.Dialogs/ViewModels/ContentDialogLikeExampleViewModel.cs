@@ -7,6 +7,7 @@ namespace SuGarToolkit.Sample.Dialogs.ViewModels;
 public class ContentDialogLikeExampleViewModel
 {
     public string Title { get; set; } = "WindowedContentDialog";
+    public string Message { get; set; } = "";
     public string PrimaryButtonText { get; set; } = "PrimaryButton";
     public string SecondaryButtonText { get; set; } = "SecondaryButton";
     public string CloseButtonText { get; set; } = "Close";

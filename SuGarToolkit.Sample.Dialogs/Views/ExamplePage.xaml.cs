@@ -90,7 +90,7 @@ public sealed partial class ExamplePage : Page
         MessageBoxResultBox.Text = result.ToString();
     }
 
-    private async void ShowContentDialog()
+    private async void ShowWindowedContentDialog()
     {
         if (contentDialogViewModel.SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
         {
@@ -99,7 +99,7 @@ public sealed partial class ExamplePage : Page
         WindowedContentDialog dialog = new()
         {
             Title = contentDialogViewModel.Title,
-            Content = new LoremIpsumPage(),
+            Content = !string.IsNullOrEmpty(contentDialogViewModel.Message) ? contentDialogViewModel.Message : new LoremIpsumPage(),
 
             PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
             SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
