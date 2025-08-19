@@ -266,41 +266,41 @@ public class MessageBox
         switch (buttons)
         {
             case MessageBoxButtons.OK:
-                dialog.CloseButtonText = "OK";
+                dialog.CloseButtonText = MessageBoxButtonText.OK;
                 dialog.DefaultButton = ContentDialogButton.Close;
                 break;
 
             case MessageBoxButtons.OKCancel:
-                dialog.PrimaryButtonText = "OK";
-                dialog.SecondaryButtonText = "Cancel";
+                dialog.PrimaryButtonText = MessageBoxButtonText.OK;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Cancel;
                 break;
 
             case MessageBoxButtons.YesNo:
-                dialog.PrimaryButtonText = "Yes";
-                dialog.SecondaryButtonText = "No";
+                dialog.PrimaryButtonText = MessageBoxButtonText.Yes;
+                dialog.SecondaryButtonText = MessageBoxButtonText.No;
                 break;
 
             case MessageBoxButtons.YesNoCancel:
-                dialog.PrimaryButtonText = "Yes";
-                dialog.SecondaryButtonText = "No";
-                dialog.CloseButtonText = "Cancel";
+                dialog.PrimaryButtonText = MessageBoxButtonText.Yes;
+                dialog.SecondaryButtonText = MessageBoxButtonText.No;
+                dialog.CloseButtonText = MessageBoxButtonText.Cancel;
                 break;
 
             case MessageBoxButtons.AbortRetryIgnore:
-                dialog.PrimaryButtonText = "Abort";
-                dialog.SecondaryButtonText = "Retry";
-                dialog.CloseButtonText = "Ignore";
+                dialog.PrimaryButtonText = MessageBoxButtonText.Abort;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Retry;
+                dialog.CloseButtonText = MessageBoxButtonText.Ignore;
                 break;
 
             case MessageBoxButtons.RetryCancel:
-                dialog.PrimaryButtonText = "Retry";
-                dialog.SecondaryButtonText = "Cancel";
+                dialog.PrimaryButtonText = MessageBoxButtonText.Retry;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Cancel;
                 break;
 
             case MessageBoxButtons.CancelTryContinue:
-                dialog.PrimaryButtonText = "Continue";
-                dialog.SecondaryButtonText = "Try again";
-                dialog.CloseButtonText = "Cancel";
+                dialog.PrimaryButtonText = MessageBoxButtonText.Continue;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Retry;
+                dialog.CloseButtonText = MessageBoxButtonText.Cancel;
                 dialog.DefaultButton = ContentDialogButton.Close;
                 break;
         }

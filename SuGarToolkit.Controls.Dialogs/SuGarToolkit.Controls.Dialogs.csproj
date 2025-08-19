@@ -36,4 +36,31 @@
 		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.DependencyPropertyAttribute\SuGarToolkit.SourceGenerators.DependencyPropertyAttribute.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Strings\MessageBoxButtonText.zh-CN.Designer.cs">
+	    <DependentUpon>MessageBoxButtonText.zh-CN.resx</DependentUpon>
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	  </Compile>
+	  <Compile Update="Strings\MessageBoxButtonText.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>MessageBoxButtonText.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Strings\MessageBoxButtonText.zh-CN.resx">
+	    <LastGenOutput>MessageBoxButtonText.zh-CN.Designer.cs</LastGenOutput>
+	    <Generator>ResXFileCodeGenerator</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Strings\MessageBoxButtonText.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>MessageBoxButtonText.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="ContentDialogWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
 </Project>
