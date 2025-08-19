@@ -1,6 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
+using SuGarToolkit.Controls.Dialogs.Strings;
+
 using System;
 using System.Threading.Tasks;
 
@@ -130,10 +132,9 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, new MessageBoxOptions
-        {
-            IsTitleBarVisible = isTitleBarVisible
-        });
+        MessageBoxOptions options = MessageBoxOptions.Default;
+        options.IsTitleBarVisible = isTitleBarVisible;
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, options);
     }
 
     /// <summary>
@@ -152,10 +153,9 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
-        return await ShowAsync(isModal, owner, content, title, buttons, image, defaultButton, new MessageBoxOptions
-        {
-            IsTitleBarVisible = isTitleBarVisible
-        });
+        MessageBoxOptions options = MessageBoxOptions.Default;
+        options.IsTitleBarVisible = isTitleBarVisible;
+        return await ShowAsync(isModal, owner, content, title, buttons, image, defaultButton, options);
     }
 
     /// <summary>

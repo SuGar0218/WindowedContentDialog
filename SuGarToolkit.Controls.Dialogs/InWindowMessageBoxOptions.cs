@@ -1,5 +1,4 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Media;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
@@ -10,9 +9,7 @@ public class InWindowMessageBoxOptions
     /// </summary>
     public bool DisableBehind { get; set; }
 
-    public SystemBackdrop? SystemBackdrop { get; set; } = new MicaBackdrop();
-
-    public ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
+    public ElementTheme RequestedTheme { get; set; }
 
     public FlowDirection FlowDirection { get; set; }
 }

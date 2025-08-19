@@ -18,9 +18,9 @@ public class WindowedContentDialog
     public object? Title { get; set; }
     public object? Content { get; set; }
 
-    public ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
-    public SystemBackdrop? SystemBackdrop { get; set; } = new MicaBackdrop();
-    public Brush Foreground { get; set; } = (Brush) Application.Current.Resources["ApplicationForegroundThemeBrush"];
+    public ElementTheme RequestedTheme { get; set; }// = ElementTheme.Default;
+    public SystemBackdrop? SystemBackdrop { get; set; }// = new MicaBackdrop();
+    public Brush? Foreground { get; set; }// = (Brush) Application.Current.Resources["ApplicationForegroundThemeBrush"];
     public Brush? Background { get; set; }
     public Brush? BorderBrush { get; set; }
     public Thickness BorderThickness { get; set; }
@@ -32,7 +32,7 @@ public class WindowedContentDialog
     public string CloseButtonText { get; set; } = string.Empty;
     public bool IsPrimaryButtonEnabled { get; set; } = true;
     public bool IsSecondaryButtonEnabled { get; set; } = true;
-    public ContentDialogButton DefaultButton { get; set; } = ContentDialogButton.Close;
+    public ContentDialogButton DefaultButton { get; set; }// = ContentDialogButton.Close;
     public bool IsTitleBarVisible { get; set; } = true;
     public bool CenterInParent { get; set; } = true;
 

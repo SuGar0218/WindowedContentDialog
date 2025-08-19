@@ -14,13 +14,15 @@ public class MessageBoxOptions
 
     public UIElement? CustomSmokeLayer { get; set; }
 
-    public SystemBackdrop? SystemBackdrop { get; set; } = new MicaBackdrop();
+    public SystemBackdrop? SystemBackdrop { get; set; }// = new MicaBackdrop();
 
-    public ElementTheme RequestedTheme { get; set; } = ElementTheme.Default;
+    public ElementTheme RequestedTheme { get; set; }// = ElementTheme.Default;
 
     public FlowDirection FlowDirection { get; set; }
 
     public bool IsTitleBarVisible { get; set; } = true;
 
     public bool CenterInParent { get; set; } = true;
+
+    public static MessageBoxOptions Default => new MessageBoxOptions { SystemBackdrop = new MicaBackdrop() };
 }
