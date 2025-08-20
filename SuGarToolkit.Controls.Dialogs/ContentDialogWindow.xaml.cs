@@ -133,10 +133,9 @@ public partial class ContentDialogWindow : Window
 
     public ElementTheme RequestedTheme
     {
-        get => content is not null ? content.RequestedTheme : field;
+        get => content.RequestedTheme;
         set
         {
-            field = value;
             content.RequestedTheme = value;
             AppWindow.TitleBar.PreferredTheme = value switch
             {
@@ -244,6 +243,7 @@ public partial class ContentDialogWindow : Window
         get => content.CloseButtonStyle;
         set => content.CloseButtonStyle = value;
     }
+
     #endregion
 
     public ContentDialogResult Result { get; private set; }
@@ -258,7 +258,7 @@ public partial class ContentDialogWindow : Window
     }
 
     /// <summary>
-    /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是UI。
+    /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是 UI。
     /// </summary>
     public object? DialogTitle
     {
@@ -368,8 +368,6 @@ public partial class ContentDialogWindow : Window
 
     [LibraryImport("user32.dll", EntryPoint = "SetFocus")]
     private static partial IntPtr SetFocus(IntPtr hWnd);
-
-    //private readonly ContentDialogContent content;
 
     private readonly OverlappedPresenter _presenter;
 
