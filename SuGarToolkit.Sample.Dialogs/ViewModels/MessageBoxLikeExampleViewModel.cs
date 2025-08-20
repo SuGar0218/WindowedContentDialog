@@ -8,7 +8,7 @@ public partial class MessageBoxLikeExampleViewModel
     public string Content { get; set; } = "Lorem ipsum dolor sit amet.";
     public MessageBoxButtons Buttons { get; set; } = MessageBoxButtons.OK;
     public MessageBoxDefaultButton DefaultButton { get; set; } = MessageBoxDefaultButton.Button1;
-    public MessageBoxImage Image { get; set; } = MessageBoxImage.Information;
+    public MessageBoxIcon Image { get; set; } = MessageBoxIcon.Information;
     public bool IsChild { get; set; } = true;
     public bool IsModal { get; set; } = true;
     public bool IsTitleBarVisible { get; set; } = true;

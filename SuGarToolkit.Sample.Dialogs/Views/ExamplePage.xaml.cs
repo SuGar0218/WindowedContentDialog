@@ -29,7 +29,7 @@ public sealed partial class ExamplePage : Page
 
     private readonly MessageBoxDefaultButton[] messageBoxDefaultButtons = Enum.GetValues<MessageBoxDefaultButton>();
 
-    private readonly MessageBoxImage[] messageBoxImages = Enum.GetValues<MessageBoxImage>();
+    private readonly MessageBoxIcon[] messageBoxImages = Enum.GetValues<MessageBoxIcon>();
 
     private readonly List<ContentDialogButton> contentDialogButtons =
     [

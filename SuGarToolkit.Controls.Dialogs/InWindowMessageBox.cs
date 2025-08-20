@@ -8,8 +8,8 @@ namespace SuGarToolkit.Controls.Dialogs;
 
 public class InWindowMessageBox
 {
-    public static async Task ShowAsync(Window ownerWindow, object? content, string? title) => await ShowAsync(ownerWindow, content, title, MessageBoxButtons.OK, MessageBoxImage.None, MessageBoxDefaultButton.Button1);
-    public static async Task ShowAsync(UIElement rootElement, object? content, string? title) => await ShowAsync(rootElement, content, title, MessageBoxButtons.OK, MessageBoxImage.None, MessageBoxDefaultButton.Button1);
+    public static async Task ShowAsync(Window ownerWindow, object? content, string? title) => await ShowAsync(ownerWindow, content, title, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1);
+    public static async Task ShowAsync(UIElement rootElement, object? content, string? title) => await ShowAsync(rootElement, content, title, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1);
 
     /// <summary>
     /// Show text messages in a MessageBox with xaml root is ownerWindow.Content.XamlRoot.
@@ -22,10 +22,10 @@ public class InWindowMessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(ownerWindow, message, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+        return await ShowAsync(ownerWindow, message, title, buttons, icon, defaultButton, new InWindowMessageBoxOptions());
     }
 
     /// <summary>
@@ -39,10 +39,10 @@ public class InWindowMessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(ownerWindow, content, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+        return await ShowAsync(ownerWindow, content, title, buttons, icon, defaultButton, new InWindowMessageBoxOptions());
     }
 
     /// <summary>
@@ -56,11 +56,11 @@ public class InWindowMessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         InWindowMessageBoxOptions options)
     {
-        return await ShowAsync(ownerWindow.Content.XamlRoot, message, title, buttons, image, defaultButton, options);
+        return await ShowAsync(ownerWindow.Content.XamlRoot, message, title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -74,11 +74,11 @@ public class InWindowMessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         InWindowMessageBoxOptions options)
     {
-        return await ShowAsync(ownerWindow.Content.XamlRoot, content, title, buttons, image, defaultButton, options);
+        return await ShowAsync(ownerWindow.Content.XamlRoot, content, title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -92,10 +92,10 @@ public class InWindowMessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(rootElement, message, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+        return await ShowAsync(rootElement, message, title, buttons, icon, defaultButton, new InWindowMessageBoxOptions());
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public class InWindowMessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(rootElement, content, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+        return await ShowAsync(rootElement, content, title, buttons, icon, defaultButton, new InWindowMessageBoxOptions());
     }
 
     /// <summary>
@@ -126,11 +126,11 @@ public class InWindowMessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         InWindowMessageBoxOptions options)
     {
-        return await ShowAsync(rootElement.XamlRoot, message, title, buttons, image, defaultButton, options);
+        return await ShowAsync(rootElement.XamlRoot, message, title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -144,15 +144,15 @@ public class InWindowMessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         InWindowMessageBoxOptions options)
     {
-        return await ShowAsync(rootElement.XamlRoot, content, title, buttons, image, defaultButton, options);
+        return await ShowAsync(rootElement.XamlRoot, content, title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
-    /// Show text messages in a MessageBox without icon image.
+    /// Show text messages in a MessageBox without icon icon.
     /// <br/>
     /// Overload #7:
     /// Invoke overload #6 with content is a SelectableTextBox.
@@ -180,7 +180,7 @@ public class InWindowMessageBox
     }
 
     /// <summary>
-    /// Show text messages in a MessageBox without icon image.
+    /// Show text messages in a MessageBox without icon icon.
     /// <br/>
     /// Overload #5:
     /// Invoke overload #4 with content is a SelectableTextBox.
@@ -192,14 +192,14 @@ public class InWindowMessageBox
         MessageBoxButtons buttons,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, MessageBoxImage.None, defaultButton);
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, MessageBoxIcon.None, defaultButton);
     }
 
     /// <summary>
-    /// Show a MessageBox without icon image.
+    /// Show a MessageBox without icon icon.
     /// <br/>
     /// Overload #4:
-    /// Invoke overload #2 with image = MessageBoxImage.None.
+    /// Invoke overload #2 with icon = MessageBoxIcon.None.
     /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
         XamlRoot xamlRoot,
@@ -208,7 +208,7 @@ public class InWindowMessageBox
         MessageBoxButtons buttons,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(xamlRoot, content, title, buttons, MessageBoxImage.None, defaultButton);
+        return await ShowAsync(xamlRoot, content, title, buttons, MessageBoxIcon.None, defaultButton);
     }
 
     /// <summary>
@@ -222,10 +222,10 @@ public class InWindowMessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, image, defaultButton);
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, icon, defaultButton);
     }
 
     /// <summary>
@@ -239,10 +239,10 @@ public class InWindowMessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton)
     {
-        return await ShowAsync(xamlRoot, content, title, buttons, image, defaultButton, new InWindowMessageBoxOptions());
+        return await ShowAsync(xamlRoot, content, title, buttons, icon, defaultButton, new InWindowMessageBoxOptions());
     }
 
     /// <summary>
@@ -255,7 +255,7 @@ public class InWindowMessageBox
     /// <param name="message">Text message displayed in body area</param>
     /// <param name="title">Text text displayed in header area</param>
     /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
-    /// <param name="image">MessageBox icon image</param>
+    /// <param name="icon">MessageBox icon icon</param>
     /// <param name="defaultButton">Which button should be focused initially</param>
     /// <param name="options">Other style settings like SystemBackdrop.</param>
     public static async Task<MessageBoxResult> ShowAsync(
@@ -263,11 +263,11 @@ public class InWindowMessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         InWindowMessageBoxOptions options)
     {
-        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, options);
+        return await ShowAsync(xamlRoot, CreateSelectableTextBlock(message), title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public class InWindowMessageBox
     /// <param name="content">DialogContent displayed in body area, which can be string or UIElement</param>
     /// <param name="title">Text text displayed in header area</param>
     /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
-    /// <param name="image">MessageBox icon image</param>
+    /// <param name="icon">MessageBox icon icon</param>
     /// <param name="defaultButton">Which button should be focused initially</param>
     /// <param name="options">Other style settings like SystemBackdrop.</param>
     /// <returns>The button selected by user.</returns>
@@ -290,7 +290,7 @@ public class InWindowMessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         InWindowMessageBoxOptions options)
     {
@@ -310,10 +310,10 @@ public class InWindowMessageBox
 
         ContentDialog dialog = new()
         {
-            Title = new MessageBoxHeader { Text = title, Image = image },
+            Title = new MessageBoxHeader { Text = title, Icon = icon },
             Content = content,
             XamlRoot = xamlRoot,
-            Style = defaultStyle,
+            Style = (Style) Application.Current.Resources["DefaultContentDialogStyle"],
             RequestedTheme = theme,
             FlowDirection = options.FlowDirection
         };
@@ -464,12 +464,6 @@ public class InWindowMessageBox
     ];
 
     private static MessageBoxResult[] MessageBoxResultsOf(MessageBoxButtons buttons) => resultGroups[(int) buttons];
-
-    private static readonly Style defaultStyle = new()
-    {
-        TargetType = typeof(ContentDialog),
-        BasedOn = Application.Current.Resources["DefaultContentDialogStyle"] as Style
-    };
 
     /// <summary>
     /// Create a readonly TextBox that allows user to select the message text.

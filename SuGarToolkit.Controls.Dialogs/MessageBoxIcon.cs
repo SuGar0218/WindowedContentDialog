@@ -1,6 +1,6 @@
 ﻿namespace SuGarToolkit.Controls.Dialogs;
 
-public enum MessageBoxImage
+public enum MessageBoxIcon
 {
     None = 0,
     // 消息框未包含符号。

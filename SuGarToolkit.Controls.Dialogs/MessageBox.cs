@@ -53,7 +53,7 @@ public class MessageBox
         => await ShowAsync(isModal, owner, content, title, MessageBoxButtons.OK, MessageBoxDefaultButton.Button1, false);
 
     /// <summary>
-    /// Show text messages in a MessageBox without icon image.
+    /// Show text messages in a MessageBox without icon.
     /// <br/>
     /// Overload #7:
     /// Invoke overload #6 with content is a SelectableTextBox.
@@ -67,7 +67,7 @@ public class MessageBox
         => await ShowAsync(false, null, CreateSelectableTextBlock(message), title, buttons, defaultButton, isTitleBarVisible);
 
     /// <summary>
-    /// Show a MessageBox without icon image.
+    /// Show a MessageBox without icon.
     /// <br/>
     /// Overload #6:
     /// Invoke overload #4 without owner/parent window.
@@ -81,7 +81,7 @@ public class MessageBox
         => await ShowAsync(false, null, content, title, buttons, defaultButton, isTitleBarVisible);
 
     /// <summary>
-    /// Show text messages in a MessageBox without icon image.
+    /// Show text messages in a MessageBox without icon.
     /// <br/>
     /// Overload #5:
     /// Invoke overload #4 with content is a SelectableTextBox.
@@ -95,14 +95,14 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, MessageBoxImage.None, defaultButton, isTitleBarVisible);
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, MessageBoxIcon.None, defaultButton, isTitleBarVisible);
     }
 
     /// <summary>
-    /// Show a MessageBox without icon image.
+    /// Show a MessageBox without icon.
     /// <br/>
     /// Overload #4:
-    /// Invoke overload #2 with image = MessageBoxImage.None.
+    /// Invoke overload #2 with icon = MessageBoxIcon.None.
     /// </summary>
     public static async Task<MessageBoxResult> ShowAsync(
         bool isModal,
@@ -113,7 +113,7 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
-        return await ShowAsync(isModal, owner, content, title, buttons, MessageBoxImage.None, defaultButton, isTitleBarVisible);
+        return await ShowAsync(isModal, owner, content, title, buttons, MessageBoxIcon.None, defaultButton, isTitleBarVisible);
     }
 
     /// <summary>
@@ -128,13 +128,13 @@ public class MessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
         MessageBoxOptions options = MessageBoxOptions.Default;
         options.IsTitleBarVisible = isTitleBarVisible;
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, options);
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -149,13 +149,13 @@ public class MessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
         MessageBoxOptions options = MessageBoxOptions.Default;
         options.IsTitleBarVisible = isTitleBarVisible;
-        return await ShowAsync(isModal, owner, content, title, buttons, image, defaultButton, options);
+        return await ShowAsync(isModal, owner, content, title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public class MessageBox
     /// <param name="message">Text message displayed in body area</param>
     /// <param name="title">Text text displayed in header area</param>
     /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
-    /// <param name="image">MessageBox icon image</param>
+    /// <param name="icon">MessageBox icon</param>
     /// <param name="defaultButton">Which button should be focused initially</param>
     /// <param name="options">Other style settings like SystemBackdrop.</param>
     public static async Task<MessageBoxResult> ShowAsync(
@@ -177,11 +177,11 @@ public class MessageBox
         string? message,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         MessageBoxOptions options)
     {
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, image, defaultButton, options);  // Overload #0
+        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, icon, defaultButton, options);  // Overload #0
     }
 
     /// <summary>
@@ -195,7 +195,7 @@ public class MessageBox
     /// <param name="content">DialogContent displayed in body area, which can be string or UIElement</param>
     /// <param name="title">Text text displayed in header area</param>
     /// <param name="buttons">The button combination displayed at the bottom of MessageBox</param>
-    /// <param name="image">MessageBox icon image</param>
+    /// <param name="icon">MessageBox icon</param>
     /// <param name="defaultButton">Which button should be focused initially</param>
     /// <param name="options">Other style settings like SystemBackdrop.</param>
     /// <returns>The button selected by user.</returns>
@@ -206,7 +206,7 @@ public class MessageBox
         object? content,
         string? title,
         MessageBoxButtons buttons,
-        MessageBoxImage image,
+        MessageBoxIcon icon,
         MessageBoxDefaultButton? defaultButton,
         MessageBoxOptions options)
     {
@@ -240,7 +240,7 @@ public class MessageBox
         WindowedContentDialog dialog = new()
         {
             WindowTitle = title,
-            Title = new MessageBoxHeader { Text = title, Image = image },
+            Title = new MessageBoxHeader { Text = title, Icon = icon },
             Content = content,
             OwnerWindow = owner,
             SystemBackdrop = options.SystemBackdrop,
@@ -299,7 +299,7 @@ public class MessageBox
 
             case MessageBoxButtons.CancelTryContinue:
                 dialog.PrimaryButtonText = MessageBoxButtonText.Continue;
-                dialog.SecondaryButtonText = MessageBoxButtonText.Retry;
+                dialog.SecondaryButtonText = MessageBoxButtonText.TryAgain;
                 dialog.CloseButtonText = MessageBoxButtonText.Cancel;
                 dialog.DefaultButton = ContentDialogButton.Close;
                 break;
