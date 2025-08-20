@@ -18,9 +18,9 @@ public class WindowedContentDialog
     public object? Title { get; set; }
     public object? Content { get; set; }
 
-    public ElementTheme RequestedTheme { get; set; }// = ElementTheme.Default;
-    public SystemBackdrop? SystemBackdrop { get; set; }// = new MicaBackdrop();
-    public Brush? Foreground { get; set; }// = (Brush) Application.Current.Resources["ApplicationForegroundThemeBrush"];
+    public ElementTheme RequestedTheme { get; set; }
+    public SystemBackdrop? SystemBackdrop { get; set; }
+    public Brush? Foreground { get; set; }
     public Brush? Background { get; set; }
     public Brush? BorderBrush { get; set; }
     public Thickness BorderThickness { get; set; }
@@ -32,7 +32,7 @@ public class WindowedContentDialog
     public string CloseButtonText { get; set; } = string.Empty;
     public bool IsPrimaryButtonEnabled { get; set; } = true;
     public bool IsSecondaryButtonEnabled { get; set; } = true;
-    public ContentDialogButton DefaultButton { get; set; }// = ContentDialogButton.Close;
+    public ContentDialogButton DefaultButton { get; set; }
     public bool IsTitleBarVisible { get; set; } = true;
     public bool CenterInParent { get; set; } = true;
 
@@ -107,7 +107,7 @@ public class WindowedContentDialog
 
         dialogWindow.SetParent(OwnerWindow, modal, CenterInParent);
 
-        if (DisableBehind && OwnerWindow?.Content is not null && OwnerWindow.Content is Control control)
+        if (DisableBehind && OwnerWindow?.Content is Control control)
         {
             bool isOriginallyEnabled = control.IsEnabled;
             dialogWindow.Opened += (window, e) =>
@@ -140,7 +140,7 @@ public class WindowedContentDialog
                 behindOverlayPopup.Child = darkLayer;
 
                 void OnOwnerWindowSizeChanged(object sender, WindowSizeChangedEventArgs args) => SizeToWindow(darkLayer, OwnerWindow);
-                dialogWindow.Loaded += (o, e) =>
+                dialogWindow.Opened += (o, e) =>
                 {
                     behindOverlayPopup.IsOpen = true;
                     behindOverlayPopup.Child.Opacity = 1.0;
@@ -158,7 +158,7 @@ public class WindowedContentDialog
             {
                 behindOverlayPopup.Child = CustomSmokeLayer;
 
-                dialogWindow.Loaded += (o, e) =>
+                dialogWindow.Opened += (o, e) =>
                 {
                     behindOverlayPopup.IsOpen = true;
                     behindOverlayPopup.Child.Opacity = 1.0;
