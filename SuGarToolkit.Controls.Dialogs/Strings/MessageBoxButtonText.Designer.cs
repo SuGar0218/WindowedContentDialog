@@ -124,6 +124,15 @@ namespace SuGarToolkit.Controls.Dialogs.Strings {
         }
         
         /// <summary>
+        ///   查找类似 Try again 的本地化字符串。
+        /// </summary>
+        internal static string TryAgain {
+            get {
+                return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Yes 的本地化字符串。
         /// </summary>
         internal static string Yes {
