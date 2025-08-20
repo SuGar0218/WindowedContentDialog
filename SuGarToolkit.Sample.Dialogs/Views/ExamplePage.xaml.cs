@@ -98,6 +98,7 @@ public sealed partial class ExamplePage : Page
         }
         WindowedContentDialog dialog = new()
         {
+            WindowTitle = contentDialogViewModel.Title,
             Title = contentDialogViewModel.Title,
             Content = !string.IsNullOrEmpty(contentDialogViewModel.Message) ? contentDialogViewModel.Message : new LoremIpsumPage(),
 
@@ -139,17 +140,52 @@ public sealed partial class ExamplePage : Page
         ContentDialog dialog = new()
         {
             Title = contentDialogViewModel.Title,
-            Content = new LoremIpsumPage(),
+            Content = !string.IsNullOrEmpty(contentDialogViewModel.Message) ? contentDialogViewModel.Message : new LoremIpsumPage(),
             PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
             SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
             CloseButtonText = contentDialogViewModel.CloseButtonText,
             DefaultButton = contentDialogViewModel.DefaultButton,
             RequestedTheme = App.Current.MainWindow!.RequestedTheme,
             XamlRoot = XamlRoot,
-            Style = new Style
+            Style = (Style) Application.Current.Resources["DefaultContentDialogStyle"]
+        };
+        if (!contentDialogViewModel.ClickPrimaryButtonToClose)
+        {
+            dialog.PrimaryButtonClick += (o, e) => e.Cancel = true;
+        }
+        if (!contentDialogViewModel.ClickSecondaryButtonToClose)
+        {
+            dialog.SecondaryButtonClick += (o, e) => e.Cancel = true;
+        }
+        ContentDialogResult result = await dialog.ShowAsync();
+        ContentDialogResultBox.Text = result.ToString();
+    }
+
+    private async void ShowContentDialogFlyout()
+    {
+        FlyoutContentDialog dialog = new()
+        {
+            Title = contentDialogViewModel.Title,
+            Content = !string.IsNullOrEmpty(contentDialogViewModel.Message) ? contentDialogViewModel.Message : new LoremIpsumPage(),
+            PrimaryButtonText = contentDialogViewModel.PrimaryButtonText,
+            SecondaryButtonText = contentDialogViewModel.SecondaryButtonText,
+            CloseButtonText = contentDialogViewModel.CloseButtonText,
+            DefaultButton = contentDialogViewModel.DefaultButton,
+
+            DisableBehind = contentDialogViewModel.DisableBehind,
+            SmokeLayerKind = contentDialogViewModel.SmokeLayerKind,
+            CustomSmokeLayer = LazyCustomSmokeLayer.Value,
+
+            ShouldConstrainToRootBounds = false,
+            PlacementTarget = ShowContentDialogButtonArea,
+
+            RequestedTheme = App.Current.MainWindow!.RequestedTheme,
+            SystemBackdrop = contentDialogViewModel.BackdropType switch
             {
-                TargetType = typeof(ContentDialog),
-                BasedOn = (Style) Application.Current.Resources["DefaultContentDialogStyle"]
+                BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
+                BuiltInSystemBackdropType.MicaAlt => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt },
+                BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
+                _ => null
             }
         };
         ContentDialogResult result = await dialog.ShowAsync();
