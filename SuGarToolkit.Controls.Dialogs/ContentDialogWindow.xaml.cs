@@ -266,12 +266,8 @@ public partial class ContentDialogWindow : Window
         set => content.Title = value;
     }
 
-    public bool IsTitleBarVisible { get; set; } = true;
-
     private void OnContentLoaded(object sender, RoutedEventArgs e)
     {
-        _presenter.SetBorderAndTitleBar(hasBorder: true, IsTitleBarVisible);
-
         // AppWindow.Resize is inaccurate.
         // AppWindow.ResizeCilent is inaccurate when ExtendsContentInfoTitleBar = false.
         // AppWindow.ResizeCilent is accurate in width but there is an extra height of title bar (30 DIP) when ExtendsContentInfoTitleBar = true.
@@ -328,7 +324,7 @@ public partial class ContentDialogWindow : Window
     private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Primary;
-        ContentDialogWindowButtonClickEventArgs args = new() { Cancel = false };
+        ContentDialogWindowButtonClickEventArgs args = new() { ShouldCloseDialog = false };
         PrimaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -336,7 +332,7 @@ public partial class ContentDialogWindow : Window
     private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Secondary;
-        ContentDialogWindowButtonClickEventArgs args = new() { Cancel = false };
+        ContentDialogWindowButtonClickEventArgs args = new() { ShouldCloseDialog = false };
         SecondaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -344,14 +340,14 @@ public partial class ContentDialogWindow : Window
     private void OnCloseButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.None;
-        ContentDialogWindowButtonClickEventArgs args = new() { Cancel = false };
+        ContentDialogWindowButtonClickEventArgs args = new() { ShouldCloseDialog = false };
         CloseButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
     private void AfterCommandBarButtonClick(ContentDialogWindowButtonClickEventArgs args)
     {
-        if (args.Cancel)
+        if (args.ShouldCloseDialog)
             return;
 
         OnClosingRequstedByCode();

@@ -12,59 +12,33 @@ using Windows.UI;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-public class WindowedContentDialog
+public class WindowedContentDialog : StandaloneContentDialogBase
 {
     public string? WindowTitle { get; set; }
-    public object? Title { get; set; }
-    public object? Content { get; set; }
-
-    public ElementTheme RequestedTheme { get; set; }
     public SystemBackdrop? SystemBackdrop { get; set; }
-    public Brush? Foreground { get; set; }
-    public Brush? Background { get; set; }
-    public Brush? BorderBrush { get; set; }
-    public Thickness BorderThickness { get; set; }
-    public FlowDirection FlowDirection { get; set; }
-    public DataTemplate? TitleTemplate { get; set; }
-    public DataTemplate? ContentTemplate { get; set; }
-    public string PrimaryButtonText { get; set; } = string.Empty;
-    public string SecondaryButtonText { get; set; } = string.Empty;
-    public string CloseButtonText { get; set; } = string.Empty;
-    public bool IsPrimaryButtonEnabled { get; set; } = true;
-    public bool IsSecondaryButtonEnabled { get; set; } = true;
-    public ContentDialogButton DefaultButton { get; set; }
     public bool IsTitleBarVisible { get; set; } = true;
     public bool CenterInParent { get; set; } = true;
 
-    public Style PrimaryButtonStyle { get; set; } = DefaultButtonStyle;
-    public Style SecondaryButtonStyle { get; set; } = DefaultButtonStyle;
-    public Style CloseButtonStyle { get; set; } = DefaultButtonStyle;
-
     /// <summary>
-    /// Disable the content of window behind when dialog window shows.
-    /// </summary>
-    public bool DisableBehind { get; set; }
-
-    public WindowedContentDialogSmokeLayerKind SmokeLayerKind { get; set; }
-
-    public UIElement? CustomSmokeLayer { get; set; }
-
-    /// <summary>
-    /// 底部第一个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 Cancel = true.
+    /// 底部第一个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 ShouldCloseDialog = false.
     /// </summary>
     public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? PrimaryButtonClick;
 
     /// <summary>
-    /// 底部第二个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 Cancel = true.
+    /// 底部第二个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 ShouldCloseDialog = false.
     /// </summary>
     public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? SecondaryButtonClick;
 
     /// <summary>
-    /// 底部关闭按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 Cancel = true.
+    /// 底部关闭按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogWindowButtonClickEventArgs 参数中的 ShouldCloseDialog = false.
     /// </summary>
     public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? CloseButtonClick;
 
+    public bool IsModal { get; set; }
+
     public Window? OwnerWindow { get; set; }
+
+    public override Task<ContentDialogResult> ShowAsync() => ShowAsync(modal: true);
 
     /// <summary>
     /// 显示对话框窗口，关闭时返回用户选择结果。
@@ -76,8 +50,10 @@ public class WindowedContentDialog
     /// </summary>
     /// <param name="modal">阻塞所属窗口。默认为 true，但是当 OwnerWindow is null 时不会起作用，仍然弹出普通窗口。</param>
     /// <returns>用户选择结果</returns>
-    public async Task<ContentDialogResult> ShowAsync(bool modal = true)
+    public async Task<ContentDialogResult> ShowAsync(bool modal)
     {
+        IsModal = modal;
+
         ContentDialogWindow dialogWindow = new()
         {
             Title = WindowTitle,
@@ -95,8 +71,6 @@ public class WindowedContentDialog
             SecondaryButtonStyle = SecondaryButtonStyle,
             CloseButtonStyle = CloseButtonStyle,
 
-            IsTitleBarVisible = IsTitleBarVisible,
-
             SystemBackdrop = SystemBackdrop,
             RequestedTheme = RequestedTheme
         };
@@ -105,7 +79,12 @@ public class WindowedContentDialog
         dialogWindow.SecondaryButtonClick += SecondaryButtonClick;
         dialogWindow.CloseButtonClick += CloseButtonClick;
 
-        dialogWindow.SetParent(OwnerWindow, modal, CenterInParent);
+        dialogWindow.SetParent(OwnerWindow, IsModal, CenterInParent);
+
+        if (!IsTitleBarVisible)
+        {
+            dialogWindow.AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Collapsed;
+        }
 
         if (DisableBehind && OwnerWindow?.Content is Control control)
         {
@@ -120,26 +99,25 @@ public class WindowedContentDialog
             };
         }
 
-        if (SmokeLayerKind is not WindowedContentDialogSmokeLayerKind.None && OwnerWindow?.Content?.XamlRoot is not null)
+        if (SmokeLayerKind is not ContentDialogSmokeLayerKind.None && OwnerWindow?.Content?.XamlRoot is not null)
         {
             Popup behindOverlayPopup = new()
             {
                 XamlRoot = OwnerWindow.Content.XamlRoot,
                 RequestedTheme = RequestedTheme
             };
-            if (SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Darken)
+            if (SmokeLayerKind is ContentDialogSmokeLayerKind.Darken)
             {
                 Rectangle darkLayer = new()
                 {
-                    Width = OwnerWindow.Content.XamlRoot.Size.Width,
-                    Height = OwnerWindow.Content.XamlRoot.Size.Height,
                     Opacity = 0.0,
                     OpacityTransition = new ScalarTransition { Duration = TimeSpan.FromSeconds(0.25) },
                     Fill = new SolidColorBrush(SmokeFillColor),
                 };
+                SizeToXamlRoot(darkLayer, OwnerWindow.Content.XamlRoot);
                 behindOverlayPopup.Child = darkLayer;
 
-                void OnOwnerWindowSizeChanged(object sender, WindowSizeChangedEventArgs args) => SizeToWindow(darkLayer, OwnerWindow);
+                void OnOwnerWindowSizeChanged(object sender, WindowSizeChangedEventArgs args) => SizeToXamlRoot(darkLayer, OwnerWindow.Content.XamlRoot);
                 dialogWindow.Opened += (o, e) =>
                 {
                     behindOverlayPopup.IsOpen = true;
@@ -154,7 +132,7 @@ public class WindowedContentDialog
                     OwnerWindow.SizeChanged -= OnOwnerWindowSizeChanged;
                 };
             }
-            else if (SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && CustomSmokeLayer is not null)
+            else if (SmokeLayerKind is ContentDialogSmokeLayerKind.Custom && CustomSmokeLayer is not null)
             {
                 behindOverlayPopup.Child = CustomSmokeLayer;
 
@@ -178,22 +156,4 @@ public class WindowedContentDialog
         dialogWindow.Closed += (o, e) => resultCompletionSource.SetResult(dialogWindow.Result);
         return await resultCompletionSource.Task;
     }
-
-    private static void SizeToWindow(FrameworkElement element, Window window)
-    {
-        element.Width = window.Content.XamlRoot.Size.Width;
-        element.Height = window.Content.XamlRoot.Size.Height;
-    }
-
-    private static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
-
-    private static Color SmokeFillColor => (Color) Application.Current.Resources["SmokeFillColorDefault"];
-}
-
-public enum WindowedContentDialogSmokeLayerKind
-{
-    None = 0,
-    Darken = 1,
-    //Blur = 2,
-    Custom = -1
 }

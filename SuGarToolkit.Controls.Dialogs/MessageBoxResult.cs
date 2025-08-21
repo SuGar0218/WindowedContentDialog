@@ -9,7 +9,7 @@ public enum MessageBoxResult
     // 对话框的返回值是 OK（通常从标签为“确定”的按钮发送）。
 
     Cancel = 2,
-    // 对话框的返回值是 Cancel（通常从标签为“取消”的按钮发送）。
+    // 对话框的返回值是 ShouldCloseDialog（通常从标签为“取消”的按钮发送）。
 
     Abort = 3,
     // 对话框的返回值是 Abort（通常从标签为“中止”的按钮发送）。

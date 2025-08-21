@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 using SuGarToolkit.Controls.Dialogs.Strings;
 
@@ -8,8 +9,42 @@ using System.Threading.Tasks;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-public class MessageBox
+public class MessageBox : MessageBoxBase
 {
+    protected MessageBox(
+        bool isModal,
+        Window? owner,
+        object? content,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxIcon icon,
+        MessageBoxDefaultButton? defaultButton,
+        MessageBoxOptions options) : base(content, title, buttons, icon, defaultButton, options)
+    {
+        _isModal = isModal;
+        _owner = owner;
+        _options = options;
+    }
+
+    protected MessageBox(
+        bool isModal,
+        Window? owner,
+        string? message,
+        string? title,
+        MessageBoxButtons buttons,
+        MessageBoxIcon icon,
+        MessageBoxDefaultButton? defaultButton,
+        MessageBoxOptions options) : base(message, title, buttons, icon, defaultButton, options)
+    {
+        _isModal = isModal;
+        _owner = owner;
+        _options = options;
+    }
+
+    private readonly bool _isModal;
+    private readonly Window? _owner;
+    private readonly MessageBoxOptions _options;
+
     /// <summary>
     /// Show text messages in a MessageBox with only OK button.
     /// <br/>
@@ -64,7 +99,7 @@ public class MessageBox
         MessageBoxButtons buttons,
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
-        => await ShowAsync(false, null, CreateSelectableTextBlock(message), title, buttons, defaultButton, isTitleBarVisible);
+        => await ShowAsync(false, null, message, title, buttons, defaultButton, isTitleBarVisible);
 
     /// <summary>
     /// Show a MessageBox without icon.
@@ -95,7 +130,7 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton = MessageBoxDefaultButton.Button1,
         bool isTitleBarVisible = true)
     {
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, MessageBoxIcon.None, defaultButton, isTitleBarVisible);
+        return await ShowAsync(isModal, owner, message, title, buttons, MessageBoxIcon.None, defaultButton, isTitleBarVisible);
     }
 
     /// <summary>
@@ -134,7 +169,7 @@ public class MessageBox
     {
         MessageBoxOptions options = MessageBoxOptions.Default;
         options.IsTitleBarVisible = isTitleBarVisible;
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, icon, defaultButton, options);
+        return await ShowAsync(isModal, owner, message, title, buttons, icon, defaultButton, options);
     }
 
     /// <summary>
@@ -181,7 +216,7 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton,
         MessageBoxOptions options)
     {
-        return await ShowAsync(isModal, owner, CreateSelectableTextBlock(message), title, buttons, icon, defaultButton, options);  // Overload #0
+        return await new MessageBox(isModal, owner, message, title, buttons, icon, defaultButton, options).ShowAsync();
     }
 
     /// <summary>
@@ -199,7 +234,6 @@ public class MessageBox
     /// <param name="defaultButton">Which button should be focused initially</param>
     /// <param name="options">Other style settings like SystemBackdrop.</param>
     /// <returns>The button selected by user.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Will not happen under normal circumstances. It happens when judging which button user selected.</exception>
     public static async Task<MessageBoxResult> ShowAsync(
         bool isModal,
         Window? owner,
@@ -210,137 +244,28 @@ public class MessageBox
         MessageBoxDefaultButton? defaultButton,
         MessageBoxOptions options)
     {
-        ElementTheme theme;
-        if (options.RequestedTheme is not ElementTheme.Default)
-        {
-            theme = options.RequestedTheme;
-        }
-        else if (owner is not null)
-        {
-            if (owner.Content is FrameworkElement root)
-            {
-                theme = root.ActualTheme;
-            }
-            else
-            {
-                theme = owner.AppWindow.TitleBar.PreferredTheme switch
-                {
-                    Microsoft.UI.Windowing.TitleBarTheme.UseDefaultAppMode => ElementTheme.Default,
-                    Microsoft.UI.Windowing.TitleBarTheme.Light => ElementTheme.Light,
-                    Microsoft.UI.Windowing.TitleBarTheme.Dark => ElementTheme.Dark,
-                    _ => ElementTheme.Default
-                };
-            }
-        }
-        else
-        {
-            theme = ElementTheme.Default;
-        }
-
-        WindowedContentDialog dialog = new()
-        {
-            WindowTitle = title,
-            Title = new MessageBoxHeader { Text = title, Icon = icon },
-            Content = content,
-            OwnerWindow = owner,
-            SystemBackdrop = options.SystemBackdrop,
-            RequestedTheme = theme,
-            IsTitleBarVisible = options.IsTitleBarVisible,
-            FlowDirection = options.FlowDirection,
-            CenterInParent = options.CenterInParent,
-            SmokeLayerKind = options.SmokeLayerKind,
-            CustomSmokeLayer = options.CustomSmokeLayer,
-            DisableBehind = options.DisableBehind,
-        };
-
-        ContentDialogButton contentDialogDefaultButton = defaultButton switch
-        {
-            MessageBoxDefaultButton.Button1 => ContentDialogButton.Primary,
-            MessageBoxDefaultButton.Button2 => ContentDialogButton.Secondary,
-            MessageBoxDefaultButton.Button3 => ContentDialogButton.Close,
-            null => ContentDialogButton.None,
-            _ => ContentDialogButton.None
-        };
-        dialog.DefaultButton = contentDialogDefaultButton;
-
-        switch (buttons)
-        {
-            case MessageBoxButtons.OK:
-                dialog.CloseButtonText = MessageBoxButtonText.OK;
-                dialog.DefaultButton = ContentDialogButton.Close;
-                break;
-
-            case MessageBoxButtons.OKCancel:
-                dialog.PrimaryButtonText = MessageBoxButtonText.OK;
-                dialog.SecondaryButtonText = MessageBoxButtonText.Cancel;
-                break;
-
-            case MessageBoxButtons.YesNo:
-                dialog.PrimaryButtonText = MessageBoxButtonText.Yes;
-                dialog.SecondaryButtonText = MessageBoxButtonText.No;
-                break;
-
-            case MessageBoxButtons.YesNoCancel:
-                dialog.PrimaryButtonText = MessageBoxButtonText.Yes;
-                dialog.SecondaryButtonText = MessageBoxButtonText.No;
-                dialog.CloseButtonText = MessageBoxButtonText.Cancel;
-                break;
-
-            case MessageBoxButtons.AbortRetryIgnore:
-                dialog.PrimaryButtonText = MessageBoxButtonText.Abort;
-                dialog.SecondaryButtonText = MessageBoxButtonText.Retry;
-                dialog.CloseButtonText = MessageBoxButtonText.Ignore;
-                break;
-
-            case MessageBoxButtons.RetryCancel:
-                dialog.PrimaryButtonText = MessageBoxButtonText.Retry;
-                dialog.SecondaryButtonText = MessageBoxButtonText.Cancel;
-                break;
-
-            case MessageBoxButtons.CancelTryContinue:
-                dialog.PrimaryButtonText = MessageBoxButtonText.Continue;
-                dialog.SecondaryButtonText = MessageBoxButtonText.TryAgain;
-                dialog.CloseButtonText = MessageBoxButtonText.Cancel;
-                dialog.DefaultButton = ContentDialogButton.Close;
-                break;
-        }
-
-        ContentDialogResult result = await dialog.ShowAsync(isModal);
-        MessageBoxResult[] results = MessageBoxResultsOf(buttons);
-        return results[result switch
-        {
-            ContentDialogResult.Primary => 0,
-            ContentDialogResult.Secondary => 1,
-            ContentDialogResult.None => results.Length - 1,
-            _ => throw new ArgumentOutOfRangeException(nameof(result)),
-        }];
+        return await new MessageBox(isModal, owner, content, title, buttons, icon, defaultButton, options).ShowAsync();
     }
 
-    private static readonly MessageBoxResult[][] resultGroups = [
-        [MessageBoxResult.OK],
-        [MessageBoxResult.OK, MessageBoxResult.Cancel],
-        [MessageBoxResult.Abort, MessageBoxResult.Retry, MessageBoxResult.Ignore],
-        [MessageBoxResult.Yes, MessageBoxResult.No, MessageBoxResult.Cancel],
-        [MessageBoxResult.Yes, MessageBoxResult.No],
-        [MessageBoxResult.Retry, MessageBoxResult.Cancel],
-        [MessageBoxResult.Continue, MessageBoxResult.TryAgain, MessageBoxResult.Cancel]
-    ];
-
-    private static MessageBoxResult[] MessageBoxResultsOf(MessageBoxButtons buttons) => resultGroups[(int) buttons];
-
-    /// <summary>
-    /// Create a readonly TextBox that allows user to select the message text.
-    /// <br/>
-    /// Why not use TextBlock with IsTextSelectionEnabled=true ?
-    /// Currently (WindowsAppSDK 1.7), once user selected text,
-    /// TextBlock with IsTextSelectionEnabled=true and TextWrapping=TextWrapping.Wrap
-    /// cannot update text wrapping automatically until the next time user selects text.
-    /// </summary>
-    private static SelectableTextBlock CreateSelectableTextBlock(string? text) => new()
+    protected override StandaloneContentDialogBase CreateDialog() => new WindowedContentDialog
     {
-        Text = text,
-        TextWrapping = TextWrapping.Wrap,
-        HorizontalAlignment = HorizontalAlignment.Stretch
+        WindowTitle = _title,
+        IsModal = _isModal,
+        OwnerWindow = _owner,
+        SystemBackdrop = _options.SystemBackdrop,
+        CenterInParent = _options.CenterInParent,
+        IsTitleBarVisible = _options.IsTitleBarVisible
     };
+
+    protected override ElementTheme DetermineTheme()
+    {
+        if (_options.RequestedTheme is not ElementTheme.Default)
+            return _options.RequestedTheme;
+
+        if (_owner?.Content is FrameworkElement root)
+            return root.ActualTheme;
+
+        return ElementTheme.Default;
+    }
 }
 
