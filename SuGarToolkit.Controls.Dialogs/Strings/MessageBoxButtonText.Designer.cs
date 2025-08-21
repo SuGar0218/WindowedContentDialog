@@ -68,7 +68,7 @@ namespace SuGarToolkit.Controls.Dialogs.Strings {
                 return ResourceManager.GetString("Abort", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   查找类似 Cancel 的本地化字符串。
         /// </summary>

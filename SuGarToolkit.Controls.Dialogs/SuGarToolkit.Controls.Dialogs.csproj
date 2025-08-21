@@ -38,11 +38,6 @@
 		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Compile Update="Strings\MessageBoxButtonText.zh-CN.Designer.cs">
-	    <DependentUpon>MessageBoxButtonText.zh-CN.resx</DependentUpon>
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	  </Compile>
 	  <Compile Update="Strings\MessageBoxButtonText.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
