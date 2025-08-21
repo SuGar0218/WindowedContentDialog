@@ -5,76 +5,42 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Windows.Foundation;
-using Windows.UI;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-public class FlyoutContentDialog
+public class FlyoutContentDialog : StandaloneContentDialogBase
 {
-    public string? WindowTitle { get; set; }
-    public object? Title { get; set; }
-    public object? Content { get; set; }
-
-    public ElementTheme RequestedTheme { get; set; }
+    /// <summary>
+    /// Doesn't work when ShouldConstrainToRootBounds = true.
+    /// </summary>
     public SystemBackdrop? SystemBackdrop { get; set; }
-    public Brush? Foreground { get; set; }
-    public Brush? Background { get; set; }
-    public Brush? BorderBrush { get; set; }
-    public Thickness BorderThickness { get; set; }
-    public FlowDirection FlowDirection { get; set; }
-    public DataTemplate? TitleTemplate { get; set; }
-    public DataTemplate? ContentTemplate { get; set; }
-    public string PrimaryButtonText { get; set; } = string.Empty;
-    public string SecondaryButtonText { get; set; } = string.Empty;
-    public string CloseButtonText { get; set; } = string.Empty;
-    public bool IsPrimaryButtonEnabled { get; set; } = true;
-    public bool IsSecondaryButtonEnabled { get; set; } = true;
-    public ContentDialogButton DefaultButton { get; set; }
-    public bool IsTitleBarVisible { get; set; } = true;
-    public bool CenterInParent { get; set; } = true;
-
-    public Style PrimaryButtonStyle { get; set; } = DefaultButtonStyle;
-    public Style SecondaryButtonStyle { get; set; } = DefaultButtonStyle;
-    public Style CloseButtonStyle { get; set; } = DefaultButtonStyle;
-
-    /// <summary>
-    /// 底部第一个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogFlyoutButtonClickEventArgs 参数中的 Cancel = true.
-    /// </summary>
-    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? PrimaryButtonClick;
-
-    /// <summary>
-    /// 底部第二个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogFlyoutButtonClickEventArgs 参数中的 Cancel = true.
-    /// </summary>
-    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? SecondaryButtonClick;
-
-    /// <summary>
-    /// 底部关闭按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogFlyoutButtonClickEventArgs 参数中的 Cancel = true.
-    /// </summary>
-    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? CloseButtonClick;
 
     /// <summary>
     /// Will be passed to Flyout.ShowAt
     /// </summary>
     public required FrameworkElement PlacementTarget { get; set; }
 
-    /// <summary>
-    /// Disable the content of window behind when dialog window shows.
-    /// </summary>
-    public bool DisableBehind { get; set; }
-
-    public WindowedContentDialogSmokeLayerKind SmokeLayerKind { get; set; }
-
-    public UIElement? CustomSmokeLayer { get; set; }
-
     public bool ShouldConstrainToRootBounds { get; set; }
 
     public FlyoutPlacementMode Placement { get; set; }
+
+    /// <summary>
+    /// 底部第一个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogFlyoutButtonClickEventArgs 参数中的 ShouldCloseDialog = true.
+    /// </summary>
+    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? PrimaryButtonClick;
+
+    /// <summary>
+    /// 底部第二个按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogFlyoutButtonClickEventArgs 参数中的 ShouldCloseDialog = true.
+    /// </summary>
+    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? SecondaryButtonClick;
+
+    /// <summary>
+    /// 底部关闭按钮按下时发生。若要取消点击后关闭窗口，设置 ContentDialogFlyoutButtonClickEventArgs 参数中的 ShouldCloseDialog = true.
+    /// </summary>
+    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? CloseButtonClick;
 
     /// <summary>
     /// 显示对话框窗口，关闭时返回用户选择结果。
@@ -84,9 +50,8 @@ public class FlyoutContentDialog
     /// 如果 DialogContent 是 FrameworkElement，那么此 FrameworkElement 不能已被其他父级持有，例如 new MainWindow().DialogContent；
     /// 下次更改 DialogContent 前，此弹窗也只能弹出一次，因为每次弹窗都创建一个新的窗口示例，使得同一个 FrameworkElement 被多处共享。
     /// </summary>
-    /// <param name="modal">阻塞所属窗口。默认为 true，但是当 PlacementTarget is null 时不会起作用，仍然弹出普通窗口。</param>
     /// <returns>用户选择结果</returns>
-    public async Task<ContentDialogResult> ShowAsync()
+    public override async Task<ContentDialogResult> ShowAsync()
     {
         ContentDialogFlyout dialogFlyout = new()
         {
@@ -126,23 +91,22 @@ public class FlyoutContentDialog
             };
         }
 
-        if (SmokeLayerKind is not WindowedContentDialogSmokeLayerKind.None && PlacementTarget.XamlRoot is not null)
+        if (SmokeLayerKind is not ContentDialogSmokeLayerKind.None && PlacementTarget.XamlRoot is not null)
         {
             Popup behindOverlayPopup = new()
             {
                 XamlRoot = PlacementTarget.XamlRoot,
                 RequestedTheme = RequestedTheme
             };
-            if (SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Darken)
+            if (SmokeLayerKind is ContentDialogSmokeLayerKind.Darken)
             {
                 Rectangle darkLayer = new()
                 {
-                    Width = PlacementTarget.XamlRoot.Size.Width,
-                    Height = PlacementTarget.XamlRoot.Size.Height,
                     Opacity = 0.0,
                     OpacityTransition = new ScalarTransition { Duration = TimeSpan.FromSeconds(0.25) },
                     Fill = new SolidColorBrush(SmokeFillColor),
                 };
+                SizeToXamlRoot(darkLayer, PlacementTarget.XamlRoot);
                 behindOverlayPopup.Child = darkLayer;
 
                 void OnPlacementTargetSizeChanged(object sender, SizeChangedEventArgs args) => SizeToXamlRoot(darkLayer, PlacementTarget.XamlRoot);
@@ -160,11 +124,11 @@ public class FlyoutContentDialog
                     PlacementTarget.SizeChanged -= OnPlacementTargetSizeChanged;
                 };
             }
-            else if (SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && CustomSmokeLayer is not null)
+            else if (SmokeLayerKind is ContentDialogSmokeLayerKind.Custom && CustomSmokeLayer is not null)
             {
                 behindOverlayPopup.Child = CustomSmokeLayer;
 
-                dialogFlyout.Opened += (o, e) =>
+                dialogFlyout.Opening += (o, e) =>
                 {
                     behindOverlayPopup.IsOpen = true;
                     behindOverlayPopup.Child.Opacity = 1.0;
@@ -184,14 +148,4 @@ public class FlyoutContentDialog
         dialogFlyout.ShowAt(PlacementTarget);
         return await resultCompletionSource.Task;
     }
-
-    private static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
-    {
-        element.Width = root.Size.Width;
-        element.Height = root.Size.Height;
-    }
-
-    private static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
-
-    private static Color SmokeFillColor => (Color) Application.Current.Resources["SmokeFillColorDefault"];
 }

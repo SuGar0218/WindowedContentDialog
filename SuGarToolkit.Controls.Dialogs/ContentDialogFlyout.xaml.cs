@@ -160,7 +160,7 @@ public sealed partial class ContentDialogFlyout : Flyout
     private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Primary;
-        ContentDialogFlyoutButtonClickEventArgs args = new() { Cancel = false };
+        ContentDialogFlyoutButtonClickEventArgs args = new() { ShouldCloseDialog = false };
         PrimaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -168,7 +168,7 @@ public sealed partial class ContentDialogFlyout : Flyout
     private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Secondary;
-        ContentDialogFlyoutButtonClickEventArgs args = new() { Cancel = false };
+        ContentDialogFlyoutButtonClickEventArgs args = new() { ShouldCloseDialog = false };
         SecondaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -176,14 +176,14 @@ public sealed partial class ContentDialogFlyout : Flyout
     private void OnCloseButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.None;
-        ContentDialogFlyoutButtonClickEventArgs args = new() { Cancel = false };
+        ContentDialogFlyoutButtonClickEventArgs args = new() { ShouldCloseDialog = false };
         CloseButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
     private void AfterCommandBarButtonClick(ContentDialogFlyoutButtonClickEventArgs args)
     {
-        if (args.Cancel)
+        if (args.ShouldCloseDialog)
             return;
 
         DispatcherQueue.TryEnqueue(Hide);
