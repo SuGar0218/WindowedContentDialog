@@ -27,12 +27,18 @@
             <StackPanel
                 Grid.Column="0"
                 HorizontalAlignment="Left"
-                Orientation="Horizontal">
+                Orientation="Horizontal"
+                Spacing="4">
                 <Button
                     Height="36"
                     Click="{x:Bind ToggleNavigationPane}"
                     Style="{ThemeResource TitleBarPaneToggleButtonStyle}" />
+                <Image
+                    Height="24"
+                    VerticalAlignment="Center"
+                    Source="/Assets/WindowedContentDialogSampleIcon.ico" />
                 <TextBlock
+                    Margin="4,0"
                     VerticalAlignment="Center"
                     Style="{ThemeResource CaptionTextBlockStyle}"
                     Text="SuGarToolkit.Controls.Dialogs" />

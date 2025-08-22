@@ -27,7 +27,7 @@
     </Page.Resources>
 
     <ScrollViewer>
-        <StackPanel Margin="36">
+        <StackPanel Margin="36,28">
             <Expander>
                 <Expander.Header>
                     <StackPanel
@@ -47,7 +47,7 @@
                 </Expander.Header>
 
                 <community:WrapPanel
-                    HorizontalSpacing="24"
+                    HorizontalSpacing="32"
                     Orientation="Horizontal"
                     VerticalSpacing="16">
                     <StackPanel Spacing="16">

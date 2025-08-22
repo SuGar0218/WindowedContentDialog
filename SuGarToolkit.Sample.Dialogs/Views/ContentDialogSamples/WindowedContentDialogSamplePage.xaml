@@ -27,7 +27,7 @@
     </Page.Resources>
 
     <ScrollViewer>
-        <StackPanel Margin="36">
+        <StackPanel Margin="36,28">
             <Expander>
                 <Expander.Header>
                     <StackPanel
@@ -47,10 +47,10 @@
                 </Expander.Header>
 
                 <community:WrapPanel
-                    HorizontalSpacing="24"
+                    HorizontalSpacing="32"
                     Orientation="Horizontal"
                     VerticalSpacing="16">
-                    <StackPanel Spacing="16" MinWidth="300">
+                    <StackPanel MinWidth="300" Spacing="16">
                         <TextBox
                             AcceptsReturn="True"
                             Header="标题"
@@ -65,7 +65,7 @@
                         <TextBox Header="SecondaryButtonText" Text="{x:Bind settings.SecondaryButtonText, Mode=TwoWay}" />
                         <TextBox Header="CloseButtonText" Text="{x:Bind settings.CloseButtonText, Mode=TwoWay}" />
                     </StackPanel>
-                    <StackPanel Spacing="16" MinWidth="200">
+                    <StackPanel MinWidth="200" Spacing="16">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="ComboBox">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
