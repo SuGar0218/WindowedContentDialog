@@ -3,10 +3,6 @@ using Microsoft.UI.Xaml.Controls;
 
 using SuGarToolkit.Controls.Dialogs.Strings;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SuGarToolkit.Controls.Dialogs;

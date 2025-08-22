@@ -1,10 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 
-using SuGarToolkit.Controls.Dialogs.Strings;
-
-using System;
 using System.Threading.Tasks;
 
 namespace SuGarToolkit.Controls.Dialogs;

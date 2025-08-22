@@ -6,12 +6,6 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 
 using SuGarToolkit.Controls.Dialogs;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SuGarToolkit.Sample.Dialogs.ViewModels;
 
 public partial class ContentDialogSettings : ObservableObject
