@@ -1,0 +1,55 @@
+using Microsoft.UI;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+
+using SuGarToolkit.Sample.Dialogs.ViewModels;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI;
+
+namespace SuGarToolkit.Sample.Dialogs.Views;
+
+public sealed partial class MessageBoxSamplesPage : Page
+{
+    public MessageBoxSamplesPage()
+    {
+        InitializeComponent();
+    }
+
+    private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        if (args.SelectedItem is null)
+            return;
+
+        NavigationItem item = (NavigationItem) args.SelectedItem;
+        ContentFrame.Navigate(item.PageType, viewModel.Settings, args.RecommendedNavigationTransitionInfo);
+    }
+
+    private readonly MessageBoxSampleViewModel viewModel = new(new MessageBoxSettings());
+
+    internal static FrameworkElement CustomSmokeLayer => field ??= new Border
+    {
+        Background = new SolidColorBrush((Color) Application.Current.Resources["SystemAccentColorDark2"]) { Opacity = 0.618 },
+        Child = new TextBlock
+        {
+            Text = "Dialog is opened",
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = new SolidColorBrush(Colors.White),
+            VerticalAlignment = VerticalAlignment.Bottom,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Style = (Style) Application.Current.Resources["TitleTextBlockStyle"]
+        }
+    };
+}

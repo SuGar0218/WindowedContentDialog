@@ -41,7 +41,7 @@ public sealed partial class ExamplePage : Page
 
     private async void ShowMessageBox()
     {
-        if (messageBoxViewModel.SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
+        if (messageBoxViewModel.SmokeLayerKind is ContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
         {
             SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
         }
@@ -57,6 +57,37 @@ public sealed partial class ExamplePage : Page
             {
                 IsTitleBarVisible = messageBoxViewModel.IsTitleBarVisible,
 
+                DisableBehind = messageBoxViewModel.DisableBehind,
+                SmokeLayerKind = messageBoxViewModel.SmokeLayerKind,
+                CustomSmokeLayer = LazyCustomSmokeLayer.Value,
+
+                RequestedTheme = ActualTheme,
+                SystemBackdrop = messageBoxViewModel.BackdropType switch
+                {
+                    BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },
+                    BuiltInSystemBackdropType.MicaAlt => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt },
+                    BuiltInSystemBackdropType.Arcylic => new DesktopAcrylicBackdrop(),
+                    _ => null
+                }
+            });
+        MessageBoxResultBox.Text = result.ToString();
+    }
+
+    private async void ShowFlyoutMessageBox()
+    {
+        if (messageBoxViewModel.SmokeLayerKind is ContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
+        {
+            SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
+        }
+        MessageBoxResult result = await FlyoutMessageBox.ShowAsync(
+            ShowMessageBoxButtonArea,
+            messageBoxViewModel.Content,
+            messageBoxViewModel.Title,
+            messageBoxViewModel.Buttons,
+            messageBoxViewModel.Image,
+            messageBoxViewModel.DefaultButton,
+            new FlyoutMessageBoxOptions
+            {
                 DisableBehind = messageBoxViewModel.DisableBehind,
                 SmokeLayerKind = messageBoxViewModel.SmokeLayerKind,
                 CustomSmokeLayer = LazyCustomSmokeLayer.Value,
@@ -92,10 +123,6 @@ public sealed partial class ExamplePage : Page
 
     private async void ShowWindowedContentDialog()
     {
-        if (contentDialogViewModel.SmokeLayerKind is WindowedContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
-        {
-            SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
-        }
         WindowedContentDialog dialog = new()
         {
             WindowTitle = contentDialogViewModel.Title,
@@ -161,8 +188,12 @@ public sealed partial class ExamplePage : Page
         ContentDialogResultBox.Text = result.ToString();
     }
 
-    private async void ShowContentDialogFlyout()
+    private async void ShowFlyoutContentDialog()
     {
+        if (contentDialogViewModel.SmokeLayerKind is ContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
+        {
+            SizeToWindow(LazyCustomSmokeLayer.Value, App.Current.MainWindow);
+        }
         FlyoutContentDialog dialog = new()
         {
             Title = contentDialogViewModel.Title,
@@ -210,11 +241,11 @@ public sealed partial class ExamplePage : Page
 
     internal static readonly BuiltInSystemBackdropType[] systemBackdropTypes = Enum.GetValues<BuiltInSystemBackdropType>();
 
-    internal static readonly WindowedContentDialogSmokeLayerKind[] behindOverlayTypes =
+    internal static readonly ContentDialogSmokeLayerKind[] behindOverlayTypes =
     [
-        WindowedContentDialogSmokeLayerKind.None,
-        WindowedContentDialogSmokeLayerKind.Darken,
-        WindowedContentDialogSmokeLayerKind.Custom
+        ContentDialogSmokeLayerKind.None,
+        ContentDialogSmokeLayerKind.Darken,
+        ContentDialogSmokeLayerKind.Custom
     ];
 
     private readonly Lazy<FrameworkElement> LazyCustomSmokeLayer = new(() => new Border
@@ -265,7 +296,7 @@ MessageBoxResultBox.Text = result.ToString();";
                 stringBuilder.AppendLine().AppendLine().Append(
 @$"dialog.PrimaryButtonClick += (o, e) =>
 {{
-    e.Cancel = true;
+    e.ShouldCloseDialog = true;
 }};");
             }
             if (!contentDialogViewModel.ClickSecondaryButtonToClose)
@@ -273,7 +304,7 @@ MessageBoxResultBox.Text = result.ToString();";
                 stringBuilder.AppendLine().AppendLine().Append(
 @$"dialog.SecondaryButtonClick += (o, e) =>
 {{
-    e.Cancel = true;
+    e.ShouldCloseDialog = true;
 }};");
             }
             stringBuilder.AppendLine().AppendLine().Append("ContentDialogResultBox.Text = result.ToString();");

@@ -15,7 +15,20 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Views\ContentDialogSamplePages\**" />
+    <EmbeddedResource Remove="Views\ContentDialogSamplePages\**" />
+    <None Remove="Views\ContentDialogSamplePages\**" />
+    <Page Remove="Views\ContentDialogSamplePages\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\FlyoutContentDialogSamplePage.xaml" />
     <None Remove="Views\LoremIpsumPage.xaml" />
+    <None Remove="Views\MainPage.xaml" />
+    <None Remove="Views\MessageBoxSamples\FlyoutMessageBoxSamplePage.xaml" />
+    <None Remove="Views\MessageBoxSamples\MuxcMessageBoxSamplePage.xaml" />
+    <None Remove="Views\MessageBoxSamples\WindowedMessageBoxSamplePage.xaml" />
+    <None Remove="Views\MuxcContentDialogSamplePage.xaml" />
+    <None Remove="Views\WindowedContentDialogSamplePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +54,8 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
@@ -52,6 +67,31 @@
     <Content Update="Assets\WindowedContentDialogSampleIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\FlyoutContentDialogSamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WindowedContentDialogSamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MuxcContentDialogSamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\ContentDialogSamplesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\LoremIpsumPage.xaml">
@@ -79,4 +119,27 @@
     <PublishAot>True</PublishAot>
     <ApplicationIcon>Assets\WindowedContentDialogSampleIcon.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <PRIResource Remove="Views\ContentDialogSamplePages\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MessageBoxSamples\MuxcMessageBoxSamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MessageBoxSamples\FlyoutMessageBoxSamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MessageBoxSamplesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MessageBoxSamples\WindowedMessageBoxSamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
 </Project>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="SuGarToolkit.Sample.Dialogs.Views.MessageBoxSamples.FlyoutMessageBoxSamplePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:community="using:CommunityToolkit.WinUI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SuGarToolkit.Sample.Dialogs.Views.MessageBoxSamples"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:SuGarToolkit.Sample.Dialogs.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style TargetType="Expander">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="ExpandDirection" Value="Down" />
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <RepositionThemeTransition />
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="36">
+
+            <Expander>
+                <Expander.Header>
+                    <StackPanel
+                        Margin="0,16"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <Button
+                            x:Name="ShowMessageBoxButton"
+                            Grid.Column="0"
+                            x:FieldModifier="private"
+                            Click="{x:Bind ShowFlyoutMessageBox}"
+                            Content="MessageBox"
+                            Style="{ThemeResource AccentButtonStyle}" />
+                        <TextBlock
+                            x:Name="MessageBoxResultBox"
+                            VerticalAlignment="Center"
+                            x:FieldModifier="private" />
+                    </StackPanel>
+                </Expander.Header>
+
+                <community:WrapPanel
+                    HorizontalSpacing="24"
+                    Orientation="Horizontal"
+                    VerticalSpacing="16">
+                    <StackPanel MinWidth="300" Spacing="16">
+                        <TextBox
+                            AcceptsReturn="True"
+                            Header="标题"
+                            Text="{x:Bind settings.Title, Mode=TwoWay}"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            AcceptsReturn="True"
+                            Header="内容"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Text="{x:Bind settings.Content, Mode=TwoWay}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel MinWidth="200" Spacing="16">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="ComboBox">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <ComboBox
+                            Header="按扭组合"
+                            ItemsSource="{x:Bind vm:EnumValues.MessageBoxButtons}"
+                            SelectedItem="{x:Bind settings.Buttons, Mode=TwoWay}" />
+                        <ComboBox
+                            Header="默认按钮"
+                            ItemsSource="{x:Bind vm:EnumValues.MessageBoxDefaultButtons}"
+                            SelectedItem="{x:Bind settings.DefaultButton, Mode=TwoWay}" />
+                        <ComboBox
+                            Header="图标"
+                            ItemsSource="{x:Bind vm:EnumValues.MessageBoxImages}"
+                            SelectedItem="{x:Bind settings.Image, Mode=TwoWay}" />
+                        <ComboBox
+                            Header="SystemBackdrop"
+                            ItemsSource="{x:Bind vm:EnumValues.SystemBackdropTypes}"
+                            SelectedItem="{x:Bind settings.BackdropType, Mode=TwoWay}" />
+                        <ComboBox
+                            Header="主题色"
+                            ItemsSource="{x:Bind vm:EnumValues.ElementThemes}"
+                            SelectedItem="{x:Bind settings.RequestedTheme, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="ElementTheme">
+                                    <TextBlock Text="{x:Bind}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox
+                            Header="父窗口叠层"
+                            ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
+                            SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Spacing="12">
+                        <CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />
+                        <CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />
+                        <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}" />
+                        <!--<CheckBox Content="显示在父窗口中间" IsChecked="{x:Bind settings.CenterInParent, Mode=TwoWay}" />-->
+                        <!--<CheckBox Content="禁用父窗口（无父窗口时无效）" IsChecked="{x:Bind settings.DisableBehind, Mode=TwoWay}" />-->
+                        <CheckBox Content="ShouldConstrainToRootBounds" IsChecked="{x:Bind settings.ShouldConstrainToRootBounds, Mode=TwoWay}" />
+                    </StackPanel>
+                </community:WrapPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

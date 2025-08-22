@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="SuGarToolkit.Sample.Dialogs.Views.ContentDialogSamples.FlyoutContentDialogSamplePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:community="using:CommunityToolkit.WinUI.Controls"
+    xmlns:converter="using:SuGarToolkit.Sample.Dialogs.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SuGarToolkit.Sample.Dialogs.Views.ContentDialogSamples"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:SuGarToolkit.Sample.Dialogs.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style TargetType="Expander">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="ExpandDirection" Value="Down" />
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <RepositionThemeTransition />
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="36">
+            <Expander>
+                <Expander.Header>
+                    <StackPanel
+                        Margin="0,16"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <Button
+                            x:Name="ShowContentDialogButton"
+                            Grid.Column="0"
+                            x:FieldModifier="private"
+                            Click="{x:Bind ShowFlyoutContentDialog}"
+                            Content="FlyoutContentDialog"
+                            Style="{ThemeResource AccentButtonStyle}" />
+                        <TextBlock
+                            x:Name="ContentDialogResultBox"
+                            VerticalAlignment="Center"
+                            x:FieldModifier="private" />
+                    </StackPanel>
+                </Expander.Header>
+
+                <community:WrapPanel
+                    HorizontalSpacing="24"
+                    Orientation="Horizontal"
+                    VerticalSpacing="16">
+                    <StackPanel Spacing="16">
+                        <TextBox
+                            AcceptsReturn="True"
+                            Header="标题"
+                            Text="{x:Bind settings.Title, Mode=TwoWay}"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            AcceptsReturn="True"
+                            Header="内容（为空时显示本示例提供的默认内容）"
+                            Text="{x:Bind settings.Message, Mode=TwoWay}"
+                            TextWrapping="Wrap" />
+                        <TextBox Header="PrimaryButtonText" Text="{x:Bind settings.PrimaryButtonText, Mode=TwoWay}" />
+                        <TextBox Header="SecondaryButtonText" Text="{x:Bind settings.SecondaryButtonText, Mode=TwoWay}" />
+                        <TextBox Header="CloseButtonText" Text="{x:Bind settings.CloseButtonText, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Spacing="16">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource DefaultComboBoxStyle}" TargetType="ComboBox">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="MinWidth" Value="200" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <ComboBox
+                            Header="默认按钮"
+                            ItemsSource="{x:Bind vm:EnumValues.ContentDialogButtons}"
+                            SelectedItem="{x:Bind settings.DefaultButton, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="ContentDialogButton">
+                                    <TextBlock Text="{x:Bind}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox
+                            Header="放置位置"
+                            ItemsSource="{x:Bind vm:EnumValues.FlyoutPlacementModes}"
+                            SelectedItem="{x:Bind settings.Placement, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="FlyoutPlacementMode">
+                                    <TextBlock Text="{x:Bind}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox
+                            Header="SystemBackdrop"
+                            IsEnabled="{x:Bind converter:FunctionalConverter.Not(settings.ShouldConstrainToRootBounds), Mode=OneWay}"
+                            ItemsSource="{x:Bind vm:EnumValues.SystemBackdropTypes}"
+                            SelectedItem="{x:Bind settings.BackdropType, Mode=TwoWay}" />
+                        <ComboBox
+                            Header="主题色"
+                            ItemsSource="{x:Bind vm:EnumValues.ElementThemes}"
+                            SelectedItem="{x:Bind settings.RequestedTheme, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="ElementTheme">
+                                    <TextBlock Text="{x:Bind}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox
+                            Header="父窗口叠层（无父窗口时无效）"
+                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}"
+                            ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
+                            SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Spacing="12">
+                        <!--<CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />-->
+                        <CheckBox Content="点击 PrimaryButton 后不关闭" IsChecked="{x:Bind settings.PrimaryButtonNotClose, Mode=TwoWay}" />
+                        <CheckBox Content="点击 SecondaryButton 后不关闭" IsChecked="{x:Bind settings.SecondaryButtonNotClose, Mode=TwoWay}" />
+                        <CheckBox Content="ShouldConstrainToRootBounds" IsChecked="{x:Bind settings.ShouldConstrainToRootBounds, Mode=TwoWay}" />
+                        <!--<CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />-->
+                        <!--<CheckBox Content="显示在父窗口中间" IsChecked="{x:Bind settings.CenterInParent, Mode=TwoWay}" />-->
+                        <!--<CheckBox
+                            Content="模态窗口（无父窗口时无效）"
+                            IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}"
+                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}" />-->
+                        <!--<CheckBox
+                            Content="禁用父窗口（无父窗口时无效）"
+                            IsChecked="{x:Bind settings.DisableBehind, Mode=TwoWay}"
+                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}" />-->
+                    </StackPanel>
+                </community:WrapPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

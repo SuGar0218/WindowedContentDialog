@@ -16,7 +16,7 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         ExtendsContentIntoTitleBar = true;
-        AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
+        //AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
 
         // 当 Windows 设置 > 个性化 中，打开了在标题栏上显示强调色时，WinUI 3 标题栏按钮颜色显示不正确。
         RootFrame.Loaded += (sender, e) =>
@@ -101,7 +101,7 @@ public sealed partial class MainWindow : Window
     private void Frame_Loaded(object sender, RoutedEventArgs e)
     {
         Frame frame = (Frame) sender;
-        frame.Navigate(typeof(ExamplePage));
+        frame.Navigate(typeof(MainPage));
     }
 
     private void Window_Closed(object sender, WindowEventArgs args)

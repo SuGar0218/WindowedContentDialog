@@ -74,7 +74,7 @@
                                 Margin="0,16"
                                 Orientation="Horizontal"
                                 Spacing="8">
-                                <Grid>
+                                <Grid x:Name="ShowMessageBoxButtonArea" x:FieldModifier="private">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
@@ -87,6 +87,7 @@
                                         <DropDownButton.Flyout>
                                             <MenuFlyout Placement="Bottom">
                                                 <MenuFlyoutItem Click="{x:Bind ShowMessageBox}" Text="WindowedMessageBox" />
+                                                <MenuFlyoutItem Click="{x:Bind ShowFlyoutMessageBox}" Text="FlyoutMessageBox" />
                                                 <MenuFlyoutItem Click="{x:Bind ShowInWindowMessageBox}" Text="InWindowMessageBox" />
                                             </MenuFlyout>
                                         </DropDownButton.Flyout>
@@ -164,8 +165,8 @@
                                         <DropDownButton.Flyout>
                                             <MenuFlyout Placement="Bottom">
                                                 <MenuFlyoutItem Click="{x:Bind ShowWindowedContentDialog}" Text="WindowedContentDialog" />
+                                                <MenuFlyoutItem Click="{x:Bind ShowFlyoutContentDialog}" Text="FlyoutContentDialog" />
                                                 <MenuFlyoutItem Click="{x:Bind ShowInWindowContentDialog}" Text="InWindowContentDialog" />
-                                                <MenuFlyoutItem Click="{x:Bind ShowContentDialogFlyout}" Text="FlyoutContentDialog" />
                                             </MenuFlyout>
                                         </DropDownButton.Flyout>
                                     </DropDownButton>

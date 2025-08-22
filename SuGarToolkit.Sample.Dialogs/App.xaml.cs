@@ -31,7 +31,7 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         MainWindow = new MainWindow();
-        MainWindow.AppWindow.Resize(new Windows.Graphics.SizeInt32(MainWindow.AppWindow.Size.Height * 3 / 4, MainWindow.AppWindow.Size.Height));
+        //MainWindow.AppWindow.Resize(new Windows.Graphics.SizeInt32((int) (MainWindow.AppWindow.Size.Height * 1.618), MainWindow.AppWindow.Size.Height));
         MainWindow.Activate();
     }
 }
