@@ -70,6 +70,7 @@ public class FlyoutContentDialog : StandaloneContentDialogBase
             CloseButtonStyle = CloseButtonStyle,
 
             Placement = Placement,
+            ShouldConstrainToRootBounds = ShouldConstrainToRootBounds,
             SystemBackdrop = SystemBackdrop,
             RequestedTheme = RequestedTheme
         };

@@ -6,7 +6,7 @@
 public sealed class ContentDialogWindowButtonClickEventArgs
 {
     /// <summary>
-    /// Whether to close _dialog after button clicked. The default value is TRUE.
+    /// Whether to cancel closing dialog after button clicked.
     /// </summary>
-    public bool ShouldCloseDialog { get; set; } = true;
+    public bool Cancel { get; set; }
 }

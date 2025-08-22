@@ -324,7 +324,7 @@ public partial class ContentDialogWindow : Window
     private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Primary;
-        ContentDialogWindowButtonClickEventArgs args = new() { ShouldCloseDialog = false };
+        ContentDialogWindowButtonClickEventArgs args = new();
         PrimaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -332,7 +332,7 @@ public partial class ContentDialogWindow : Window
     private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Secondary;
-        ContentDialogWindowButtonClickEventArgs args = new() { ShouldCloseDialog = false };
+        ContentDialogWindowButtonClickEventArgs args = new();
         SecondaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -340,14 +340,14 @@ public partial class ContentDialogWindow : Window
     private void OnCloseButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.None;
-        ContentDialogWindowButtonClickEventArgs args = new() { ShouldCloseDialog = false };
+        ContentDialogWindowButtonClickEventArgs args = new();
         CloseButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
     private void AfterCommandBarButtonClick(ContentDialogWindowButtonClickEventArgs args)
     {
-        if (args.ShouldCloseDialog)
+        if (args.Cancel)
             return;
 
         OnClosingRequstedByCode();

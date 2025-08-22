@@ -45,12 +45,13 @@ public abstract class StandaloneContentDialogBase
 
     public UIElement? CustomSmokeLayer { get; set; }
 
-    protected static Style DefaultButtonStyle => field ??= (Style) Application.Current.Resources["DefaultButtonStyle"];
-    protected static Color SmokeFillColor => field == default ? (field = (Color) Application.Current.Resources["SmokeFillColorDefault"]) : field;
-
     protected static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
     {
         element.Width = root.Size.Width;
         element.Height = root.Size.Height;
     }
+
+    protected static Style DefaultButtonStyle => field ??= (Style) Application.Current.Resources["DefaultButtonStyle"];
+    protected static Color SmokeFillColor => field == default ? (field = (Color) Application.Current.Resources["SmokeFillColorDefault"]) : field;
+
 }

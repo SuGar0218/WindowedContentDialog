@@ -160,7 +160,7 @@ public sealed partial class ContentDialogFlyout : Flyout
     private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Primary;
-        ContentDialogFlyoutButtonClickEventArgs args = new() { ShouldCloseDialog = false };
+        ContentDialogFlyoutButtonClickEventArgs args = new();
         PrimaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -168,7 +168,7 @@ public sealed partial class ContentDialogFlyout : Flyout
     private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.Secondary;
-        ContentDialogFlyoutButtonClickEventArgs args = new() { ShouldCloseDialog = false };
+        ContentDialogFlyoutButtonClickEventArgs args = new();
         SecondaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
@@ -176,14 +176,14 @@ public sealed partial class ContentDialogFlyout : Flyout
     private void OnCloseButtonClick(object sender, RoutedEventArgs e)
     {
         Result = ContentDialogResult.None;
-        ContentDialogFlyoutButtonClickEventArgs args = new() { ShouldCloseDialog = false };
+        ContentDialogFlyoutButtonClickEventArgs args = new();
         CloseButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
     private void AfterCommandBarButtonClick(ContentDialogFlyoutButtonClickEventArgs args)
     {
-        if (args.ShouldCloseDialog)
+        if (args.Cancel)
             return;
 
         DispatcherQueue.TryEnqueue(Hide);
@@ -191,12 +191,20 @@ public sealed partial class ContentDialogFlyout : Flyout
 
     protected override Control CreatePresenter()
     {
-        Control presenter = base.CreatePresenter();
-        presenter.MinWidth = 0;
-        presenter.MaxWidth = double.PositiveInfinity;
-        presenter.MinHeight = 0;
-        presenter.MaxHeight = double.PositiveInfinity;
-        presenter.Padding = new Thickness(0);
+        FlyoutPresenter presenter = new()
+        {
+            Content = Content,
+            MinWidth = 0,
+            MaxWidth = double.PositiveInfinity,
+            MinHeight = 0,
+            MaxHeight = double.PositiveInfinity,
+            Padding = new Thickness(0),
+            RequestedTheme = RequestedTheme
+        };
+        if (!ShouldConstrainToRootBounds && SystemBackdrop is not null)
+        {
+            presenter.Background = null;
+        }
         return presenter;
     }
 

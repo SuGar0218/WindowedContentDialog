@@ -5,5 +5,8 @@
 /// </summary>
 public sealed class ContentDialogFlyoutButtonClickEventArgs
 {
-    public bool ShouldCloseDialog { get; set; }
+    /// <summary>
+    /// Whether to cancel closing dialog after button clicked.
+    /// </summary>
+    public bool Cancel { get; set; }
 }
