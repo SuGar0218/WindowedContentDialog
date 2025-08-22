@@ -31,7 +31,7 @@ public sealed partial class MuxcContentDialogSamplePage : Page
             SecondaryButtonText = settings.SecondaryButtonText,
             CloseButtonText = settings.CloseButtonText,
             DefaultButton = settings.DefaultButton,
-            RequestedTheme = App.Current.MainWindow!.RequestedTheme,
+            RequestedTheme = settings.RequestedTheme is ElementTheme.Default ? ActualTheme : settings.RequestedTheme,
             XamlRoot = XamlRoot,
             Style = (Style) Application.Current.Resources["DefaultContentDialogStyle"]
         };

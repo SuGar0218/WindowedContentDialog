@@ -61,9 +61,6 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Update="Assets\WindowedContentDialogSampleIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -121,6 +118,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="Views\ContentDialogSamplePages\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\MessageBoxSamples\MuxcMessageBoxSamplePage.xaml">

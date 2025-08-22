@@ -99,6 +99,7 @@
                         </ComboBox>
                         <ComboBox
                             Header="父窗口叠层"
+                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}"
                             ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
                             SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />
                     </StackPanel>

@@ -36,6 +36,7 @@ public sealed partial class FlyoutMessageBoxSamplePage : Page
             settings.DefaultButton,
             new FlyoutMessageBoxOptions
             {
+                Placement = settings.Placement,
                 ShouldConstrainToRootBounds = settings.ShouldConstrainToRootBounds,
 
                 //DisableBehind = settings.DisableBehind,

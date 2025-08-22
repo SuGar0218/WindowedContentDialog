@@ -44,7 +44,7 @@ public partial class ContentDialogSettings : ObservableObject
     public ElementTheme RequestedTheme { get; set; }
 
     [ObservableProperty]
-    public bool ShouldConstrainToRootBounds { get; set; } = true;
+    public partial bool ShouldConstrainToRootBounds { get; set; } = true;
 
     public FlyoutPlacementMode Placement { get; set; }
 }

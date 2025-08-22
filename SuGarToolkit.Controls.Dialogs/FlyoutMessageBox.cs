@@ -66,12 +66,13 @@ public class FlyoutMessageBox : MessageBoxBase
     protected override StandaloneContentDialogBase CreateDialog() => new FlyoutContentDialog
     {
         PlacementTarget = _anchor,
+        Placement = _options.Placement,
         SystemBackdrop = _options.SystemBackdrop,
         ShouldConstrainToRootBounds = _options.ShouldConstrainToRootBounds
     };
 
     protected override ElementTheme DetermineTheme()
     {
-        return _options.RequestedTheme is ElementTheme.Default ? _options.RequestedTheme : _anchor.ActualTheme;
+        return _options.RequestedTheme is ElementTheme.Default ? _anchor.ActualTheme : _options.RequestedTheme;
     }
 }

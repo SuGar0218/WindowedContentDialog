@@ -43,6 +43,7 @@ public sealed partial class FlyoutContentDialogSamplePage : Page
             CustomSmokeLayer = ContentDialogSamplesPage.CustomSmokeLayer,
 
             ShouldConstrainToRootBounds = settings.ShouldConstrainToRootBounds,
+            Placement = settings.Placement,
             PlacementTarget = ShowContentDialogButton,
 
             RequestedTheme = settings.RequestedTheme is ElementTheme.Default ? ActualTheme : settings.RequestedTheme,

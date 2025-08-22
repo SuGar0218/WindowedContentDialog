@@ -85,6 +85,16 @@
                             ItemsSource="{x:Bind vm:EnumValues.MessageBoxImages}"
                             SelectedItem="{x:Bind settings.Image, Mode=TwoWay}" />
                         <ComboBox
+                            Header="放置位置"
+                            ItemsSource="{x:Bind vm:EnumValues.FlyoutPlacementModes}"
+                            SelectedItem="{x:Bind settings.Placement, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="FlyoutPlacementMode">
+                                    <TextBlock Text="{x:Bind}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox
                             Header="SystemBackdrop"
                             ItemsSource="{x:Bind vm:EnumValues.SystemBackdropTypes}"
                             SelectedItem="{x:Bind settings.BackdropType, Mode=TwoWay}" />
@@ -100,13 +110,14 @@
                         </ComboBox>
                         <ComboBox
                             Header="父窗口叠层"
+                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}"
                             ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
                             SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />
                     </StackPanel>
                     <StackPanel Spacing="12">
-                        <CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />
-                        <CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />
-                        <CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}" />
+                        <!--<CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />-->
+                        <!--<CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />-->
+                        <!--<CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}" />-->
                         <!--<CheckBox Content="显示在父窗口中间" IsChecked="{x:Bind settings.CenterInParent, Mode=TwoWay}" />-->
                         <!--<CheckBox Content="禁用父窗口（无父窗口时无效）" IsChecked="{x:Bind settings.DisableBehind, Mode=TwoWay}" />-->
                         <CheckBox Content="ShouldConstrainToRootBounds" IsChecked="{x:Bind settings.ShouldConstrainToRootBounds, Mode=TwoWay}" />

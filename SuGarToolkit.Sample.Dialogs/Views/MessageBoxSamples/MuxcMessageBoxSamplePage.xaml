@@ -104,7 +104,7 @@
                             SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />-->
                     </StackPanel>
                     <StackPanel Spacing="12">
-                        <CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />
+                        <!--<CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />-->
                         <!--<CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />
                         <CheckBox
                             Content="模态窗口（无父窗口时无效）"
