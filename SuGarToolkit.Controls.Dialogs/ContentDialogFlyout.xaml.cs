@@ -11,6 +11,7 @@ public sealed partial class ContentDialogFlyout : Flyout
     public ContentDialogFlyout()
     {
         InitializeComponent();
+        Closed += OnClosed;
     }
 
     public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? PrimaryButtonClick;
@@ -137,8 +138,8 @@ public sealed partial class ContentDialogFlyout : Flyout
 
     public ElementTheme RequestedTheme
     {
-        get => content.RequestedTheme;
-        set => content.RequestedTheme = value;
+        get;// => content.RequestedTheme;
+        set;// => content.RequestedTheme = value;
     }
 
     #endregion
@@ -185,14 +186,50 @@ public sealed partial class ContentDialogFlyout : Flyout
             MinHeight = 0,
             MaxHeight = double.PositiveInfinity,
             Padding = new Thickness(0),
-            RequestedTheme = RequestedTheme
         };
-        if (!ShouldConstrainToRootBounds && SystemBackdrop is not null)
+
+        // It looks odd but there seems not to be a better practice currently (WindowsAppSDK 1.7).
+        // By default, FlyoutPresenter has acrylic background.
+        // If ShouldConstrainToRootBounds is true,
+        // the flyout will not create a new window and present content in FlyoutPresenter,
+        // so we just need to set RequestedTheme for FlyoutPresenter normally.
+        // If ShouldConstrainToRootBounds is false,
+        // the flyout will create a new window and present content in FlyoutPresenter,
+        // which default backgroud will cover on the window, resulting in SystemBackdrop cannot be seen,
+        // so we should remove background.
+        // After some tests, it seems that SytemBackdrop of window containing FlyoutPresenter only follows Flyout.Target
+        // (comes from PlacementTarget paramter of ShowAt method, I simply call it anchor below).
+        // But once we set RequestedTheme for FlyoutPresenter,
+        // no matter whether the anchor's RequestedTheme is set,
+        // SytemBackdrop of the window will be light when system is set to light mode.
+        if (ShouldConstrainToRootBounds)
         {
-            presenter.Background = null;
+            presenter.RequestedTheme = RequestedTheme;
         }
+        else
+        {
+            originalTargetTheme = Target.RequestedTheme;
+            Target.RequestedTheme = RequestedTheme;
+            // If SystemBackdrop is null and FlyoutPresenter.Background is null,
+            // the backgroud of flyout will be transparent.
+            if (SystemBackdrop is not null)
+            {
+                presenter.Background = null;
+            }
+        }
+
         return presenter;
     }
+
+    private void OnClosed(object? sender, object e)
+    {
+        if (!ShouldConstrainToRootBounds)
+        {
+            Target.RequestedTheme = originalTargetTheme;
+        }
+    }
+
+    private ElementTheme originalTargetTheme;
 
     private static Style DefaultButtonStyle => field ??= (Style) Application.Current.Resources["DefaultButtonStyle"];
 }
