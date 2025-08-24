@@ -146,6 +146,26 @@ public partial class ContentDialogWindow : Window
         }
     }
 
+    public ContentDialogResult Result { get; private set; }
+
+    /// <summary>
+    /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是 UI。
+    /// </summary>
+    public object? DialogTitle
+    {
+        get => content.Title;
+        set => content.Title = value;
+    }
+
+    /// <summary>
+    /// 此 DialogContent 表示对话框正文部分的内容，而不是整个窗口的内容。
+    /// </summary>
+    public object? DialogContent
+    {
+        get => content.Content;
+        set => content.Content = value;
+    }
+
     #region ContentDialogContent properties
 
     public Brush? Foreground
@@ -245,26 +265,6 @@ public partial class ContentDialogWindow : Window
     }
 
     #endregion
-
-    public ContentDialogResult Result { get; private set; }
-
-    /// <summary>
-    /// 此 DialogContent 表示对话框正文部分的内容，而不是整个窗口的内容。
-    /// </summary>
-    public object? DialogContent
-    {
-        get => content.Content;
-        set => content.Content = value;
-    }
-
-    /// <summary>
-    /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是 UI。
-    /// </summary>
-    public object? DialogTitle
-    {
-        get => content.Title;
-        set => content.Title = value;
-    }
 
     private void OnContentLoaded(object sender, RoutedEventArgs e)
     {

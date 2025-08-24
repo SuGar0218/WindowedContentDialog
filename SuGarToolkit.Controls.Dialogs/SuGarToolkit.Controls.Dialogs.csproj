@@ -48,7 +48,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Update="Strings\MessageBoxButtonText.zh-CN.resx">
-	    <LastGenOutput>MessageBoxButtonText.zh-CN.Designer.cs</LastGenOutput>
+	    <LastGenOutput>MessageBoxButtonText.Designer.cs</LastGenOutput>
 	    <Generator>ResXFileCodeGenerator</Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Strings\MessageBoxButtonText.resx">

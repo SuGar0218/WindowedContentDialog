@@ -15,7 +15,7 @@ internal sealed partial class ContentDialogContent : ContentControl
     public ContentDialogContent() : base()
     {
         DefaultStyleKey = typeof(ContentDialogContent);
-        Unloaded += (o, e) => needsCustomMeasure = false;
+        Unloaded += (o, e) => isCustomMeasureFinishedAfterLoaded = false;
     }
 
     private Button PrimaryButton;
@@ -58,15 +58,19 @@ internal sealed partial class ContentDialogContent : ContentControl
     /// <br/>
     /// If the first measurement after Loaded is finished, there will be no need for customized measurement until Unloaded.
     /// </summary>
-    private bool needsCustomMeasure;
+    private bool isCustomMeasureFinishedAfterLoaded;
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        if (needsCustomMeasure)
+        if (isCustomMeasureFinishedAfterLoaded)
             return base.MeasureOverride(availableSize);
 
-        needsCustomMeasure = IsLoaded;
+        isCustomMeasureFinishedAfterLoaded = IsLoaded;
+        return CustomMeasure(availableSize);
+    }
 
+    private Size CustomMeasure(Size availableSize)
+    {
         int countButtons = 0;
         double buttonLongestWidth = 0.0;
         double buttonMaxWidth = (double) Application.Current.Resources["ContentDialogButtonMaxWidth"];
