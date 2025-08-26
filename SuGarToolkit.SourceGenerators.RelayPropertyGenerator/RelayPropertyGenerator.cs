@@ -1,12 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
 namespace SuGarToolkit.SourceGenerators
@@ -44,6 +41,26 @@ namespace SuGarToolkit.SourceGenerators
 
         public void Initialize(IncrementalGeneratorInitializationContext initContext)
         {
+            initContext.RegisterPostInitializationOutput(postContext =>
+            {
+                postContext.AddSource("DependencyPropertyAttribute.g.cs", @"
+using System;
+
+namespace SuGarToolkit.SourceGenerators
+{
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public class RelayPropertyAttribute : Attribute
+    {
+        public RelayPropertyAttribute(string path)
+        {
+            _path = path;
+        }
+
+        private readonly string _path;
+    }
+}");
+            });
+
             IncrementalValueProvider<ImmutableArray<RelayPropertyInfo>> relayPropertyInfosProvider = initContext.SyntaxProvider.ForAttributeWithMetadataName(
                 TargetAttributeFullQualifiedName,
                 (syntaxNode, _) => syntaxNode is PropertyDeclarationSyntax,
