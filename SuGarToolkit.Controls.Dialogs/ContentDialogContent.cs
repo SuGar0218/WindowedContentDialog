@@ -10,7 +10,7 @@ using Windows.Foundation;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-internal sealed partial class ContentDialogContent : ContentControl
+public partial class ContentDialogContent : ContentControl
 {
     public ContentDialogContent() : base()
     {
