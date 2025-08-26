@@ -1,6 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
+using SuGarToolkit.Controls.Dialogs.Strings;
+
 using System;
 using System.Threading.Tasks;
 
@@ -331,103 +333,43 @@ public class InWindowMessageBox
         switch (buttons)
         {
             case MessageBoxButtons.OK:
-                dialog.PrimaryButtonText = "OK";
+                dialog.CloseButtonText = MessageBoxButtonText.OK;
+                dialog.DefaultButton = ContentDialogButton.Close;
                 break;
 
             case MessageBoxButtons.OKCancel:
-                dialog.PrimaryButtonText = "OK";
-                dialog.SecondaryButtonText = "ShouldCloseDialog";
+                dialog.PrimaryButtonText = MessageBoxButtonText.OK;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Cancel;
                 break;
 
             case MessageBoxButtons.YesNo:
-                dialog.PrimaryButtonText = "Yes";
-                dialog.SecondaryButtonText = "No";
-                //_dialog.PrimaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "Y" }
-                //    }
-                //};
-                //_dialog.SecondaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "N" }
-                //    }
-                //};
+                dialog.PrimaryButtonText = MessageBoxButtonText.Yes;
+                dialog.SecondaryButtonText = MessageBoxButtonText.No;
                 break;
 
             case MessageBoxButtons.YesNoCancel:
-                dialog.PrimaryButtonText = "Yes";
-                dialog.SecondaryButtonText = "No";
-                dialog.CloseButtonText = "ShouldCloseDialog";
-                //_dialog.PrimaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "Y" }
-                //    }
-                //};
-                //_dialog.SecondaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "N" }
-                //    }
-                //};
+                dialog.PrimaryButtonText = MessageBoxButtonText.Yes;
+                dialog.SecondaryButtonText = MessageBoxButtonText.No;
+                dialog.CloseButtonText = MessageBoxButtonText.Cancel;
                 break;
 
             case MessageBoxButtons.AbortRetryIgnore:
-                dialog.PrimaryButtonText = "Abort";
-                dialog.SecondaryButtonText = "Retry";
-                dialog.CloseButtonText = "Ignore";
-                //_dialog.PrimaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "A" }
-                //    }
-                //};
-                //_dialog.SecondaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "R" }
-                //    }
-                //};
-                //_dialog.CloseButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "I" }
-                //    }
-                //};
+                dialog.PrimaryButtonText = MessageBoxButtonText.Abort;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Retry;
+                dialog.CloseButtonText = MessageBoxButtonText.Ignore;
                 break;
 
             case MessageBoxButtons.RetryCancel:
-                dialog.PrimaryButtonText = "Retry";
-                dialog.SecondaryButtonText = "ShouldCloseDialog";
-                //_dialog.PrimaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "R" }
-                //    }
-                //};
+                dialog.PrimaryButtonText = MessageBoxButtonText.Retry;
+                dialog.SecondaryButtonText = MessageBoxButtonText.Cancel;
                 break;
 
             case MessageBoxButtons.CancelTryContinue:
-                dialog.PrimaryButtonText = "Continue";
-                dialog.SecondaryButtonText = "Try again";
-                dialog.CloseButtonText = "ShouldCloseDialog";
+                dialog.PrimaryButtonText = MessageBoxButtonText.Continue;
+                dialog.SecondaryButtonText = MessageBoxButtonText.TryAgain;
+                dialog.CloseButtonText = MessageBoxButtonText.Cancel;
                 dialog.DefaultButton = ContentDialogButton.Close;
-                //_dialog.PrimaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "C" }
-                //    }
-                //};
-                //_dialog.SecondaryButtonStyle = new() {
-                //    TargetType = typeof(Button),
-                //    Setters = {
-                //        new Setter { Property = Button.AccessKeyProperty, Value = "T" }
-                //    }
-                //};
                 break;
-
         }
 
         ContentDialogResult result;

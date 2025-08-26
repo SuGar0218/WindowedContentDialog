@@ -13,6 +13,9 @@ public class MessageBoxBaseOptions
 
     public UIElement? CustomSmokeLayer { get; set; }
 
+    /// <summary>
+    /// ElementTheme.Default is treated as following owner window
+    /// </summary>
     public ElementTheme RequestedTheme { get; set; }
 
     public FlowDirection FlowDirection { get; set; }
