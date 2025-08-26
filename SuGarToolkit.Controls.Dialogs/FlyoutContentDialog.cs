@@ -72,7 +72,7 @@ public class FlyoutContentDialog : StandaloneContentDialogBase
             Placement = Placement,
             ShouldConstrainToRootBounds = ShouldConstrainToRootBounds,
             SystemBackdrop = SystemBackdrop,
-            RequestedTheme = RequestedTheme
+            RequestedTheme = DetermineTheme()
         };
 
         dialogFlyout.PrimaryButtonClick += PrimaryButtonClick;
@@ -148,5 +148,16 @@ public class FlyoutContentDialog : StandaloneContentDialogBase
         dialogFlyout.Closed += (o, e) => resultCompletionSource.SetResult(dialogFlyout.Result);
         dialogFlyout.ShowAt(PlacementTarget);
         return await resultCompletionSource.Task;
+    }
+
+    /// <summary>
+    /// ElementTheme.Default is treated as following owner window
+    /// </summary>
+    protected override ElementTheme DetermineTheme()
+    {
+        if (RequestedTheme is not ElementTheme.Default)
+            return RequestedTheme;
+
+        return PlacementTarget.ActualTheme;
     }
 }

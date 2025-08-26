@@ -71,8 +71,8 @@ public class FlyoutMessageBox : MessageBoxBase
         ShouldConstrainToRootBounds = _options.ShouldConstrainToRootBounds
     };
 
-    protected override ElementTheme DetermineTheme()
-    {
-        return _options.RequestedTheme is ElementTheme.Default ? _anchor.ActualTheme : _options.RequestedTheme;
-    }
+    //protected override ElementTheme DetermineTheme()
+    //{
+    //    return _options.RequestedTheme is ElementTheme.Default ? _anchor.ActualTheme : _options.RequestedTheme;
+    //}
 }

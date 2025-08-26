@@ -44,7 +44,7 @@ public sealed partial class WindowedContentDialogSamplePage : Page
             SmokeLayerKind = settings.SmokeLayerKind,
             CustomSmokeLayer = ContentDialogSamplesPage.CustomSmokeLayer,
 
-            RequestedTheme = settings.RequestedTheme is ElementTheme.Default ? ActualTheme : settings.RequestedTheme,
+            RequestedTheme = settings.RequestedTheme,
             SystemBackdrop = settings.BackdropType switch
             {
                 BuiltInSystemBackdropType.Mica => new MicaBackdrop { Kind = Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base },

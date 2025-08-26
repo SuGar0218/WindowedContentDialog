@@ -67,7 +67,7 @@ public abstract class MessageBoxBase
     /// <returns></returns>
     protected abstract StandaloneContentDialogBase CreateDialog();
 
-    protected abstract ElementTheme DetermineTheme();
+    protected virtual ElementTheme DetermineTheme() => _options.RequestedTheme;
 
     protected void DetermineDefaultButton()
     {

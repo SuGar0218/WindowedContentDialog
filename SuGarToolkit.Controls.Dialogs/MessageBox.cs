@@ -252,15 +252,15 @@ public class MessageBox : MessageBoxBase
         IsTitleBarVisible = _options.IsTitleBarVisible
     };
 
-    protected override ElementTheme DetermineTheme()
-    {
-        if (_options.RequestedTheme is not ElementTheme.Default)
-            return _options.RequestedTheme;
+    //protected override ElementTheme DetermineTheme()
+    //{
+    //    if (_options.RequestedTheme is not ElementTheme.Default)
+    //        return _options.RequestedTheme;
 
-        if (_owner?.Content is FrameworkElement root)
-            return root.ActualTheme;
+    //    if (_owner?.Content is FrameworkElement root)
+    //        return root.ActualTheme;
 
-        return ElementTheme.Default;
-    }
+    //    return ElementTheme.Default;
+    //}
 }
 

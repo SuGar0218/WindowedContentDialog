@@ -29,8 +29,12 @@ public abstract class StandaloneContentDialogBase
     public Style PrimaryButtonStyle { get; set; } = DefaultButtonStyle;
     public Style SecondaryButtonStyle { get; set; } = DefaultButtonStyle;
     public Style CloseButtonStyle { get; set; } = DefaultButtonStyle;
-    public ElementTheme RequestedTheme { get; set; }
     public FlowDirection FlowDirection { get; set; }
+
+    /// <summary>
+    /// ElementTheme.Default is treated as following owner window
+    /// </summary>
+    public ElementTheme RequestedTheme { get; set; }
 
     /// <summary>
     /// Disable the content of window behind when dialog window shows.
@@ -41,13 +45,14 @@ public abstract class StandaloneContentDialogBase
 
     public UIElement? CustomSmokeLayer { get; set; }
 
+    protected virtual ElementTheme DetermineTheme() => RequestedTheme;
+
     protected static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
     {
         element.Width = root.Size.Width;
         element.Height = root.Size.Height;
     }
 
-    protected static Style DefaultButtonStyle => field ??= (Style) Application.Current.Resources["DefaultButtonStyle"];
-    protected static Color SmokeFillColor => field == default ? (field = (Color) Application.Current.Resources["SmokeFillColorDefault"]) : field;
-
+    protected static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
+    protected static Color SmokeFillColor => (Color) Application.Current.Resources["SmokeFillColorDefault"];
 }
