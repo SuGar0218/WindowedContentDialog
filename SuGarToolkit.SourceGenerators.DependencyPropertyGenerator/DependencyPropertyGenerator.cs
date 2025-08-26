@@ -127,93 +127,90 @@ namespace SuGarToolkit.SourceGenerators
                 propertyInfosWithoutDefaultValueProvider
             ).Collect();
 
-            initContext.RegisterSourceOutput(
-                allPropertyInfosProvider,
-                (sourceProductionContext, propertyInfos) =>
+            initContext.RegisterSourceOutput(allPropertyInfosProvider, (sourceProductionContext, propertyInfos) =>
+            {
+                Dictionary<INamedTypeSymbol, List<DependencyPropertyInfo>> propertyInfosOfClass = new Dictionary<INamedTypeSymbol, List<DependencyPropertyInfo>>(SymbolEqualityComparer.Default);
+
+                foreach (DependencyPropertyInfo propertyInfo in propertyInfos)
                 {
-                    Dictionary<INamedTypeSymbol, List<DependencyPropertyInfo>> propertyInfosOfClass = new Dictionary<INamedTypeSymbol, List<DependencyPropertyInfo>>(SymbolEqualityComparer.Default);
-
-                    foreach (DependencyPropertyInfo propertyInfo in propertyInfos)
+                    INamedTypeSymbol ownerClass = propertyInfo.PropertySymbol.ContainingType;
+                    if (!propertyInfosOfClass.ContainsKey(ownerClass))
                     {
-                        INamedTypeSymbol ownerClass = propertyInfo.PropertySymbol.ContainingType;
-                        if (!propertyInfosOfClass.ContainsKey(ownerClass))
-                        {
-                            propertyInfosOfClass[ownerClass] = new List<DependencyPropertyInfo>();
-                        }
-                        propertyInfosOfClass[ownerClass].Add(propertyInfo);
+                        propertyInfosOfClass[ownerClass] = new List<DependencyPropertyInfo>();
                     }
+                    propertyInfosOfClass[ownerClass].Add(propertyInfo);
+                }
 
-                    foreach (INamedTypeSymbol classSymbol in propertyInfosOfClass.Keys)
-                    {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.Append(@"
+                foreach (INamedTypeSymbol classSymbol in propertyInfosOfClass.Keys)
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.Append(@"
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
                         ");
-                        stringBuilder.Append($@"
+                    stringBuilder.Append($@"
 namespace {classSymbol.ContainingNamespace}
 {{
     {GetAccessibilityLiteral(classSymbol.DeclaredAccessibility)} partial class {classSymbol.Name}
     {{
                         ");
-                        foreach (DependencyPropertyInfo propertyInfo in propertyInfosOfClass[classSymbol])
-                        {
-                            string accessModifier = GetAccessibilityLiteral(propertyInfo.PropertySymbol.DeclaredAccessibility);
-                            string propertyTypeName = $"{propertyInfo.PropertySymbol.Type.ContainingNamespace}.{propertyInfo.PropertySymbol.Type.Name}";
-                            string propertyName = propertyInfo.PropertySymbol.Name;
-                            string ownerClassName = propertyInfo.PropertySymbol.ContainingType.Name;
+                    foreach (DependencyPropertyInfo propertyInfo in propertyInfosOfClass[classSymbol])
+                    {
+                        string accessModifier = GetAccessibilityLiteral(propertyInfo.PropertySymbol.DeclaredAccessibility);
+                        string propertyTypeName = $"{propertyInfo.PropertySymbol.Type.ContainingNamespace}.{propertyInfo.PropertySymbol.Type.Name}";
+                        string propertyName = propertyInfo.PropertySymbol.Name;
+                        string ownerClassName = propertyInfo.PropertySymbol.ContainingType.Name;
 
-                            stringBuilder.Append($@"
+                        stringBuilder.Append($@"
         {accessModifier} partial {propertyInfo.PropertySymbol.Type} {propertyName}
         {{
             get => ({propertyTypeName}) GetValue({propertyName}Property);
             set => SetValue({propertyName}Property, value);
         }}
-                            ");
-                            if (propertyInfo.ManualSetDefaultValue)
-                            {
-                                //string defaultValue, defaultValueName, defaultValueLiteral;
-                                //defaultValue = GetPropertyLiteral(propertyInfo.AssociatedAttribute, "DefaultValue");
-                                //if (string.IsNullOrEmpty(defaultValue))
-                                //{
-                                //    defaultValueName = GetPropertyLiteral(propertyInfo.AssociatedAttribute, "DefaultValueName");
-                                //    defaultValueName = defaultValueName.Substring(1, defaultValueName.Length - 2);
-                                //    defaultValueLiteral = defaultValueName;
-                                //}
-                                //else
-                                //{
-                                //    defaultValueLiteral = defaultValue;
-                                //}
-                                stringBuilder.Append($@"
+                        ");
+                        if (propertyInfo.ManualSetDefaultValue)
+                        {
+                            //string defaultValue, defaultValueName, defaultValueLiteral;
+                            //defaultValue = GetPropertyLiteral(propertyInfo.AssociatedAttribute, "DefaultValue");
+                            //if (string.IsNullOrEmpty(defaultValue))
+                            //{
+                            //    defaultValueName = GetPropertyLiteral(propertyInfo.AssociatedAttribute, "DefaultValueName");
+                            //    defaultValueName = defaultValueName.Substring(1, defaultValueName.Length - 2);
+                            //    defaultValueLiteral = defaultValueName;
+                            //}
+                            //else
+                            //{
+                            //    defaultValueLiteral = defaultValue;
+                            //}
+                            stringBuilder.Append($@"
         {accessModifier} static readonly DependencyProperty {propertyName}Property = DependencyProperty.Register(
             nameof({propertyName}),
             typeof({propertyTypeName}),
             typeof({ownerClassName}),
             new PropertyMetadata({propertyInfo.DefaultValueLiteral})
         );
-                                ");
-                            }
-                            else
-                            {
-                                stringBuilder.Append($@"
+                            ");
+                        }
+                        else
+                        {
+                            stringBuilder.Append($@"
         {accessModifier} static readonly DependencyProperty {propertyName}Property = DependencyProperty.Register(
             nameof({propertyName}),
             typeof({propertyTypeName}),
             typeof({ownerClassName}),
             new PropertyMetadata(default({propertyTypeName}))
         );
-                                ");
-                            }
+                            ");
                         }
-                        stringBuilder.Append($@"
+                    }
+                    stringBuilder.Append($@"
     }}
 }}
-                        ");
-                        sourceProductionContext.AddSource($"{classSymbol}.DependencyProperty.g.cs", stringBuilder.ToString());
-                    }
+                    ");
+                    sourceProductionContext.AddSource($"{classSymbol}.DependencyProperty.g.cs", stringBuilder.ToString());
                 }
-            );
+            });
         }
     }
 }
