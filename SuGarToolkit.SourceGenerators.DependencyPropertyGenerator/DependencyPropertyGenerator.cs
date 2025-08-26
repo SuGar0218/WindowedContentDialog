@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace SuGarToolkit.SourceGenerators
@@ -70,9 +72,29 @@ namespace SuGarToolkit.SourceGenerators
 
         public void Initialize(IncrementalGeneratorInitializationContext initContext)
         {
-#if DEBUG
             //Debugger.Launch();
-#endif
+
+            initContext.RegisterPostInitializationOutput(postContext =>
+            {
+                postContext.AddSource("DependencyPropertyAttribute.g.cs", @"
+using System;
+
+namespace SuGarToolkit.SourceGenerators
+{
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = false)]
+    public sealed class DependencyPropertyAttribute : Attribute
+    {
+        public string DefaultValueName { get; set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = false)]
+    public sealed class DependencyPropertyAttribute<T> : Attribute
+    {
+        public T DefaultValue { get; set; }
+    }
+}");
+            });
+
             IncrementalValuesProvider<DependencyPropertyInfo> propertyInfosWithoutDefaultValueProvider = initContext.SyntaxProvider
                 .ForAttributeWithMetadataName(
                     TargetAttributeFullQualifiedName,

@@ -28,6 +28,7 @@
     <None Remove="Views\MessageBoxSamples\MuxcMessageBoxSamplePage.xaml" />
     <None Remove="Views\MessageBoxSamples\WindowedMessageBoxSamplePage.xaml" />
     <None Remove="Views\MuxcContentDialogSamplePage.xaml" />
+    <None Remove="Views\TestPage.xaml" />
     <None Remove="Views\WindowedContentDialogSamplePage.xaml" />
   </ItemGroup>
 
@@ -121,6 +122,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuGarToolkit.Controls.Dialogs\SuGarToolkit.Controls.Dialogs.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\TestPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\MessageBoxSamples\MuxcMessageBoxSamplePage.xaml">

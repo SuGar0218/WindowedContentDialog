@@ -13,7 +13,7 @@
 		<Nullable>enable</Nullable>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>1.2.1</Version>
+		<Version>1.2.2-alpha</Version>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
@@ -36,7 +36,6 @@
 		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.DependencyPropertyAttribute\SuGarToolkit.SourceGenerators.DependencyPropertyAttribute.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 	<ItemGroup>
