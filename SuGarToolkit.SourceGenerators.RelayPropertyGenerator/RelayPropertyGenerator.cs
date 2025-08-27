@@ -43,7 +43,7 @@ namespace SuGarToolkit.SourceGenerators
         {
             initContext.RegisterPostInitializationOutput(postContext =>
             {
-                postContext.AddSource("DependencyPropertyAttribute.g.cs", @"
+                postContext.AddSource($"{TargetAttributeFullQualifiedName}.g.cs", @"
 using System;
 
 namespace SuGarToolkit.SourceGenerators

@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace SuGarToolkit.SourceGenerators
@@ -70,11 +72,11 @@ namespace SuGarToolkit.SourceGenerators
 
         public void Initialize(IncrementalGeneratorInitializationContext initContext)
         {
-            //Debugger.Launch();
+            //System.Diagnostics.Debugger.Launch();
 
             initContext.RegisterPostInitializationOutput(postContext =>
             {
-                postContext.AddSource("DependencyPropertyAttribute.g.cs", @"
+                postContext.AddSource($"{TargetAttributeFullQualifiedName}.g.cs", @"
 using System;
 
 namespace SuGarToolkit.SourceGenerators
@@ -125,7 +127,6 @@ namespace SuGarToolkit.SourceGenerators
                         }
                     });
 
-
             IncrementalValuesProvider<DependencyPropertyInfo> propertyInfosWithDefaultValueProvider = initContext.SyntaxProvider
                 .ForAttributeWithMetadataName(
                     $"{TargetAttributeFullQualifiedName}`1",
@@ -149,85 +150,59 @@ namespace SuGarToolkit.SourceGenerators
 
             initContext.RegisterSourceOutput(allPropertyInfosProvider, (sourceProductionContext, propertyInfos) =>
             {
-                Dictionary<INamedTypeSymbol, List<DependencyPropertyInfo>> propertyInfosOfClass = new Dictionary<INamedTypeSymbol, List<DependencyPropertyInfo>>(SymbolEqualityComparer.Default);
+                IEnumerable<IGrouping<ISymbol, DependencyPropertyInfo>> groupedByClass = propertyInfos.GroupBy(
+                    dependencyPropertyInfo => dependencyPropertyInfo.PropertySymbol.ContainingType,
+                    SymbolEqualityComparer.Default);
 
-                foreach (DependencyPropertyInfo propertyInfo in propertyInfos)
+                foreach (IGrouping<ISymbol, DependencyPropertyInfo> group in groupedByClass)
                 {
-                    INamedTypeSymbol ownerClass = propertyInfo.PropertySymbol.ContainingType;
-                    if (!propertyInfosOfClass.ContainsKey(ownerClass))
-                    {
-                        propertyInfosOfClass[ownerClass] = new List<DependencyPropertyInfo>();
-                    }
-                    propertyInfosOfClass[ownerClass].Add(propertyInfo);
-                }
-
-                foreach (INamedTypeSymbol classSymbol in propertyInfosOfClass.Keys)
-                {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.Append(@"
+                    INamedTypeSymbol classSymbol = (INamedTypeSymbol) group.Key;
+                    StringBuilder stringBuilder = new StringBuilder().AppendLine($@"
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
-                        ");
-                    stringBuilder.Append($@"
+
 namespace {classSymbol.ContainingNamespace}
 {{
-    {GetAccessibilityLiteral(classSymbol.DeclaredAccessibility)} partial class {classSymbol.Name}
-    {{
-                        ");
-                    foreach (DependencyPropertyInfo propertyInfo in propertyInfosOfClass[classSymbol])
+    {GetAccessibilityLiteral(classSymbol.DeclaredAccessibility)} {(classSymbol.IsAbstract ? "abstract" : "")} partial class {classSymbol.Name}
+    {{");
+                    foreach (DependencyPropertyInfo dependencyPropertyInfo in group)
                     {
-                        string accessModifier = GetAccessibilityLiteral(propertyInfo.PropertySymbol.DeclaredAccessibility);
-                        string propertyTypeName = $"{propertyInfo.PropertySymbol.Type.ContainingNamespace}.{propertyInfo.PropertySymbol.Type.Name}";
-                        string propertyName = propertyInfo.PropertySymbol.Name;
-                        string ownerClassName = propertyInfo.PropertySymbol.ContainingType.Name;
-
-                        stringBuilder.Append($@"
-        {accessModifier} partial {propertyInfo.PropertySymbol.Type} {propertyName}
+                        string accessModifier = GetAccessibilityLiteral(dependencyPropertyInfo.PropertySymbol.DeclaredAccessibility);
+                        string propertyTypeName = $"{dependencyPropertyInfo.PropertySymbol.Type.ContainingNamespace}.{dependencyPropertyInfo.PropertySymbol.Type.Name}";
+                        string propertyName = dependencyPropertyInfo.PropertySymbol.Name;
+                        string ownerClassName = dependencyPropertyInfo.PropertySymbol.ContainingType.Name;
+                        stringBuilder.AppendLine($@"
+        {accessModifier} partial {dependencyPropertyInfo.PropertySymbol.Type} {propertyName}
         {{
             get => ({propertyTypeName}) GetValue({propertyName}Property);
             set => SetValue({propertyName}Property, value);
-        }}
-                        ");
-                        if (propertyInfo.ManualSetDefaultValue)
+        }}");
+                        if (dependencyPropertyInfo.ManualSetDefaultValue)
                         {
-                            //string defaultValue, defaultValueName, defaultValueLiteral;
-                            //defaultValue = GetPropertyLiteral(propertyInfo.AssociatedAttribute, "DefaultValue");
-                            //if (string.IsNullOrEmpty(defaultValue))
-                            //{
-                            //    defaultValueName = GetPropertyLiteral(propertyInfo.AssociatedAttribute, "DefaultValueName");
-                            //    defaultValueName = defaultValueName.Substring(1, defaultValueName.Length - 2);
-                            //    defaultValueLiteral = defaultValueName;
-                            //}
-                            //else
-                            //{
-                            //    defaultValueLiteral = defaultValue;
-                            //}
-                            stringBuilder.Append($@"
+                            stringBuilder.AppendLine($@"
         {accessModifier} static readonly DependencyProperty {propertyName}Property = DependencyProperty.Register(
             nameof({propertyName}),
             typeof({propertyTypeName}),
             typeof({ownerClassName}),
-            new PropertyMetadata({propertyInfo.DefaultValueLiteral})
+            new PropertyMetadata({dependencyPropertyInfo.DefaultValueLiteral})
         );
                             ");
                         }
                         else
                         {
-                            stringBuilder.Append($@"
+                            stringBuilder.AppendLine($@"
         {accessModifier} static readonly DependencyProperty {propertyName}Property = DependencyProperty.Register(
             nameof({propertyName}),
             typeof({propertyTypeName}),
             typeof({ownerClassName}),
             new PropertyMetadata(default({propertyTypeName}))
-        );
-                            ");
+        );");
                         }
                     }
-                    stringBuilder.Append($@"
+                    stringBuilder.AppendLine($@"
     }}
-}}
-                    ");
+}}");
                     sourceProductionContext.AddSource($"{classSymbol}.DependencyProperty.g.cs", stringBuilder.ToString());
                 }
             });
