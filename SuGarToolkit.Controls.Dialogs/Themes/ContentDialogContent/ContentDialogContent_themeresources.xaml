@@ -22,6 +22,9 @@
     <Thickness x:Key="ContentDialogWindowContentPadding">24,0,24,24</Thickness>
     <Color x:Key="ContentDialogWindowCommandSpaceBackground">#0F000000</Color>
     <Color x:Key="ContentDialogWindowSeparatorBorderColor">#19000000</Color>
-    <SolidColorBrush x:Key="ContentDialogWindowCommandSpaceBackgroundBrush" Color="{StaticResource ContentDialogWindowCommandSpaceBackground}" />
+    <SolidColorBrush
+        x:Key="ContentDialogWindowCommandSpaceBackgroundBrush"
+        Opacity="0.5"
+        Color="{StaticResource ContentDialogWindowCommandSpaceBackground}" />
     <SolidColorBrush x:Key="ContentDialogWindowSeparatorBorderBrush" Color="{StaticResource ContentDialogWindowSeparatorBorderColor}" />
 </ResourceDictionary>
