@@ -18,17 +18,50 @@ public partial class ContentDialogContent : ContentControl
         Unloaded += (o, e) => isCustomMeasureFinishedAfterLoaded = false;
     }
 
-    private Button PrimaryButton;
-    private Button SecondaryButton;
-    private Button CloseButton;
+    [DependencyProperty]
+    public partial object? Title { get; set; }
 
-    public event RoutedEventHandler? PrimaryButtonClick;
-    public event RoutedEventHandler? SecondaryButtonClick;
-    public event RoutedEventHandler? CloseButtonClick;
+    [DependencyProperty]
+    public partial DataTemplate? TitleTemplate { get; set; }
+
+    [DependencyProperty]
+    public partial string? PrimaryButtonText { get; set; }
+
+    [DependencyProperty]
+    public partial string? SecondaryButtonText { get; set; }
+
+    [DependencyProperty]
+    public partial string? CloseButtonText { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
+    public partial bool IsPrimaryButtonEnabled { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
+    public partial bool IsSecondaryButtonEnabled { get; set; }
+
+    [DependencyProperty(DefaultValue = ContentDialogButton.Close)]
+    public partial ContentDialogButton DefaultButton { get; set; }
+
+    [DependencyProperty(DefaultValuePath = nameof(DefaultButtonStyle))]
+    public partial Style? PrimaryButtonStyle { get; set; }
+
+    [DependencyProperty(DefaultValuePath = nameof(DefaultButtonStyle))]
+    public partial Style? SecondaryButtonStyle { get; set; }
+
+    [DependencyProperty(DefaultValuePath = nameof(DefaultButtonStyle))]
+    public partial Style? CloseButtonStyle { get; set; }
+
+    public event TypedEventHandler<ContentDialogContent, EventArgs>? PrimaryButtonClick;
+    public event TypedEventHandler<ContentDialogContent, EventArgs>? SecondaryButtonClick;
+    public event TypedEventHandler<ContentDialogContent, EventArgs>? CloseButtonClick;
 
     public UIElement TitleArea { get; private set; }
     public Grid DialogSpace { get; private set; }
     public Grid CommandSpace { get; private set; }
+
+    private Button PrimaryButton;
+    private Button SecondaryButton;
+    private Button CloseButton;
 
     protected override void OnApplyTemplate()
     {
@@ -42,11 +75,10 @@ public partial class ContentDialogContent : ContentControl
         SecondaryButton = (Button) GetTemplateChild(nameof(SecondaryButton));
         CloseButton = (Button) GetTemplateChild(nameof(CloseButton));
 
-        PrimaryButton.Click += PrimaryButtonClick;
-        SecondaryButton.Click += SecondaryButtonClick;
-        CloseButton.Click += CloseButtonClick;
+        PrimaryButton.Click += (sender, args) => PrimaryButtonClick?.Invoke(this, EventArgs.Empty);
+        SecondaryButton.Click += (sender, args) => SecondaryButtonClick?.Invoke(this, EventArgs.Empty);
+        CloseButton.Click += (sender, args) => CloseButtonClick?.Invoke(this, EventArgs.Empty);
 
-        //VisualStateManager.GoToState(this, "DialogShowingWithoutSmokeLayer", false);
         buttonsVisibilityState = DetermineButtonsVisibilityState();
         defaultButtonState = DetermineDefaultButtonState();
     }
@@ -213,39 +245,6 @@ public partial class ContentDialogContent : ContentControl
                 return "NoDefaultButton";
         }
     }
-
-    [DependencyProperty]
-    public partial object? Title { get; set; }
-
-    [DependencyProperty]
-    public partial DataTemplate? TitleTemplate { get; set; }
-
-    [DependencyProperty]
-    public partial string? PrimaryButtonText { get; set; }
-
-    [DependencyProperty]
-    public partial string? SecondaryButtonText { get; set; }
-
-    [DependencyProperty]
-    public partial string? CloseButtonText { get; set; }
-
-    [DependencyProperty<bool>(DefaultValue = true)]
-    public partial bool IsPrimaryButtonEnabled { get; set; }
-
-    [DependencyProperty<bool>(DefaultValue = true)]
-    public partial bool IsSecondaryButtonEnabled { get; set; }
-
-    [DependencyProperty<ContentDialogButton>(DefaultValue = ContentDialogButton.Close)]
-    public partial ContentDialogButton DefaultButton { get; set; }
-
-    [DependencyProperty(DefaultValueName = nameof(DefaultButtonStyle))]
-    public partial Style? PrimaryButtonStyle { get; set; }
-
-    [DependencyProperty(DefaultValueName = nameof(DefaultButtonStyle))]
-    public partial Style? SecondaryButtonStyle { get; set; }
-
-    [DependencyProperty(DefaultValueName = nameof(DefaultButtonStyle))]
-    public partial Style? CloseButtonStyle { get; set; }
 
     private static Style DefaultButtonStyle => field ??= (Style) Application.Current.Resources["DefaultButtonStyle"];
 }

@@ -37,6 +37,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator\SuGarToolkit.SourceGenerators.DependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.RelayDependencyPropertyGenerator\SuGarToolkit.SourceGenerators.RelayDependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\SuGarToolkit.SourceGenerators.RelayPropertyGenerator\SuGarToolkit.SourceGenerators.RelayPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Strings\MessageBoxButtonText.Designer.cs">

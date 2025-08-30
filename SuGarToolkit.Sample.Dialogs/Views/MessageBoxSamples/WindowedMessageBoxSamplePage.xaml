@@ -5,8 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:community="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="using:SuGarToolkit.Controls.Dialogs"
     xmlns:local="using:SuGarToolkit.Sample.Dialogs.Views.MessageBoxSamples"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:SuGarToolkit.Sample.Dialogs.Views"
     xmlns:vm="using:SuGarToolkit.Sample.Dialogs.ViewModels"
     mc:Ignorable="d">
 
@@ -27,7 +29,7 @@
     </Page.Resources>
 
     <ScrollViewer>
-        <StackPanel Margin="36,28">
+        <StackPanel Margin="36,28" Spacing="16">
             <Expander>
                 <Expander.Header>
                     <StackPanel
@@ -97,21 +99,16 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <ComboBox
-                            Header="父窗口叠层"
-                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}"
-                            ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
-                            SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />
                     </StackPanel>
                     <StackPanel Spacing="12">
                         <CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />
                         <CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />
+                        <CheckBox Content="显示在父窗口中间" IsChecked="{x:Bind settings.CenterInParent, Mode=TwoWay}" />
                         <CheckBox
                             Content="模态窗口（无父窗口时无效）"
                             IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}"
                             IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}" />
-                        <CheckBox Content="显示在父窗口中间" IsChecked="{x:Bind settings.CenterInParent, Mode=TwoWay}" />
-                        <!--<CheckBox Content="禁用父窗口（无父窗口时无效）" IsChecked="{x:Bind settings.DisableBehind, Mode=TwoWay}" />-->
+                        <CheckBox Content="背后变暗" IsChecked="{x:Bind settings.SmokeBehind, Mode=TwoWay}" />
                     </StackPanel>
                 </community:WrapPanel>
             </Expander>

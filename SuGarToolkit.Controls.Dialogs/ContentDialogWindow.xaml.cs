@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 using Windows.Foundation;
@@ -24,9 +25,47 @@ namespace SuGarToolkit.Controls.Dialogs;
 /// </summary>
 public partial class ContentDialogWindow : Window
 {
-    public ContentDialogWindow() : base()
+    public ContentDialogWindow()
     {
         InitializeComponent();
+        InitializeWindow();
+        content.Loaded += (o, e) => DetermineTitleBarButtonForegroundColor();
+        content.ActualThemeChanged += (o, e) => DetermineTitleBarButtonForegroundColor();
+    }
+
+    private ContentDialogWindow(UIElement? content)
+    {
+        Content = content;
+        InitializeWindow();
+    }
+
+    internal static ContentDialogWindow CreateWithoutComponent() => new(null);
+
+    internal void InitializeComponent(ContentDialogContent component)
+    {
+        content = component;
+        content.PrimaryButtonClick += OnPrimaryButtonClick;
+        content.SecondaryButtonClick += OnSecondaryButtonClick;
+        content.CloseButtonClick += OnCloseButtonClick;
+        content.Loaded += OnContentLoaded;
+        content.Loaded += DetermineTitleBarButtonForegroundColor;
+        content.ActualThemeChanged += DetermineTitleBarButtonForegroundColor;
+
+        Content = content;
+
+        Closed += (sender, args) =>
+        {
+            content.PrimaryButtonClick -= OnPrimaryButtonClick;
+            content.SecondaryButtonClick -= OnSecondaryButtonClick;
+            content.CloseButtonClick -= OnCloseButtonClick;
+            content.Loaded -= OnContentLoaded;
+            content.Loaded -= DetermineTitleBarButtonForegroundColor;
+            content.ActualThemeChanged -= DetermineTitleBarButtonForegroundColor;
+        };
+    }
+
+    private void InitializeWindow()
+    {
         ExtendsContentIntoTitleBar = true;
         _presenter = OverlappedPresenter.CreateForDialog();
         _presenter.IsResizable = true;
@@ -34,33 +73,37 @@ public partial class ContentDialogWindow : Window
 
         AppWindow.Closing += (appWindow, e) => OnClosingRequestedBySystem();
         Activated += OnActivated;
-
-        // When showing accent color in title bar is enabled,
-        // title bar buttons in the default custom title bar in WinUI3
-        // will become white like system title bar.
-        // But there is no accent color background here.
-        void DetermineTitleBarButtonForegroundColor()
-        {
-            switch (content.ActualTheme)
-            {
-                case ElementTheme.Light:
-                    AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
-                    break;
-                case ElementTheme.Dark:
-                    AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
-                    break;
-            }
-        }
-        content.Loaded += (o, e) => DetermineTitleBarButtonForegroundColor();
-        content.ActualThemeChanged += (o, e) => DetermineTitleBarButtonForegroundColor();
     }
 
-    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? PrimaryButtonClick;
-    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? SecondaryButtonClick;
-    public event TypedEventHandler<ContentDialogWindow, ContentDialogWindowButtonClickEventArgs>? CloseButtonClick;
+    /// <summary>
+    /// When showing accent color in title bar is enabled,
+    /// title bar buttons in the default custom title bar in WinUI3
+    /// will become white like system title bar.
+    /// But there is no accent color background here.
+    /// </summary>
+    private void DetermineTitleBarButtonForegroundColor()
+    {
+        switch (content.ActualTheme)
+        {
+            case ElementTheme.Light:
+                AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
+                break;
+            case ElementTheme.Dark:
+                AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
+                break;
+        }
+    }
+
+    private void DetermineTitleBarButtonForegroundColor(object sender, object args) => DetermineTitleBarButtonForegroundColor();
+
+    public event TypedEventHandler<ContentDialogWindow, CancelEventArgs>? PrimaryButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, CancelEventArgs>? SecondaryButtonClick;
+    public event TypedEventHandler<ContentDialogWindow, CancelEventArgs>? CloseButtonClick;
 
     public event TypedEventHandler<ContentDialogWindow, EventArgs>? Loaded;
     public event TypedEventHandler<ContentDialogWindow, EventArgs>? Opened;
+
+    public bool IsLoaded { get; private set; }
 
     private void OnActivated(object sender, WindowActivatedEventArgs args)
     {
@@ -99,7 +142,7 @@ public partial class ContentDialogWindow : Window
     {
         _parent?.Closed -= OnParentClosed;
         _parent = null;
-        DispatcherQueue.TryEnqueue(Close);
+        Close();
     }
 
     /// <summary>
@@ -303,14 +346,6 @@ public partial class ContentDialogWindow : Window
                 _ => null
             };
         }
-        if (SystemBackdrop is null || SystemBackdrop is DesktopAcrylicBackdrop)
-        {
-            content.CommandSpace.Background.Opacity = 1.0;
-        }
-        else
-        {
-            content.CommandSpace.Background.Opacity = 0.5;
-        }
 
         DispatcherQueue.TryEnqueue(() => Loaded?.Invoke(this, EventArgs.Empty));
     }
@@ -321,38 +356,49 @@ public partial class ContentDialogWindow : Window
         DispatcherQueue.TryEnqueue(() => Opened?.Invoke(this, EventArgs.Empty));
     }
 
-    private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
+    private void OnPrimaryButtonClick(ContentDialogContent sender, EventArgs e)
     {
         Result = ContentDialogResult.Primary;
-        ContentDialogWindowButtonClickEventArgs args = new();
+        CancelEventArgs args = new();
         PrimaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
-    private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
+    private void OnSecondaryButtonClick(ContentDialogContent sender, EventArgs e)
     {
         Result = ContentDialogResult.Secondary;
-        ContentDialogWindowButtonClickEventArgs args = new();
+        CancelEventArgs args = new();
         SecondaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
-    private void OnCloseButtonClick(object sender, RoutedEventArgs e)
+    private void OnCloseButtonClick(ContentDialogContent sender, EventArgs e)
     {
         Result = ContentDialogResult.None;
-        ContentDialogWindowButtonClickEventArgs args = new();
+        CancelEventArgs args = new();
         CloseButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
-    private void AfterCommandBarButtonClick(ContentDialogWindowButtonClickEventArgs args)
+    private void AfterCommandBarButtonClick(CancelEventArgs args)
     {
         if (args.Cancel)
+        {
+            Result = ContentDialogResult.None;
             return;
-
+        }
         OnClosingRequstedByCode();
-        DispatcherQueue.TryEnqueue(Close);
+        Close();
     }
+
+    protected static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
+    {
+        element.Width = root.Size.Width;
+        element.Height = root.Size.Height;
+    }
+
+    protected static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
+    protected static Color SmokeFillColor => (Color) Application.Current.Resources["SmokeFillColorDefault"];
 
     // 64-bit systems
     [LibraryImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
@@ -365,7 +411,7 @@ public partial class ContentDialogWindow : Window
     [LibraryImport("user32.dll", EntryPoint = "SetFocus")]
     private static partial IntPtr SetFocus(IntPtr hWnd);
 
-    private readonly OverlappedPresenter _presenter;
+    private OverlappedPresenter _presenter = null!;
 
     private Window? _parent;
 

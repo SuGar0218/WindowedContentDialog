@@ -23,10 +23,6 @@ public sealed partial class FlyoutMessageBoxSamplePage : Page
 
     private async void ShowFlyoutMessageBox()
     {
-        if (settings.SmokeLayerKind is ContentDialogSmokeLayerKind.Custom && App.Current.MainWindow is not null)
-        {
-            SizeToXamlRoot(MessageBoxSamplesPage.CustomSmokeLayer, XamlRoot);
-        }
         MessageBoxResult result = await FlyoutMessageBox.ShowAsync(
             ShowMessageBoxButton,
             settings.Content,
@@ -38,10 +34,7 @@ public sealed partial class FlyoutMessageBoxSamplePage : Page
             {
                 Placement = settings.Placement,
                 ShouldConstrainToRootBounds = settings.ShouldConstrainToRootBounds,
-
-                //DisableBehind = settings.DisableBehind,
-                SmokeLayerKind = settings.SmokeLayerKind,
-                CustomSmokeLayer = MessageBoxSamplesPage.CustomSmokeLayer,
+                SmokeBehind = settings.SmokeBehind,
 
                 RequestedTheme = settings.RequestedTheme,
                 SystemBackdrop = settings.BackdropType switch
@@ -56,10 +49,4 @@ public sealed partial class FlyoutMessageBoxSamplePage : Page
     }
 
     private MessageBoxSettings settings;
-
-    private static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
-    {
-        element.Width = root.Size.Width;
-        element.Height = root.Size.Height;
-    }
 }

@@ -19,8 +19,6 @@ public class EnumValues
 
     public static readonly BuiltInSystemBackdropType[] SystemBackdropTypes = Enum.GetValues<BuiltInSystemBackdropType>();
 
-    public static readonly ContentDialogSmokeLayerKind[] BehindOverlayTypes = Enum.GetValues<ContentDialogSmokeLayerKind>();
-
     public static readonly List<ElementTheme> ElementThemes = [.. Enum.GetValues<ElementTheme>()];
 
     public static readonly List<ContentDialogButton> ContentDialogButtons = [.. Enum.GetValues<ContentDialogButton>()];

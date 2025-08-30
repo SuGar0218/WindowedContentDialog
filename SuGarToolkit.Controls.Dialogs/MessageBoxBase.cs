@@ -40,7 +40,7 @@ public abstract class MessageBoxBase
     protected readonly MessageBoxIcon _icon;
     protected readonly MessageBoxDefaultButton? _defaultButton;
     private readonly MessageBoxBaseOptions _options;
-    private StandaloneContentDialogBase _dialog;
+    private IStandaloneContentDialog _dialog;
 
     protected async Task<MessageBoxResult> ShowAsync()
     {
@@ -51,9 +51,6 @@ public abstract class MessageBoxBase
             Icon = _icon,
             Text = _title
         };
-        _dialog.DisableBehind = _options.DisableBehind;
-        _dialog.SmokeLayerKind = _options.SmokeLayerKind;
-        _dialog.CustomSmokeLayer = _options.CustomSmokeLayer;
         _dialog.FlowDirection = _options.FlowDirection;
         _dialog.RequestedTheme = DetermineTheme();
         DetermineDefaultButton();
@@ -65,7 +62,7 @@ public abstract class MessageBoxBase
     /// Create instance and set properties not contained in StandaloneContentDialogBase. 
     /// </summary>
     /// <returns></returns>
-    protected abstract StandaloneContentDialogBase CreateDialog();
+    protected abstract IStandaloneContentDialog CreateDialog();
 
     protected virtual ElementTheme DetermineTheme() => _options.RequestedTheme;
 

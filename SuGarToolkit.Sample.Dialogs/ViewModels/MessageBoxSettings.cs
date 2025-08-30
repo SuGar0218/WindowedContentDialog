@@ -28,13 +28,13 @@ public partial class MessageBoxSettings : ObservableObject
 
     public BuiltInSystemBackdropType BackdropType { get; set; } = BuiltInSystemBackdropType.Mica;
 
-    public ContentDialogSmokeLayerKind SmokeLayerKind { get; set; } = ContentDialogSmokeLayerKind.Darken;
-
     public FlyoutPlacementMode Placement { get; set; }
 
     public bool ShouldConstrainToRootBounds { get; set; } = true;
 
     public bool CenterInParent { get; set; } = true;
+
+    public bool SmokeBehind { get; set; } = true;
 
     public ElementTheme RequestedTheme { get; set; }
 }

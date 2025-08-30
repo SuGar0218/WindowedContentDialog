@@ -96,11 +96,6 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <!--<ComboBox
-                            Header="父窗口叠层（无父窗口时无效）"
-                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}"
-                            ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
-                            SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />-->
                     </StackPanel>
                     <StackPanel Spacing="12">
                         <!--<CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />-->

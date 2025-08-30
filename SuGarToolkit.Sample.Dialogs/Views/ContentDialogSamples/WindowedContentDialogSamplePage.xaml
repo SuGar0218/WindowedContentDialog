@@ -3,8 +3,10 @@
     x:Class="SuGarToolkit.Sample.Dialogs.Views.ContentDialogSamples.WindowedContentDialogSamplePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:app="using:SuGarToolkit.Sample.Dialogs"
     xmlns:community="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="using:SuGarToolkit.Controls.Dialogs"
     xmlns:local="using:SuGarToolkit.Sample.Dialogs.Views.ContentDialogSamples"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:SuGarToolkit.Sample.Dialogs.ViewModels"
@@ -16,18 +18,46 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="ExpandDirection" Value="Down" />
             <Setter Property="IsExpanded" Value="True" />
-            <Setter Property="Transitions">
-                <Setter.Value>
-                    <TransitionCollection>
-                        <RepositionThemeTransition />
-                    </TransitionCollection>
-                </Setter.Value>
-            </Setter>
         </Style>
+
+        <dialogs:WindowedContentDialog
+            x:Key="XamlWindowedContentDialog"
+            x:Name="XamlWindowedContentDialog"
+            CloseButtonText="{x:Bind settings.CloseButtonText, Mode=OneWay}"
+            IsModal="{x:Bind settings.IsModal, Mode=OneWay}"
+            IsPrimaryButtonEnabled="{x:Bind settings.IsPrimaryButtonEnabled, Mode=OneWay}"
+            IsSecondaryButtonEnabled="{x:Bind settings.IsSecondaryButtonEnabled, Mode=OneWay}"
+            OwnerWindow="{x:Bind app:App.Current.MainWindow}"
+            PrimaryButtonText="{x:Bind settings.PrimaryButtonText, Mode=OneWay}"
+            SecondaryButtonText="{x:Bind settings.SecondaryButtonText, Mode=OneWay}"
+            SmokeBehind="{x:Bind settings.SmokeBehind, Mode=OneWay}">
+
+            <dialogs:WindowedContentDialog.SystemBackdrop>
+                <MicaBackdrop />
+            </dialogs:WindowedContentDialog.SystemBackdrop>
+
+            <dialogs:WindowedContentDialog.Title>
+                <dialogs:MessageBoxHeader Icon="Information" Text="{x:Bind settings.Title, Mode=OneWay}" />
+            </dialogs:WindowedContentDialog.Title>
+
+            <StackPanel>
+                <CheckBox Content="Lorem" IsThreeState="True" />
+                <CheckBox Content="Ipsum" IsThreeState="True" />
+                <CheckBox Content="Dolor" IsThreeState="True" />
+                <CheckBox Content="Sit" IsThreeState="True" />
+                <CheckBox Content="Amet" IsThreeState="True" />
+            </StackPanel>
+        </dialogs:WindowedContentDialog>
     </Page.Resources>
 
     <ScrollViewer>
-        <StackPanel Margin="36,28">
+        <StackPanel Margin="36,28" Spacing="16">
+            <StackPanel.ChildrenTransitions>
+                <TransitionCollection>
+                    <RepositionThemeTransition />
+                </TransitionCollection>
+            </StackPanel.ChildrenTransitions>
+
             <Expander>
                 <Expander.Header>
                     <StackPanel
@@ -38,7 +68,14 @@
                             Grid.Column="0"
                             Click="{x:Bind ShowWindowedContentDialog}"
                             Content="WindowedContentDialog"
-                            Style="{ThemeResource AccentButtonStyle}" />
+                            Style="{ThemeResource AccentButtonStyle}">
+                            <Button.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Click="{x:Bind ShowWindowedContentDialog}" Text="WindowedContentDialog used in code-behind" />
+                                    <MenuFlyoutItem Click="{x:Bind ShowXamlWindowedContentDialog}" Text="WindowedContentDialog declared in XAML with x:Bind" />
+                                </MenuFlyout>
+                            </Button.ContextFlyout>
+                        </Button>
                         <TextBlock
                             x:Name="ContentDialogResultBox"
                             VerticalAlignment="Center"
@@ -95,14 +132,11 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <ComboBox
-                            Header="父窗口叠层（无父窗口时无效）"
-                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}"
-                            ItemsSource="{x:Bind vm:EnumValues.BehindOverlayTypes}"
-                            SelectedItem="{x:Bind settings.SmokeLayerKind, Mode=TwoWay}" />
                     </StackPanel>
                     <StackPanel Spacing="12">
                         <CheckBox Content="显示标题栏" IsChecked="{x:Bind settings.IsTitleBarVisible, Mode=TwoWay}" />
+                        <CheckBox Content="IsPrimaryButtonEnabled" IsChecked="{x:Bind settings.IsPrimaryButtonEnabled, Mode=TwoWay}" />
+                        <CheckBox Content="IsSecondaryButtonEnabled" IsChecked="{x:Bind settings.IsSecondaryButtonEnabled, Mode=TwoWay}" />
                         <CheckBox Content="点击 PrimaryButton 后不关闭" IsChecked="{x:Bind settings.PrimaryButtonNotClose, Mode=TwoWay}" />
                         <CheckBox Content="点击 SecondaryButton 后不关闭" IsChecked="{x:Bind settings.SecondaryButtonNotClose, Mode=TwoWay}" />
                         <CheckBox Content="以此为父窗口" IsChecked="{x:Bind settings.IsChild, Mode=TwoWay}" />
@@ -111,10 +145,7 @@
                             Content="模态窗口（无父窗口时无效）"
                             IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}"
                             IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}" />
-                        <!--<CheckBox
-                            Content="禁用父窗口（无父窗口时无效）"
-                            IsChecked="{x:Bind settings.DisableBehind, Mode=TwoWay}"
-                            IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}" />-->
+                        <CheckBox Content="背后变暗" IsChecked="{x:Bind settings.SmokeBehind, Mode=TwoWay}" />
                     </StackPanel>
                 </community:WrapPanel>
             </Expander>

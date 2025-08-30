@@ -10,8 +10,10 @@
 
     <local:ContentDialogContent
         x:Name="content"
+        x:FieldModifier="private"
         CloseButtonClick="OnCloseButtonClick"
         Loaded="OnContentLoaded"
         PrimaryButtonClick="OnPrimaryButtonClick"
         SecondaryButtonClick="OnSecondaryButtonClick" />
+
 </Window>

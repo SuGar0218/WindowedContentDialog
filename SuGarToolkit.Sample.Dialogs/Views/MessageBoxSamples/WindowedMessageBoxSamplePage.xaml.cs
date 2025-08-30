@@ -23,10 +23,6 @@ public sealed partial class WindowedMessageBoxSamplePage : Page
 
     private async void ShowWindowedMessageBox()
     {
-        if (settings.SmokeLayerKind is ContentDialogSmokeLayerKind.Custom)
-        {
-            SizeToXamlRoot(MessageBoxSamplesPage.CustomSmokeLayer, XamlRoot);
-        }
         MessageBoxResult result = await MessageBox.ShowAsync(
             settings.IsModal,
             settings.IsChild ? App.Current.MainWindow : null,
@@ -39,10 +35,7 @@ public sealed partial class WindowedMessageBoxSamplePage : Page
             {
                 IsTitleBarVisible = settings.IsTitleBarVisible,
                 CenterInParent = settings.CenterInParent,
-
-                //DisableBehind = settings.DisableBehind,
-                SmokeLayerKind = settings.SmokeLayerKind,
-                CustomSmokeLayer = MessageBoxSamplesPage.CustomSmokeLayer,
+                SmokeBehind = settings.SmokeBehind,
 
                 RequestedTheme = settings.RequestedTheme,
                 SystemBackdrop = settings.BackdropType switch
@@ -57,10 +50,4 @@ public sealed partial class WindowedMessageBoxSamplePage : Page
     }
 
     private MessageBoxSettings settings;
-
-    private static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
-    {
-        element.Width = root.Size.Width;
-        element.Height = root.Size.Height;
-    }
 }

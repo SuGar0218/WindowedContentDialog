@@ -63,12 +63,13 @@ public class FlyoutMessageBox : MessageBoxBase
 
     private readonly FlyoutMessageBoxOptions _options;
 
-    protected override StandaloneContentDialogBase CreateDialog() => new FlyoutContentDialog
+    protected override IStandaloneContentDialog CreateDialog() => new FlyoutContentDialog
     {
         PlacementTarget = _anchor,
         Placement = _options.Placement,
         SystemBackdrop = _options.SystemBackdrop,
-        ShouldConstrainToRootBounds = _options.ShouldConstrainToRootBounds
+        ShouldConstrainToRootBounds = _options.ShouldConstrainToRootBounds,
+        SmokeBehind = _options.SmokeBehind
     };
 
     //protected override ElementTheme DetermineTheme()

@@ -242,14 +242,15 @@ public class MessageBox : MessageBoxBase
         return await new MessageBox(isModal, owner, content, title, buttons, icon, defaultButton, options).ShowAsync();
     }
 
-    protected override StandaloneContentDialogBase CreateDialog() => new WindowedContentDialog
+    protected override IStandaloneContentDialog CreateDialog() => new WindowedContentDialog
     {
         WindowTitle = _title,
         IsModal = _isModal,
         OwnerWindow = _owner,
         SystemBackdrop = _options.SystemBackdrop,
         CenterInParent = _options.CenterInParent,
-        IsTitleBarVisible = _options.IsTitleBarVisible
+        IsTitleBarVisible = _options.IsTitleBarVisible,
+        SmokeBehind = _options.SmokeBehind
     };
 
     //protected override ElementTheme DetermineTheme()

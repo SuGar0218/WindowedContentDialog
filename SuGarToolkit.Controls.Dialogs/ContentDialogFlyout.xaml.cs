@@ -2,6 +2,9 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
+using System;
+using System.ComponentModel;
+
 using Windows.Foundation;
 
 namespace SuGarToolkit.Controls.Dialogs;
@@ -11,12 +14,34 @@ public sealed partial class ContentDialogFlyout : Flyout
     public ContentDialogFlyout()
     {
         InitializeComponent();
+        InitializeFlyout();
+    }
+
+    private ContentDialogFlyout(UIElement? content)
+    {
+        Content = content;
+        InitializeFlyout();
+    }
+
+    internal static ContentDialogFlyout CreateWithoutComponent() => new(null);
+
+    internal void InitializeComponent(ContentDialogContent component)
+    {
+        content = component;
+        content.PrimaryButtonClick += OnPrimaryButtonClick;
+        content.SecondaryButtonClick += OnSecondaryButtonClick;
+        content.CloseButtonClick += OnCloseButtonClick;
+        Content = content;
+    }
+
+    private void InitializeFlyout()
+    {
         Closed += OnClosed;
     }
 
-    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? PrimaryButtonClick;
-    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? SecondaryButtonClick;
-    public event TypedEventHandler<ContentDialogFlyout, ContentDialogFlyoutButtonClickEventArgs>? CloseButtonClick;
+    public event TypedEventHandler<ContentDialogFlyout, CancelEventArgs>? PrimaryButtonClick;
+    public event TypedEventHandler<ContentDialogFlyout, CancelEventArgs>? SecondaryButtonClick;
+    public event TypedEventHandler<ContentDialogFlyout, CancelEventArgs>? CloseButtonClick;
 
     public ContentDialogResult Result { get; private set; }
 
@@ -144,36 +169,36 @@ public sealed partial class ContentDialogFlyout : Flyout
 
     #endregion
 
-    private void OnPrimaryButtonClick(object sender, RoutedEventArgs e)
+    private void OnPrimaryButtonClick(ContentDialogContent sender, EventArgs e)
     {
         Result = ContentDialogResult.Primary;
-        ContentDialogFlyoutButtonClickEventArgs args = new();
+        CancelEventArgs args = new();
         PrimaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
-    private void OnSecondaryButtonClick(object sender, RoutedEventArgs e)
+    private void OnSecondaryButtonClick(ContentDialogContent sender, EventArgs e)
     {
         Result = ContentDialogResult.Secondary;
-        ContentDialogFlyoutButtonClickEventArgs args = new();
+        CancelEventArgs args = new();
         SecondaryButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
-    private void OnCloseButtonClick(object sender, RoutedEventArgs e)
+    private void OnCloseButtonClick(ContentDialogContent sender, EventArgs e)
     {
         Result = ContentDialogResult.None;
-        ContentDialogFlyoutButtonClickEventArgs args = new();
+        CancelEventArgs args = new();
         CloseButtonClick?.Invoke(this, args);
         AfterCommandBarButtonClick(args);
     }
 
-    private void AfterCommandBarButtonClick(ContentDialogFlyoutButtonClickEventArgs args)
+    private void AfterCommandBarButtonClick(CancelEventArgs args)
     {
         if (args.Cancel)
             return;
 
-        DispatcherQueue.TryEnqueue(Hide);
+        Hide();
     }
 
     protected override Control CreatePresenter()

@@ -38,10 +38,7 @@ public sealed partial class WindowedContentDialogSamplePage : Page
             OwnerWindow = settings.IsChild ? App.Current.MainWindow : null,
             IsTitleBarVisible = settings.IsTitleBarVisible,
             CenterInParent = settings.CenterInParent,
-
-            //DisableBehind = settings.DisableBehind,
-            SmokeLayerKind = settings.SmokeLayerKind,
-            CustomSmokeLayer = ContentDialogSamplesPage.CustomSmokeLayer,
+            SmokeBehind = settings.SmokeBehind,
 
             RequestedTheme = settings.RequestedTheme,
             SystemBackdrop = settings.BackdropType switch
@@ -61,6 +58,12 @@ public sealed partial class WindowedContentDialogSamplePage : Page
             dialog.SecondaryButtonClick += (o, e) => e.Cancel = true;
         }
         ContentDialogResult result = await dialog.ShowAsync(settings.IsModal);
+        ContentDialogResultBox.Text = result.ToString();
+    }
+
+    private async void ShowXamlWindowedContentDialog()
+    {
+        ContentDialogResult result = await XamlWindowedContentDialog.ShowAsync();
         ContentDialogResultBox.Text = result.ToString();
     }
 }

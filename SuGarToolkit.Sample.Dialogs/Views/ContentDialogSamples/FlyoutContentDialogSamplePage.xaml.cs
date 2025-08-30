@@ -25,10 +25,6 @@ public sealed partial class FlyoutContentDialogSamplePage : Page
 
     private async void ShowFlyoutContentDialog()
     {
-        if (settings.SmokeLayerKind is ContentDialogSmokeLayerKind.Custom)
-        {
-            SizeToXamlRoot(ContentDialogSamplesPage.CustomSmokeLayer, XamlRoot);
-        }
         FlyoutContentDialog dialog = new()
         {
             Title = settings.Title,
@@ -37,10 +33,7 @@ public sealed partial class FlyoutContentDialogSamplePage : Page
             SecondaryButtonText = settings.SecondaryButtonText,
             CloseButtonText = settings.CloseButtonText,
             DefaultButton = settings.DefaultButton,
-
-            //DisableBehind = settings.DisableBehind,
-            SmokeLayerKind = settings.SmokeLayerKind,
-            CustomSmokeLayer = ContentDialogSamplesPage.CustomSmokeLayer,
+            SmokeBehind = settings.SmokeBehind,
 
             ShouldConstrainToRootBounds = settings.ShouldConstrainToRootBounds,
             Placement = settings.Placement,
@@ -64,6 +57,12 @@ public sealed partial class FlyoutContentDialogSamplePage : Page
             dialog.SecondaryButtonClick += (o, e) => e.Cancel = true;
         }
         ContentDialogResult result = await dialog.ShowAsync();
+        ContentDialogResultBox.Text = result.ToString();
+    }
+
+    private async void ShowXamlFlyoutContentDialog()
+    {
+        ContentDialogResult result = await XamlFlyoutContentDialog.ShowAsync();
         ContentDialogResultBox.Text = result.ToString();
     }
 
