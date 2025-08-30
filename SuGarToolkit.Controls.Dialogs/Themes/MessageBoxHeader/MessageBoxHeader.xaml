@@ -8,7 +8,7 @@
         <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/MessageBoxHeader/MessageBoxHeader_themeresources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="local:MessageBoxHeader">
+    <Style x:Key="MessageBoxHeaderDefaultStyle" TargetType="local:MessageBoxHeader">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MessageBoxHeader">
@@ -108,5 +108,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource MessageBoxHeaderDefaultStyle}" TargetType="local:MessageBoxHeader" />
 
 </ResourceDictionary>

@@ -7,8 +7,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/ContentDialogContent/ContentDialogContent_themeresources.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
-    <Style TargetType="local:ContentDialogContent" x:Key="DefaultContentDialogContentStyle">
+
+    <Style x:Key="ContentDialogContentDefaultStyle" TargetType="local:ContentDialogContent">
         <Setter Property="Foreground" Value="{ThemeResource ContentDialogForeground}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
@@ -331,4 +331,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource ContentDialogContentDefaultStyle}" TargetType="local:ContentDialogContent" />
+
 </ResourceDictionary>

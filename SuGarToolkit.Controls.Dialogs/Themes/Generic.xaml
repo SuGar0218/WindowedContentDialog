@@ -43,7 +43,4 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource DefaultContentDialogContentStyle}" TargetType="local:ContentDialogContent" />
-    <Style BasedOn="{StaticResource DefaultContentDialogContentStyle}" TargetType="local:WindowedContentDialog" />
-
 </ResourceDictionary>
