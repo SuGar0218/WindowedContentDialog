@@ -154,8 +154,54 @@
                             IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}"
                             IsEnabled="{x:Bind settings.IsChild, Mode=OneWay}" />-->
                         <CheckBox Content="背后变暗" IsChecked="{x:Bind settings.SmokeBehind, Mode=TwoWay}" />
+                        <CheckBox Content="ShouldConstrainToRootBounds" IsChecked="{x:Bind settings.ShouldConstrainToRootBounds, Mode=TwoWay}" />
                     </StackPanel>
                 </community:WrapPanel>
+            </Expander>
+
+            <Expander>
+                <Expander.Header>
+                    <StackPanel
+                        Margin="0,16"
+                        Orientation="Horizontal"
+                        Spacing="8">
+
+                        <Button
+                            x:Name="ShowAttachedContentDialogButton"
+                            Grid.Column="0"
+                            x:FieldModifier="private"
+                            Click="{x:Bind ShowAttachedFlyoutContentDialog}"
+                            Content="FlyoutContentDialog attached to Expander"
+                            Style="{ThemeResource AccentButtonStyle}" />
+
+                        <TextBlock
+                            x:Name="AttachedContentDialogResultBox"
+                            VerticalAlignment="Center"
+                            x:FieldModifier="private" />
+
+                        <dialogs:FlyoutContentDialog
+                            x:Name="AttachedFlyoutContentDialog"
+                            CloseButtonText="{x:Bind settings.CloseButtonText, Mode=OneWay}"
+                            IsPrimaryButtonEnabled="{x:Bind settings.IsPrimaryButtonEnabled, Mode=OneWay}"
+                            IsSecondaryButtonEnabled="{x:Bind settings.IsSecondaryButtonEnabled, Mode=OneWay}"
+                            PrimaryButtonText="{x:Bind settings.PrimaryButtonText, Mode=OneWay}"
+                            SecondaryButtonText="{x:Bind settings.SecondaryButtonText, Mode=OneWay}"
+                            SmokeBehind="{x:Bind settings.SmokeBehind, Mode=OneWay}">
+
+                            <dialogs:FlyoutContentDialog.Title>
+                                <dialogs:MessageBoxHeader Icon="Information" Text="{x:Bind settings.Title, Mode=OneWay}" />
+                            </dialogs:FlyoutContentDialog.Title>
+
+                            <StackPanel>
+                                <CheckBox Content="Lorem" IsThreeState="True" />
+                                <CheckBox Content="Ipsum" IsThreeState="True" />
+                                <CheckBox Content="Dolor" IsThreeState="True" />
+                                <CheckBox Content="Sit" IsThreeState="True" />
+                                <CheckBox Content="Amet" IsThreeState="True" />
+                            </StackPanel>
+                        </dialogs:FlyoutContentDialog>
+                    </StackPanel>
+                </Expander.Header>
             </Expander>
         </StackPanel>
     </ScrollViewer>

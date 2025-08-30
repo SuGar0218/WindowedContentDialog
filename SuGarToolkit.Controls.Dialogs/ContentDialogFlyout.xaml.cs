@@ -1,6 +1,9 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
+
+using SuGarToolkit.SourceGenerators;
 
 using System;
 using System.ComponentModel;
@@ -9,11 +12,16 @@ using Windows.Foundation;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
+[ContentProperty(Name = nameof(DialogContent))]
 public sealed partial class ContentDialogFlyout : Flyout
 {
     public ContentDialogFlyout()
     {
-        InitializeComponent();
+        //InitializeComponent();  // [ContentProperty] affects not only derived classed but also current class.
+        Content = new ContentDialogContent();
+        ContentDialogContent.PrimaryButtonClick += OnPrimaryButtonClick;
+        ContentDialogContent.SecondaryButtonClick += OnSecondaryButtonClick;
+        ContentDialogContent.CloseButtonClick += OnCloseButtonClick;
         InitializeFlyout();
     }
 
@@ -24,6 +32,8 @@ public sealed partial class ContentDialogFlyout : Flyout
     }
 
     internal static ContentDialogFlyout CreateWithoutComponent() => new(null);
+
+    private ContentDialogContent ContentDialogContent => (ContentDialogContent) Content;
 
     internal void InitializeComponent(ContentDialogContent component)
     {
@@ -45,127 +55,70 @@ public sealed partial class ContentDialogFlyout : Flyout
 
     public ContentDialogResult Result { get; private set; }
 
-    /// <summary>
-    /// 此 DialogContent 表示对话框正文部分的内容，而不是整个 Flyout 的内容。
-    /// </summary>
-    public object? DialogContent
-    {
-        get => content.Content;
-        set => content.Content = value;
-    }
+    #region ContentDialogContent properties
 
     /// <summary>
     /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是 UI。
     /// </summary>
-    public object? DialogTitle
-    {
-        get => content.Title;
-        set => content.Title = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.Title")]
+    public partial object? DialogTitle { get; set; }
 
-    #region ContentDialogContent properties
+    /// <summary>
+    /// 此 DialogContent 表示对话框正文部分的内容，而不是整个 Flyout 的内容。
+    /// </summary>
+    [RelayDependencyProperty("ContentDialogContent.Content")]
+    public partial object? DialogContent { get; set; }
 
-    public Brush? Foreground
-    {
-        get => content.Foreground;
-        set => content.Foreground = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.Foreground")]
+    public partial Brush? Foreground { get; set; }
 
-    public Brush? Background
-    {
-        get => content.Background;
-        set => content.Background = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.Background")]
+    public partial Brush? Background { get; set; }
 
-    public Brush? BorderBrush
-    {
-        get => content.BorderBrush;
-        set => content.BorderBrush = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.BorderBrush")]
+    public partial Brush? BorderBrush { get; set; }
 
-    public Thickness BorderThickness
-    {
-        get => content.BorderThickness;
-        set => content.BorderThickness = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.BorderThickness")]
+    public partial Thickness BorderThickness { get; set; }
 
-    public FlowDirection FlowDirection
-    {
-        get => content.FlowDirection;
-        set => content.FlowDirection = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.FlowDirection")]
+    public partial FlowDirection FlowDirection { get; set; }
 
-    public DataTemplate? TitleTemplate
-    {
-        get => content.TitleTemplate;
-        set => content.TitleTemplate = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.TitleTemplate")]
+    public partial DataTemplate? TitleTemplate { get; set; }
 
-    public DataTemplate? ContentTemplate
-    {
-        get => content.ContentTemplate;
-        set => content.ContentTemplate = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.ContentTemplate")]
+    public partial DataTemplate? ContentTemplate { get; set; }
 
-    public string? PrimaryButtonText
-    {
-        get => content.PrimaryButtonText;
-        set => content.PrimaryButtonText = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.PrimaryButtonText")]
+    public partial string? PrimaryButtonText { get; set; }
 
-    public string? SecondaryButtonText
-    {
-        get => content.SecondaryButtonText;
-        set => content.SecondaryButtonText = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.SecondaryButtonText")]
+    public partial string? SecondaryButtonText { get; set; }
 
-    public string? CloseButtonText
-    {
-        get => content.CloseButtonText;
-        set => content.CloseButtonText = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.CloseButtonText")]
+    public partial string? CloseButtonText { get; set; }
 
-    public bool IsPrimaryButtonEnabled
-    {
-        get => content.IsPrimaryButtonEnabled;
-        set => content.IsPrimaryButtonEnabled = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.IsPrimaryButtonEnabled")]
+    public partial bool IsPrimaryButtonEnabled { get; set; }
 
-    public bool IsSecondaryButtonEnabled
-    {
-        get => content.IsSecondaryButtonEnabled;
-        set => content.IsSecondaryButtonEnabled = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.IsSecondaryButtonEnabled")]
+    public partial bool IsSecondaryButtonEnabled { get; set; }
 
-    public ContentDialogButton DefaultButton
-    {
-        get => content.DefaultButton;
-        set => content.DefaultButton = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.DefaultButton")]
+    public partial ContentDialogButton DefaultButton { get; set; }
 
-    public Style? PrimaryButtonStyle
-    {
-        get => content.PrimaryButtonStyle;
-        set => content.PrimaryButtonStyle = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.PrimaryButtonStyle")]
+    public partial Style? PrimaryButtonStyle { get; set; }
 
-    public Style? SecondaryButtonStyle
-    {
-        get => content.SecondaryButtonStyle;
-        set => content.SecondaryButtonStyle = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.SecondaryButtonStyle")]
+    public partial Style? SecondaryButtonStyle { get; set; }
 
-    public Style? CloseButtonStyle
-    {
-        get => content.CloseButtonStyle;
-        set => content.CloseButtonStyle = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.CloseButtonStyle")]
+    public partial Style? CloseButtonStyle { get; set; }
 
-    public ElementTheme RequestedTheme
-    {
-        get;// => content.RequestedTheme;
-        set;// => content.RequestedTheme = value;
-    }
+    [RelayDependencyProperty("ContentDialogContent.RequestedTheme")]
+    public partial ElementTheme RequestedTheme { get; set; }
 
     #endregion
 
@@ -205,13 +158,15 @@ public sealed partial class ContentDialogFlyout : Flyout
     {
         FlyoutPresenter presenter = new()
         {
-            Content = Content,
+            Content = ContentDialogContent,
             MinWidth = 0,
             MaxWidth = double.PositiveInfinity,
             MinHeight = 0,
             MaxHeight = double.PositiveInfinity,
-            Padding = new Thickness(0),
+            Padding = new Thickness(0)
         };
+        ScrollViewer.SetVerticalScrollMode(presenter, ScrollMode.Disabled);
+        ScrollViewer.SetVerticalScrollBarVisibility(presenter, ScrollBarVisibility.Disabled);
 
         // It looks odd but there seems not to be a better practice currently (WindowsAppSDK 1.7).
         // By default, FlyoutPresenter has acrylic background.

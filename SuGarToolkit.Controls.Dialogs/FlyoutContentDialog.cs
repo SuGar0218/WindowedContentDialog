@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 
@@ -16,10 +17,12 @@ using Windows.UI;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-public partial class FlyoutContentDialog : ContentControl, IStandaloneContentDialog
+[ContentProperty(Name = nameof(Content))]
+public partial class FlyoutContentDialog : Control, IStandaloneContentDialog
 {
     public FlyoutContentDialog()
     {
+        DefaultStyleKey = typeof(FlyoutContentDialog);
         ContentDialogContent = new ContentDialogContent();
         InitializeContentDialogFlyout();
         Loaded += OnLoaded;
@@ -59,6 +62,9 @@ public partial class FlyoutContentDialog : ContentControl, IStandaloneContentDia
     [RelayDependencyProperty("ContentDialogContent.Title")]
     public partial object? Title { get; set; }
 
+    [RelayDependencyProperty("ContentDialogContent.Content")]
+    public partial object? Content { get; set; }
+
     [RelayDependencyProperty("ContentDialogContent.PrimaryButtonText")]
     public partial string? PrimaryButtonText { get; set; }
 
@@ -70,6 +76,12 @@ public partial class FlyoutContentDialog : ContentControl, IStandaloneContentDia
 
     [RelayDependencyProperty("ContentDialogContent.TitleTemplate")]
     public partial DataTemplate? TitleTemplate { get; set; }
+
+    [RelayDependencyProperty("ContentDialogContent.ContentTemplate")]
+    public partial DataTemplate? ContentTemplate { get; set; }
+
+    [RelayDependencyProperty("ContentDialogContent.ContentTemplateSelector")]
+    public partial DataTemplateSelector? ContentTemplateSelector { get; set; }
 
     [RelayDependencyProperty("ContentDialogContent.DefaultButton")]
     public partial ContentDialogButton DefaultButton { get; set; }
@@ -151,25 +163,13 @@ public partial class FlyoutContentDialog : ContentControl, IStandaloneContentDia
         return Result;
     }
 
-    protected override void OnContentChanged(object oldContent, object newContent)
-    {
-        if (lastOldContent == newContent)  // to avoid assignment loop
-            return;
-
-        lastOldContent = oldContent;
-        Content = null;
-        ContentDialogContent.Content = newContent;
-    }
-
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (Parent is FrameworkElement parent)
+        if (PlacementTarget is null && Parent is FrameworkElement parent)
         {
             PlacementTarget = parent;
         }
     }
-
-    private object? lastOldContent;
 
     /// <summary>
     /// ElementTheme.Default is treated as following owner window

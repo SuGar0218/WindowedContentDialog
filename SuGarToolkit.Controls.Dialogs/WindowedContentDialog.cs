@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 
@@ -16,10 +17,12 @@ using Windows.UI;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
-public partial class WindowedContentDialog : ContentControl, IStandaloneContentDialog
+[ContentProperty(Name = nameof(Content))]
+public partial class WindowedContentDialog : Control, IStandaloneContentDialog
 {
     public WindowedContentDialog()
     {
+        DefaultStyleKey = typeof(WindowedContentDialog);
         ContentDialogContent = new ContentDialogContent();
     }
 
@@ -39,27 +42,11 @@ public partial class WindowedContentDialog : ContentControl, IStandaloneContentD
 
     #region properties
 
-    [DependencyProperty]
-    public partial string? WindowTitle { get; set; }
-
-    [DependencyProperty]
-    public partial SystemBackdrop? SystemBackdrop { get; set; }
-
-    [DependencyProperty(DefaultValue = true)]
-    public partial bool IsTitleBarVisible { get; set; }
-
-    [DependencyProperty(DefaultValue = true)]
-    public partial bool CenterInParent { get; set; }
-
-    public bool IsModal { get; set; }
-
-    public Window? OwnerWindow { get; set; }
-
-    [DependencyProperty(DefaultValue = true)]
-    public partial bool SmokeBehind { get; set; }
-
     [RelayDependencyProperty("ContentDialogContent.Title")]
     public partial object? Title { get; set; }
+
+    [RelayDependencyProperty("ContentDialogContent.Content")]
+    public partial object? Content { get; set; }
 
     [RelayDependencyProperty("ContentDialogContent.PrimaryButtonText")]
     public partial string? PrimaryButtonText { get; set; }
@@ -72,6 +59,12 @@ public partial class WindowedContentDialog : ContentControl, IStandaloneContentD
 
     [RelayDependencyProperty("ContentDialogContent.TitleTemplate")]
     public partial DataTemplate? TitleTemplate { get; set; }
+
+    [RelayDependencyProperty("ContentDialogContent.ContentTemplate")]
+    public partial DataTemplate? ContentTemplate { get; set; }
+
+    [RelayDependencyProperty("ContentDialogContent.ContentTemplateSelector")]
+    public partial DataTemplateSelector? ContentTemplateSelector { get; set; }
 
     [RelayDependencyProperty("ContentDialogContent.DefaultButton")]
     public partial ContentDialogButton DefaultButton { get; set; }
@@ -90,6 +83,25 @@ public partial class WindowedContentDialog : ContentControl, IStandaloneContentD
 
     [RelayDependencyProperty("ContentDialogContent.CloseButtonStyle")]
     public partial Style? CloseButtonStyle { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
+    public partial bool SmokeBehind { get; set; }
+
+    [DependencyProperty]
+    public partial string? WindowTitle { get; set; }
+
+    [DependencyProperty]
+    public partial SystemBackdrop? SystemBackdrop { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
+    public partial bool IsTitleBarVisible { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
+    public partial bool CenterInParent { get; set; }
+
+    public bool IsModal { get; set; }
+
+    public Window? OwnerWindow { get; set; }
 
     #endregion
 
@@ -161,28 +173,6 @@ public partial class WindowedContentDialog : ContentControl, IStandaloneContentD
         return Result;
     }
 
-    private object? lastOldContent;
-
-    protected override void OnContentChanged(object oldContent, object newContent)
-    {
-        if (lastOldContent == newContent)  // to avoid assignment loop
-            return;
-
-        lastOldContent = oldContent;
-        Content = null;
-        ContentDialogContent.Content = newContent;
-    }
-
-    protected override void OnContentTemplateChanged(DataTemplate oldContentTemplate, DataTemplate newContentTemplate)
-    {
-        ContentDialogContent.ContentTemplate = newContentTemplate;
-    }
-
-    protected override void OnContentTemplateSelectorChanged(DataTemplateSelector oldContentTemplateSelector, DataTemplateSelector newContentTemplateSelector)
-    {
-        ContentDialogContent.Content = newContentTemplateSelector;
-    }
-
     /// <summary>
     /// ElementTheme.Default is treated as following owner window
     /// </summary>
@@ -204,23 +194,7 @@ public partial class WindowedContentDialog : ContentControl, IStandaloneContentD
     }
 
     private ContentDialogContent ContentDialogContent { get; set; }
-
     private ContentDialogWindow ContentDialogWindow { get; set; }
-    //{
-    //    get => field;
-    //    set
-    //    {
-    //        if (field == value)
-    //            return;
-
-    //        if (field is not null)
-    //        {
-    //            field.Close();
-    //            field = null!;
-    //        }
-    //        field = value;
-    //    }
-    //}
 
     protected static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
     protected static Color SmokeFillColor => (Color) Application.Current.Resources["SmokeFillColorDefault"];

@@ -66,6 +66,12 @@ public sealed partial class FlyoutContentDialogSamplePage : Page
         ContentDialogResultBox.Text = result.ToString();
     }
 
+    private async void ShowAttachedFlyoutContentDialog()
+    {
+        ContentDialogResult result = await AttachedFlyoutContentDialog.ShowAsync();
+        AttachedContentDialogResultBox.Text = result.ToString();
+    }
+
     private static void SizeToXamlRoot(FrameworkElement element, XamlRoot root)
     {
         element.Width = root.Size.Width;

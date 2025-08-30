@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="SuGarToolkit.Sample.Dialogs.Views.ContentDialogFlyoutSamplePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="using:SuGarToolkit.Controls.Dialogs"
+    xmlns:local="using:SuGarToolkit.Sample.Dialogs.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Button
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Content="ContentDialogFlyout"
+        Style="{ThemeResource AccentButtonStyle}">
+        <Button.Flyout>
+            <dialogs:ContentDialogFlyout
+                CloseButtonText="Close Button"
+                DefaultButton="Primary"
+                DialogTitle="SampleContentDialogWindow"
+                PrimaryButtonText="Primary Button"
+                SecondaryButtonText="Secondary Button">
+                <StackPanel>
+                    <CheckBox Content="Using" IsThreeState="True" />
+                    <CheckBox Content="ContentDialogFlyout" IsChecked="True" />
+                    <CheckBox Content="in" IsThreeState="True" />
+                    <CheckBox Content="XAML" IsThreeState="True" />
+                    <TextBox
+                        AcceptsReturn="True"
+                        FontFamily="Cascadia Code"
+                        IsReadOnly="True"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Text="{x:Bind local:ContentDialogFlyoutSamplePage.XamlCode}" />
+                </StackPanel>
+            </dialogs:ContentDialogFlyout>
+        </Button.Flyout>
+    </Button>
+
+</Page>

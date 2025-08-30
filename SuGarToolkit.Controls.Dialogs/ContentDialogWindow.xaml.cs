@@ -2,7 +2,10 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
+
+using SuGarToolkit.SourceGenerators;
 
 using System;
 using System.ComponentModel;
@@ -23,17 +26,23 @@ namespace SuGarToolkit.Controls.Dialogs;
 /// Don't use Activate() only,
 /// it will not make window modal even if OverlappedPresenter.IsModal is true.
 /// </summary>
+[ContentProperty(Name = nameof(DialogContent))]
 public partial class ContentDialogWindow : Window
 {
     public ContentDialogWindow()
     {
-        InitializeComponent();
+        //InitializeComponent();  // [ContentProperty] affects not only derived classed but also current class.
+        Content = new ContentDialogContent();
+        ContentDialogContent.PrimaryButtonClick += OnPrimaryButtonClick;
+        ContentDialogContent.SecondaryButtonClick += OnSecondaryButtonClick;
+        ContentDialogContent.CloseButtonClick += OnCloseButtonClick;
+        ContentDialogContent.Loaded += OnContentLoaded;
+        ContentDialogContent.Loaded += (o, e) => DetermineTitleBarButtonForegroundColor();
+        ContentDialogContent.ActualThemeChanged += (o, e) => DetermineTitleBarButtonForegroundColor();
         InitializeWindow();
-        content.Loaded += (o, e) => DetermineTitleBarButtonForegroundColor();
-        content.ActualThemeChanged += (o, e) => DetermineTitleBarButtonForegroundColor();
     }
 
-    private ContentDialogWindow(UIElement? content)
+    private ContentDialogWindow(ContentDialogContent? content)
     {
         Content = content;
         InitializeWindow();
@@ -41,26 +50,27 @@ public partial class ContentDialogWindow : Window
 
     internal static ContentDialogWindow CreateWithoutComponent() => new(null);
 
+    private ContentDialogContent ContentDialogContent => (ContentDialogContent) Content;
+
     internal void InitializeComponent(ContentDialogContent component)
     {
-        content = component;
-        content.PrimaryButtonClick += OnPrimaryButtonClick;
-        content.SecondaryButtonClick += OnSecondaryButtonClick;
-        content.CloseButtonClick += OnCloseButtonClick;
-        content.Loaded += OnContentLoaded;
-        content.Loaded += DetermineTitleBarButtonForegroundColor;
-        content.ActualThemeChanged += DetermineTitleBarButtonForegroundColor;
+        component.PrimaryButtonClick += OnPrimaryButtonClick;
+        component.SecondaryButtonClick += OnSecondaryButtonClick;
+        component.CloseButtonClick += OnCloseButtonClick;
+        component.Loaded += OnContentLoaded;
+        component.Loaded += DetermineTitleBarButtonForegroundColor;
+        component.ActualThemeChanged += DetermineTitleBarButtonForegroundColor;
 
-        Content = content;
+        Content = component;
 
         Closed += (sender, args) =>
         {
-            content.PrimaryButtonClick -= OnPrimaryButtonClick;
-            content.SecondaryButtonClick -= OnSecondaryButtonClick;
-            content.CloseButtonClick -= OnCloseButtonClick;
-            content.Loaded -= OnContentLoaded;
-            content.Loaded -= DetermineTitleBarButtonForegroundColor;
-            content.ActualThemeChanged -= DetermineTitleBarButtonForegroundColor;
+            ContentDialogContent.PrimaryButtonClick -= OnPrimaryButtonClick;
+            ContentDialogContent.SecondaryButtonClick -= OnSecondaryButtonClick;
+            ContentDialogContent.CloseButtonClick -= OnCloseButtonClick;
+            ContentDialogContent.Loaded -= OnContentLoaded;
+            ContentDialogContent.Loaded -= DetermineTitleBarButtonForegroundColor;
+            ContentDialogContent.ActualThemeChanged -= DetermineTitleBarButtonForegroundColor;
         };
     }
 
@@ -83,7 +93,7 @@ public partial class ContentDialogWindow : Window
     /// </summary>
     private void DetermineTitleBarButtonForegroundColor()
     {
-        switch (content.ActualTheme)
+        switch (ContentDialogContent.ActualTheme)
         {
             case ElementTheme.Light:
                 AppWindow.TitleBar.ButtonForegroundColor = Colors.Black;
@@ -107,16 +117,16 @@ public partial class ContentDialogWindow : Window
 
     private void OnActivated(object sender, WindowActivatedEventArgs args)
     {
-        if (!content.IsLoaded)
+        if (!ContentDialogContent.IsLoaded)
             return;
 
         if (args.WindowActivationState is WindowActivationState.Deactivated)
         {
-            content.AfterLostFocus();
+            ContentDialogContent.AfterLostFocus();
         }
         else
         {
-            content.AfterGotFocus();
+            ContentDialogContent.AfterGotFocus();
         }
     }
 
@@ -176,10 +186,10 @@ public partial class ContentDialogWindow : Window
 
     public ElementTheme RequestedTheme
     {
-        get => content.RequestedTheme;
+        get => ContentDialogContent.RequestedTheme;
         set
         {
-            content.RequestedTheme = value;
+            ContentDialogContent.RequestedTheme = value;
             AppWindow.TitleBar.PreferredTheme = value switch
             {
                 ElementTheme.Light => TitleBarTheme.Light,
@@ -194,118 +204,64 @@ public partial class ContentDialogWindow : Window
     /// <summary>
     /// 此 DialogTitle 表示对话框标题部分的内容，可以是文本也可以是 UI。
     /// </summary>
-    public object? DialogTitle
-    {
-        get => content.Title;
-        set => content.Title = value;
-    }
+    [RelayProperty("ContentDialogContent.Title")]
+    public partial object? DialogTitle { get; set; }
 
     /// <summary>
     /// 此 DialogContent 表示对话框正文部分的内容，而不是整个窗口的内容。
     /// </summary>
-    public object? DialogContent
-    {
-        get => content.Content;
-        set => content.Content = value;
-    }
+    [RelayProperty("ContentDialogContent.Content")]
+    public partial object? DialogContent { get; set; }
 
     #region ContentDialogContent properties
 
-    public Brush? Foreground
-    {
-        get => content.Foreground;
-        set => content.Foreground = value;
-    }
+    [RelayProperty("ContentDialogContent.Foreground")]
+    public partial Brush? Foreground { get; set; }
 
-    public Brush? Background
-    {
-        get => content.Background;
-        set => content.Background = value;
-    }
+    [RelayProperty("ContentDialogContent.Background")]
+    public partial Brush? Background { get; set; }
 
-    public Brush? BorderBrush
-    {
-        get => content.BorderBrush;
-        set => content.BorderBrush = value;
-    }
+    [RelayProperty("ContentDialogContent.BorderBrush")]
+    public partial Brush? BorderBrush { get; set; }
 
-    public Thickness BorderThickness
-    {
-        get => content.BorderThickness;
-        set => content.BorderThickness = value;
-    }
+    [RelayProperty("ContentDialogContent.BorderThickness")]
+    public partial Thickness BorderThickness { get; set; }
 
-    public FlowDirection FlowDirection
-    {
-        get => content.FlowDirection;
-        set => content.FlowDirection = value;
-    }
+    [RelayProperty("ContentDialogContent.FlowDirection")]
+    public partial FlowDirection FlowDirection { get; set; }
 
-    public DataTemplate? TitleTemplate
-    {
-        get => content.TitleTemplate;
-        set => content.TitleTemplate = value;
-    }
+    [RelayProperty("ContentDialogContent.TitleTemplate")]
+    public partial DataTemplate? TitleTemplate { get; set; }
 
-    public DataTemplate? ContentTemplate
-    {
-        get => content.ContentTemplate;
-        set => content.ContentTemplate = value;
-    }
+    [RelayProperty("ContentDialogContent.ContentTemplate")]
+    public partial DataTemplate? ContentTemplate { get; set; }
 
-    public string? PrimaryButtonText
-    {
-        get => content.PrimaryButtonText;
-        set => content.PrimaryButtonText = value;
-    }
+    [RelayProperty("ContentDialogContent.PrimaryButtonText")]
+    public partial string? PrimaryButtonText { get; set; }
 
-    public string? SecondaryButtonText
-    {
-        get => content.SecondaryButtonText;
-        set => content.SecondaryButtonText = value;
-    }
+    [RelayProperty("ContentDialogContent.SecondaryButtonText")]
+    public partial string? SecondaryButtonText { get; set; }
 
-    public string? CloseButtonText
-    {
-        get => content.CloseButtonText;
-        set => content.CloseButtonText = value;
-    }
+    [RelayProperty("ContentDialogContent.CloseButtonText")]
+    public partial string? CloseButtonText { get; set; }
 
-    public bool IsPrimaryButtonEnabled
-    {
-        get => content.IsPrimaryButtonEnabled;
-        set => content.IsPrimaryButtonEnabled = value;
-    }
+    [RelayProperty("ContentDialogContent.IsPrimaryButtonEnabled")]
+    public partial bool IsPrimaryButtonEnabled { get; set; }
 
-    public bool IsSecondaryButtonEnabled
-    {
-        get => content.IsSecondaryButtonEnabled;
-        set => content.IsSecondaryButtonEnabled = value;
-    }
+    [RelayProperty("ContentDialogContent.IsSecondaryButtonEnabled")]
+    public partial bool IsSecondaryButtonEnabled { get; set; }
 
-    public ContentDialogButton DefaultButton
-    {
-        get => content.DefaultButton;
-        set => content.DefaultButton = value;
-    }
+    [RelayProperty("ContentDialogContent.DefaultButton")]
+    public partial ContentDialogButton DefaultButton { get; set; }
 
-    public Style? PrimaryButtonStyle
-    {
-        get => content.PrimaryButtonStyle;
-        set => content.PrimaryButtonStyle = value;
-    }
+    [RelayProperty("ContentDialogContent.PrimaryButtonStyle")]
+    public partial Style? PrimaryButtonStyle { get; set; }
 
-    public Style? SecondaryButtonStyle
-    {
-        get => content.SecondaryButtonStyle;
-        set => content.SecondaryButtonStyle = value;
-    }
+    [RelayProperty("ContentDialogContent.SecondaryButtonStyle")]
+    public partial Style? SecondaryButtonStyle { get; set; }
 
-    public Style? CloseButtonStyle
-    {
-        get => content.CloseButtonStyle;
-        set => content.CloseButtonStyle = value;
-    }
+    [RelayProperty("ContentDialogContent.CloseButtonStyle")]
+    public partial Style? CloseButtonStyle { get; set; }
 
     #endregion
 
@@ -316,9 +272,9 @@ public partial class ContentDialogWindow : Window
         // AppWindow.ResizeCilent is accurate in width but there is an extra height of title bar (30 DIP) when ExtendsContentInfoTitleBar = true.
         // No matter whether ExtendsContentInfoTitleBar, the size is the same after use AppWindow.ResizeCilent.
         AppWindow.ResizeClient(new Windows.Graphics.SizeInt32(
-            (int) ((content.DesiredSize.Width + 1) * content.XamlRoot.RasterizationScale) + 1,
-            (int) ((content.DesiredSize.Height - 30) * content.XamlRoot.RasterizationScale) + 1));
-        SetTitleBar(content.TitleArea);
+            (int) ((ContentDialogContent.DesiredSize.Width + 1) * ContentDialogContent.XamlRoot.RasterizationScale) + 1,
+            (int) ((ContentDialogContent.DesiredSize.Height - 30) * ContentDialogContent.XamlRoot.RasterizationScale) + 1));
+        SetTitleBar(ContentDialogContent.TitleArea);
 
         if (_center)
         {
@@ -354,6 +310,18 @@ public partial class ContentDialogWindow : Window
     {
         AppWindow.Show();
         DispatcherQueue.TryEnqueue(() => Opened?.Invoke(this, EventArgs.Empty));
+    }
+
+    public void OpenAfterLoaded()
+    {
+        if (IsLoaded)
+        {
+            Open();
+        }
+        else
+        {
+            Loaded += (sender, args) => Open();
+        }
     }
 
     private void OnPrimaryButtonClick(ContentDialogContent sender, EventArgs e)

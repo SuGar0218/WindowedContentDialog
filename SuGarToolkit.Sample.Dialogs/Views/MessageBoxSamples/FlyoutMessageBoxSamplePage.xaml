@@ -114,8 +114,8 @@
                         <!--<CheckBox Content="模态窗口（无父窗口时无效）" IsChecked="{x:Bind settings.IsModal, Mode=TwoWay}" />-->
                         <!--<CheckBox Content="显示在父窗口中间" IsChecked="{x:Bind settings.CenterInParent, Mode=TwoWay}" />-->
                         <!--<CheckBox Content="禁用父窗口（无父窗口时无效）" IsChecked="{x:Bind settings.DisableBehind, Mode=TwoWay}" />-->
-                        <CheckBox Content="ShouldConstrainToRootBounds" IsChecked="{x:Bind settings.ShouldConstrainToRootBounds, Mode=TwoWay}" />
                         <CheckBox Content="背后变暗" IsChecked="{x:Bind settings.SmokeBehind, Mode=TwoWay}" />
+                        <CheckBox Content="ShouldConstrainToRootBounds" IsChecked="{x:Bind settings.ShouldConstrainToRootBounds, Mode=TwoWay}" />
                     </StackPanel>
                 </community:WrapPanel>
             </Expander>

@@ -12,6 +12,8 @@ internal class MainViewModel
     public List<NavigationItem> SampleList =
     [
         new NavigationItem<ContentDialogSamplesPage>(nameof(ContentDialog)),
-        new NavigationItem<MessageBoxSamplesPage>(nameof(MessageBox))
+        new NavigationItem<MessageBoxSamplesPage>(nameof(MessageBox)),
+        new NavigationItem<ContentDialogWindowSamplePage>(nameof(ContentDialogWindow)),
+        new NavigationItem<ContentDialogFlyoutSamplePage>(nameof(ContentDialogFlyout)),
     ];
 }
