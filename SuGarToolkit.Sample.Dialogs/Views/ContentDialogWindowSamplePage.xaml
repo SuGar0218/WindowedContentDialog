@@ -12,7 +12,7 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Click="Button_Click"
-        Content="ContentDialogWindow"
+        Content="Show ContentDialogWindow"
         Style="{ThemeResource AccentButtonStyle}" />
 
 </Page>

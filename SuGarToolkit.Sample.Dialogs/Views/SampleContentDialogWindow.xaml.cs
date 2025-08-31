@@ -41,11 +41,9 @@ public sealed partial class SampleContentDialogWindow : ContentDialogWindow
     </dialogs:ContentDialogWindow.SystemBackdrop>
 
     <StackPanel>
-        <CheckBox Content=""Using"" IsThreeState=""True"" />
-        <CheckBox Content=""ContentDialogWindow"" IsThreeState=""True"" />
-        <CheckBox Content=""in"" IsThreeState=""True"" />
-        <CheckBox Content=""XAML"" IsThreeState=""True"" />
-        <TextBox IsReadOnly=""True"" Text=""{x:Bind XamlCode}"" />
+        <CheckBox Content=""Using"" />
+        <CheckBox Content=""ContentDialogWindow"" />
+        <CheckBox Content=""in XAML"" />
     </StackPanel>
     
 </dialogs:ContentDialogWindow>";

@@ -25,31 +25,21 @@ public sealed partial class ContentDialogFlyoutSamplePage : Page
     }
 
     internal const string XamlCode = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
-<Page xmlns:dialogs=""using:SuGarToolkit.Controls.Dialogs"" ...>
-    <Button
-        HorizontalAlignment=""Center""
-        VerticalAlignment=""Center""
-        Content=""ContentDialogWindow""
-        Style=""{ThemeResource AccentButtonStyle}"">
-        <Button.Flyout>
-            <dialogs:ContentDialogFlyout
-                CloseButtonText=""Close Button""
-                DefaultButton=""Primary""
-                DialogTitle=""SampleContentDialogWindow""
-                PrimaryButtonText=""Primary Button""
-                SecondaryButtonText=""Secondary Button"">
-                <StackPanel>
-                    <CheckBox Content=""Using"" IsThreeState=""True"" />
-                    <CheckBox Content=""ContentDialogFlyout"" IsChecked=""True"" />
-                    <CheckBox Content=""in"" IsThreeState=""True"" />
-                    <CheckBox Content=""XAML"" IsThreeState=""True"" />
-                    <TextBox
-                        AcceptsReturn=""True""
-                        IsReadOnly=""True""
-                        Text=""{x:Bind local:SampleContentDialogWindow.XamlCode}"" />
-                </StackPanel>
-            </dialogs:ContentDialogFlyout>
-        </Button.Flyout>
-    </Button>
-</Page>";
+<Button Content=""ContentDialogFlyout"" Style=""{ThemeResource AccentButtonStyle}"">
+    <Button.Flyout>
+        <dialogs:ContentDialogFlyout
+            CloseButtonText=""Close Button""
+            DefaultButton=""Primary""
+            DialogTitle=""SampleContentDialogWindow""
+            PrimaryButtonText=""Primary Button""
+            RequestedTheme=""{x:Bind ActualTheme}""
+            SecondaryButtonText=""Secondary Button"">
+            <StackPanel>
+                <CheckBox Content=""Using"" />
+                <CheckBox Content=""ContentDialogFlyout"" />
+                <CheckBox Content=""in XAML"" />
+            </StackPanel>
+        </dialogs:ContentDialogFlyout>
+    </Button.Flyout>
+</Button>";
 }

@@ -7,7 +7,7 @@
     xmlns:dialogs="using:SuGarToolkit.Controls.Dialogs"
     xmlns:local="using:SuGarToolkit.Sample.Dialogs.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="SampleContentDialogWindow"
+    Title="Sample ContentDialogWindow"
     CloseButtonText="Close Button"
     DefaultButton="Primary"
     DialogTitle="{x:Bind Title}"
@@ -22,14 +22,13 @@
     <StackPanel>
         <CheckBox Content="Using" IsThreeState="True" />
         <CheckBox Content="ContentDialogWindow" IsChecked="True" />
-        <CheckBox Content="in" IsThreeState="True" />
-        <CheckBox Content="XAML" IsThreeState="True" />
+        <CheckBox Content="in XAML" IsThreeState="True" />
         <TextBox
-            FontFamily="Cascadia Code"
+            AcceptsReturn="True"
+            FontFamily="Consolas"
+            IsReadOnly="True"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
-            AcceptsReturn="True"
-            IsReadOnly="True"
             Text="{x:Bind local:SampleContentDialogWindow.XamlCode}" />
     </StackPanel>
 

@@ -24,6 +24,7 @@ public partial class FlyoutContentDialog : Control, IStandaloneContentDialog
     {
         DefaultStyleKey = typeof(FlyoutContentDialog);
         ContentDialogContent = new ContentDialogContent();
+        InitializeRelayDependencyProperties();
         InitializeContentDialogFlyout();
         Loaded += OnLoaded;
     }

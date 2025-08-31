@@ -24,6 +24,7 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
     {
         DefaultStyleKey = typeof(WindowedContentDialog);
         ContentDialogContent = new ContentDialogContent();
+        InitializeRelayDependencyProperties();
     }
 
     private void InitializeContentDialogWindow()

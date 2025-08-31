@@ -33,11 +33,13 @@ public sealed partial class FlyoutContentDialogSamplePage : Page
             SecondaryButtonText = settings.SecondaryButtonText,
             CloseButtonText = settings.CloseButtonText,
             DefaultButton = settings.DefaultButton,
-            SmokeBehind = settings.SmokeBehind,
+            IsPrimaryButtonEnabled = settings.IsPrimaryButtonEnabled,
+            IsSecondaryButtonEnabled = settings.IsSecondaryButtonEnabled,
 
             ShouldConstrainToRootBounds = settings.ShouldConstrainToRootBounds,
             Placement = settings.Placement,
             PlacementTarget = ShowContentDialogButton,
+            SmokeBehind = settings.SmokeBehind,
 
             RequestedTheme = settings.RequestedTheme,
             SystemBackdrop = settings.BackdropType switch

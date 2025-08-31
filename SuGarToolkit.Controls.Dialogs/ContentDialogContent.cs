@@ -15,6 +15,7 @@ public partial class ContentDialogContent : ContentControl
     public ContentDialogContent() : base()
     {
         DefaultStyleKey = typeof(ContentDialogContent);
+        Loaded += OnLoaded;
         Unloaded += (o, e) => isCustomMeasureFinishedAfterLoaded = false;
     }
 
@@ -78,7 +79,10 @@ public partial class ContentDialogContent : ContentControl
         PrimaryButton.Click += (sender, args) => PrimaryButtonClick?.Invoke(this, EventArgs.Empty);
         SecondaryButton.Click += (sender, args) => SecondaryButtonClick?.Invoke(this, EventArgs.Empty);
         CloseButton.Click += (sender, args) => CloseButtonClick?.Invoke(this, EventArgs.Empty);
+    }
 
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
         buttonsVisibilityState = DetermineButtonsVisibilityState();
         defaultButtonState = DetermineDefaultButtonState();
     }

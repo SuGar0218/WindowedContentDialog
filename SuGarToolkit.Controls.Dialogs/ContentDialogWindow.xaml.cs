@@ -9,6 +9,7 @@ using SuGarToolkit.SourceGenerators;
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 using Windows.Foundation;
@@ -80,9 +81,9 @@ public partial class ContentDialogWindow : Window
         _presenter = OverlappedPresenter.CreateForDialog();
         _presenter.IsResizable = true;
         AppWindow.SetPresenter(_presenter);
-
         AppWindow.Closing += (appWindow, e) => OnClosingRequestedBySystem();
         Activated += OnActivated;
+        Closed += OnClosed;
     }
 
     /// <summary>
@@ -148,11 +149,14 @@ public partial class ContentDialogWindow : Window
         AppWindow.Hide();
     }
 
-    private void OnParentClosed(object sender, WindowEventArgs args)
+    private void OnClosed(object sender, WindowEventArgs args)
     {
         _parent?.Closed -= OnParentClosed;
+    }
+
+    private void OnParentClosed(object sender, WindowEventArgs args)
+    {
         _parent = null;
-        Close();
     }
 
     /// <summary>
@@ -169,19 +173,22 @@ public partial class ContentDialogWindow : Window
         _parent = parent;
         _parent?.Closed += OnParentClosed;
 
+        if (!modal || parent is null)
+            return;
+
         IntPtr ownerHwnd = parent is null ? IntPtr.Zero : Win32Interop.GetWindowFromWindowId(parent.AppWindow.Id);
-        IntPtr ownedHwnd = Win32Interop.GetWindowFromWindowId(AppWindow.Id);
+        IntPtr selfHwnd = Win32Interop.GetWindowFromWindowId(AppWindow.Id);
         if (IntPtr.Size == 8)  // 64-bit
         {
-            SetWindowLongPtr(ownedHwnd, -8, ownerHwnd);  // -8 = GWLP_HWNDPARENT
+            SetWindowLongPtr(selfHwnd, -8, ownerHwnd);  // -8 = GWLP_HWNDPARENT
         }
         else // 32-bit
         {
-            SetWindowLong(ownedHwnd, -8, ownerHwnd); // -8 = GWL_HWNDPARENT
+            SetWindowLong(selfHwnd, -8, ownerHwnd); // -8 = GWL_HWNDPARENT
         }
 
         // IsModal must be set after set parent window; otherwise, it will cause exception.
-        _presenter.IsModal = parent is not null && modal;
+        _presenter.IsModal = true;
     }
 
     public ElementTheme RequestedTheme
@@ -375,9 +382,6 @@ public partial class ContentDialogWindow : Window
     // 32-bit systems
     [LibraryImport("user32.dll", EntryPoint = "SetWindowLongW")]
     private static partial IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
-    [LibraryImport("user32.dll", EntryPoint = "SetFocus")]
-    private static partial IntPtr SetFocus(IntPtr hWnd);
 
     private OverlappedPresenter _presenter = null!;
 

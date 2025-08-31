@@ -26,6 +26,11 @@ public sealed partial class ContentDialogWindowSamplePage : Page
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        new SampleContentDialogWindow().OpenAfterLoaded();
+        new SampleContentDialogWindow
+        {
+            RequestedTheme = ActualTheme,
+            SystemBackdrop = new MicaBackdrop()
+        }
+        .OpenAfterLoaded();
     }
 }

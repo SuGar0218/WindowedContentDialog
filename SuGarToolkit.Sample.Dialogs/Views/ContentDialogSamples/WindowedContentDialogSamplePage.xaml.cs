@@ -34,6 +34,8 @@ public sealed partial class WindowedContentDialogSamplePage : Page
             SecondaryButtonText = settings.SecondaryButtonText,
             CloseButtonText = settings.CloseButtonText,
             DefaultButton = settings.DefaultButton,
+            IsPrimaryButtonEnabled = settings.IsPrimaryButtonEnabled,
+            IsSecondaryButtonEnabled = settings.IsSecondaryButtonEnabled,
 
             OwnerWindow = settings.IsChild ? App.Current.MainWindow : null,
             IsTitleBarVisible = settings.IsTitleBarVisible,

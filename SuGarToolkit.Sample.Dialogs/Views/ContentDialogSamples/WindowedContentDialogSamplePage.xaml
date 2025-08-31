@@ -24,6 +24,7 @@
             x:Key="XamlWindowedContentDialog"
             x:Name="XamlWindowedContentDialog"
             CloseButtonText="{x:Bind settings.CloseButtonText, Mode=OneWay}"
+            DefaultButton="{x:Bind settings.DefaultButton, Mode=OneWay}"
             IsModal="{x:Bind settings.IsModal, Mode=OneWay}"
             IsPrimaryButtonEnabled="{x:Bind settings.IsPrimaryButtonEnabled, Mode=OneWay}"
             IsSecondaryButtonEnabled="{x:Bind settings.IsSecondaryButtonEnabled, Mode=OneWay}"

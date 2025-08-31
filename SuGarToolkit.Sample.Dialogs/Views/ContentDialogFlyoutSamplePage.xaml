@@ -18,17 +18,17 @@
             <dialogs:ContentDialogFlyout
                 CloseButtonText="Close Button"
                 DefaultButton="Primary"
-                DialogTitle="SampleContentDialogWindow"
+                DialogTitle="Sample ContentDialogFlyout"
                 PrimaryButtonText="Primary Button"
+                RequestedTheme="{x:Bind ActualTheme}"
                 SecondaryButtonText="Secondary Button">
                 <StackPanel>
                     <CheckBox Content="Using" IsThreeState="True" />
                     <CheckBox Content="ContentDialogFlyout" IsChecked="True" />
-                    <CheckBox Content="in" IsThreeState="True" />
-                    <CheckBox Content="XAML" IsThreeState="True" />
+                    <CheckBox Content="in XAML" IsThreeState="True" />
                     <TextBox
                         AcceptsReturn="True"
-                        FontFamily="Cascadia Code"
+                        FontFamily="Consolas"
                         IsReadOnly="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
