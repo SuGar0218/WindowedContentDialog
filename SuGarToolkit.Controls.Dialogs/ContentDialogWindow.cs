@@ -337,7 +337,7 @@ public partial class ContentDialogWindow : Window
         Result = ContentDialogResult.Primary;
         CancelEventArgs args = new();
         PrimaryButtonClick?.Invoke(this, args);
-        AfterCommandBarButtonClick(args);
+        AfterCommandSpaceButtonClick(args);
     }
 
     private void OnSecondaryButtonClick(ContentDialogContent sender, EventArgs e)
@@ -345,7 +345,7 @@ public partial class ContentDialogWindow : Window
         Result = ContentDialogResult.Secondary;
         CancelEventArgs args = new();
         SecondaryButtonClick?.Invoke(this, args);
-        AfterCommandBarButtonClick(args);
+        AfterCommandSpaceButtonClick(args);
     }
 
     private void OnCloseButtonClick(ContentDialogContent sender, EventArgs e)
@@ -353,10 +353,10 @@ public partial class ContentDialogWindow : Window
         Result = ContentDialogResult.None;
         CancelEventArgs args = new();
         CloseButtonClick?.Invoke(this, args);
-        AfterCommandBarButtonClick(args);
+        AfterCommandSpaceButtonClick(args);
     }
 
-    private void AfterCommandBarButtonClick(CancelEventArgs args)
+    private void AfterCommandSpaceButtonClick(CancelEventArgs args)
     {
         if (args.Cancel)
         {

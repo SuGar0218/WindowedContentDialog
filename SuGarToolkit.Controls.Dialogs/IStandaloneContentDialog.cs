@@ -35,5 +35,5 @@ public interface IStandaloneContentDialog
     /// </summary>
     public ElementTheme RequestedTheme { get; set; }
 
-    protected virtual ElementTheme DetermineTheme() => RequestedTheme;
+    public ElementTheme DetermineTheme() => RequestedTheme;
 }

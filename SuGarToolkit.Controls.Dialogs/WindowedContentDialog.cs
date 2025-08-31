@@ -10,6 +10,7 @@ using SuGarToolkit.SourceGenerators;
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 using Windows.Foundation;
@@ -30,6 +31,8 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
     private void InitializeContentDialogWindow()
     {
         ContentDialogWindow = ContentDialogWindow.CreateWithoutComponent();
+        ContentDialogWindow.InitializeComponent(ContentDialogContent);
+        ContentDialogWindow.RequestedTheme = DetermineTheme();
         ContentDialogWindow.Title = WindowTitle;
         ContentDialogWindow.SystemBackdrop = SystemBackdrop;
         ContentDialogWindow.PrimaryButtonClick += (sender, args) => PrimaryButtonClick?.Invoke(this, args);
@@ -126,9 +129,6 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
     public async Task<ContentDialogResult> ShowAsync()
     {
         InitializeContentDialogWindow();
-        // ContentDialogWindow here is the ContentDialogWindow property instead of ContentDialogWindow class
-        ContentDialogWindow.InitializeComponent(ContentDialogContent);
-        ContentDialogWindow.RequestedTheme = DetermineTheme();
         ContentDialogWindow.SetParent(OwnerWindow, IsModal, CenterInParent);
         if (!IsTitleBarVisible)
         {
@@ -177,7 +177,7 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
     /// <summary>
     /// ElementTheme.Default is treated as following owner window
     /// </summary>
-    protected ElementTheme DetermineTheme()
+    public ElementTheme DetermineTheme()
     {
         if (RequestedTheme is not ElementTheme.Default)
             return RequestedTheme;
@@ -194,7 +194,8 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
         element.Height = root.Size.Height;
     }
 
-    private ContentDialogContent ContentDialogContent { get; set; }
+    [DisallowNull]
+    private ContentDialogContent ContentDialogContent { get; init; }
     private ContentDialogWindow ContentDialogWindow { get; set; }
 
     protected static Style DefaultButtonStyle => (Style) Application.Current.Resources["DefaultButtonStyle"];
