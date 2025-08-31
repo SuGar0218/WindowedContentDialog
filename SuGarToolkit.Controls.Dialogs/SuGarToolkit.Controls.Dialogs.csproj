@@ -26,10 +26,6 @@
 		<IsAotCompatible>True</IsAotCompatible>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="ContentDialogFlyout.xaml" />
-	  <None Remove="ContentDialogWindow.xaml" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
@@ -56,15 +52,5 @@
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>MessageBoxButtonText.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="ContentDialogFlyout.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Update="ContentDialogWindow.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
 	</ItemGroup>
 </Project>

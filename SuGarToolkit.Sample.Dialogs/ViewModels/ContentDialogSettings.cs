@@ -4,8 +4,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 
-using SuGarToolkit.Controls.Dialogs;
-
 namespace SuGarToolkit.Sample.Dialogs.ViewModels;
 
 public partial class ContentDialogSettings : ObservableObject

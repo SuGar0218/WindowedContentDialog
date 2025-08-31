@@ -9,7 +9,6 @@ using SuGarToolkit.SourceGenerators;
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 using Windows.Foundation;
@@ -32,7 +31,9 @@ public partial class ContentDialogWindow : Window
 {
     public ContentDialogWindow()
     {
-        //InitializeComponent();  // [ContentProperty] affects not only derived classed but also current class.
+        // Why not use XAML and generated InitializeComponent ?
+        // [ContentProperty] affects which property XAML direct content sets on current class and derived classes.
+        // But here needs to set Content instead of DialogContent.
         Content = new ContentDialogContent();
         ContentDialogContent.PrimaryButtonClick += OnPrimaryButtonClick;
         ContentDialogContent.SecondaryButtonClick += OnSecondaryButtonClick;

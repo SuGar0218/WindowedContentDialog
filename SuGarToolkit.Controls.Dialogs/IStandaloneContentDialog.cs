@@ -4,8 +4,6 @@ using Microsoft.UI.Xaml.Media;
 
 using System.Threading.Tasks;
 
-using Windows.UI;
-
 namespace SuGarToolkit.Controls.Dialogs;
 
 public interface IStandaloneContentDialog
