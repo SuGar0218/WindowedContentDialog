@@ -42,18 +42,26 @@ namespace SuGarToolkit.SourceGenerators
             {
                 postContext.AddSource($"{TargetAttributeFullQualifiedName}.g.cs", @"
 using System;
-using Microsoft.UI.Xaml;
 
 namespace SuGarToolkit.SourceGenerators
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public sealed class DependencyPropertyAttribute : Attribute
     {
+        /// <summary>
+        /// Constant default value.
+        /// </summary>
         public object DefaultValue { get; set; }
 
+        /// <summary>
+        /// Path.To.Target.Value
+        /// </summary>
         public string DefaultValuePath { get; set; }
 
-        public PropertyChangedCallback OnPropertyChanged { get; set; }
+        /// <summary>
+        /// nameof(DependencyPropertyChangedCallback)
+        /// </summary>
+        public string PropertyChanged { get; set; }
     }
 }");
             });
@@ -65,7 +73,11 @@ namespace SuGarToolkit.SourceGenerators
                 {
                     AttributeData associatedAttribute = syntaxContext.Attributes[0];
                     string defaultValueLiteral = GetPropertyLiteral(associatedAttribute, "DefaultValue");
-                    string propertyChangedCallbackLiteral = GetPropertyLiteral(associatedAttribute, "OnPropertyChanged");
+                    string propertyChangedCallbackLiteral = GetPropertyLiteral(associatedAttribute, "PropertyChanged");
+                    if (!string.IsNullOrEmpty(propertyChangedCallbackLiteral))
+                    {
+                        propertyChangedCallbackLiteral = propertyChangedCallbackLiteral.Substring(1, propertyChangedCallbackLiteral.Length - 2);
+                    }
                     if (!string.IsNullOrEmpty(defaultValueLiteral))
                     {
                         return new DependencyPropertyInfo
@@ -135,7 +147,7 @@ namespace {classSymbol.ContainingNamespace}
             nameof({propertyName}),
             typeof({propertyTypeName}),
             typeof({ownerClassName}),
-            new PropertyMetadata({dependencyPropertyInfo.DefaultValueLiteral})
+            new PropertyMetadata({dependencyPropertyInfo.DefaultValueLiteral}{(string.IsNullOrEmpty(dependencyPropertyInfo.PropertyChangedCallbackLiteral) ? string.Empty : $", {dependencyPropertyInfo.PropertyChangedCallbackLiteral}")})
         );
                             ");
                         }
@@ -146,7 +158,7 @@ namespace {classSymbol.ContainingNamespace}
             nameof({propertyName}),
             typeof({propertyTypeName}),
             typeof({ownerClassName}),
-            new PropertyMetadata(default({propertyTypeName}))
+            new PropertyMetadata(default({propertyTypeName}){(string.IsNullOrEmpty(dependencyPropertyInfo.PropertyChangedCallbackLiteral) ? string.Empty : $", {dependencyPropertyInfo.PropertyChangedCallbackLiteral}")})
         );");
                         }
                     }
