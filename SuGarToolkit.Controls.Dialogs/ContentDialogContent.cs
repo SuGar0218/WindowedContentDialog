@@ -10,6 +10,20 @@ using Windows.Foundation;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
+[TemplatePart(Name = nameof(PrimaryButton), Type = typeof(Button))]
+[TemplatePart(Name = nameof(SecondaryButton), Type = typeof(Button))]
+[TemplatePart(Name = nameof(CloseButton), Type = typeof(Button))]
+[TemplatePart(Name = nameof(TitleArea), Type = typeof(UIElement))]
+[TemplatePart(Name = nameof(DialogSpace), Type = typeof(Grid))]
+[TemplatePart(Name = nameof(CommandSpace), Type = typeof(Grid))]
+[TemplateVisualState(Name = "AllVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "NoneVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "PrimaryVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "SecondaryVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "CloseVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "PrimaryAndSecondaryVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "PrimaryAndCloseVisible", GroupName = "ButtonsVisibilityStates")]
+[TemplateVisualState(Name = "SecondaryAndCloseVisible", GroupName = "ButtonsVisibilityStates")]
 public partial class ContentDialogContent : ContentControl
 {
     public ContentDialogContent() : base()
@@ -19,19 +33,21 @@ public partial class ContentDialogContent : ContentControl
         Unloaded += (o, e) => isCustomMeasureFinishedAfterLoaded = false;
     }
 
+    #region properties
+
     [DependencyProperty]
     public partial object? Title { get; set; }
 
     [DependencyProperty]
     public partial DataTemplate? TitleTemplate { get; set; }
 
-    [DependencyProperty]
+    [DependencyProperty(PropertyChanged = nameof(OnButtonTextChanged))]
     public partial string? PrimaryButtonText { get; set; }
 
-    [DependencyProperty]
+    [DependencyProperty(PropertyChanged = nameof(OnButtonTextChanged))]
     public partial string? SecondaryButtonText { get; set; }
 
-    [DependencyProperty]
+    [DependencyProperty(PropertyChanged = nameof(OnButtonTextChanged))]
     public partial string? CloseButtonText { get; set; }
 
     [DependencyProperty(DefaultValue = true)]
@@ -40,7 +56,7 @@ public partial class ContentDialogContent : ContentControl
     [DependencyProperty(DefaultValue = true)]
     public partial bool IsSecondaryButtonEnabled { get; set; }
 
-    [DependencyProperty(DefaultValue = ContentDialogButton.Close)]
+    [DependencyProperty(DefaultValue = ContentDialogButton.Close, PropertyChanged = nameof(OnDefaultButtonChanged))]
     public partial ContentDialogButton DefaultButton { get; set; }
 
     [DependencyProperty(DefaultValuePath = nameof(DefaultButtonStyle))]
@@ -51,6 +67,8 @@ public partial class ContentDialogContent : ContentControl
 
     [DependencyProperty(DefaultValuePath = nameof(DefaultButtonStyle))]
     public partial Style? CloseButtonStyle { get; set; }
+
+    #endregion
 
     public event TypedEventHandler<ContentDialogContent, EventArgs>? PrimaryButtonClick;
     public event TypedEventHandler<ContentDialogContent, EventArgs>? SecondaryButtonClick;
@@ -145,6 +163,25 @@ public partial class ContentDialogContent : ContentControl
             desiredSize.Width = minWidth;
         }
         return desiredSize;
+    }
+
+    private static void OnButtonTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ContentDialogContent self = (ContentDialogContent) d;
+        if (self.IsLoaded)
+        {
+            self.buttonsVisibilityState = self.DetermineButtonsVisibilityState();
+            self.isCustomMeasureFinishedAfterLoaded = false;
+        }
+    }
+
+    private static void OnDefaultButtonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ContentDialogContent self = (ContentDialogContent) d;
+        if (self.IsLoaded)
+        {
+            self.defaultButtonState = self.DetermineDefaultButtonState();
+        }
     }
 
     public void AfterGotFocus()
