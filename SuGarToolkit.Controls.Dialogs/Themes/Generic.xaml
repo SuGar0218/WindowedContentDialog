@@ -4,8 +4,8 @@
     xmlns:local="using:SuGarToolkit.Controls.Dialogs">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/ContentDialogContent/ContentDialogContent.xaml" />
-        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/MessageBoxHeader/MessageBoxHeader.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/ContentDialog/ContentDialogContent.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/MessageBox/MessageBoxHeader.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="local:SelectableTextBlock">

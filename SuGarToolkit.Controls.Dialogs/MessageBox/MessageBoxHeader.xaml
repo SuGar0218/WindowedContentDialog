@@ -5,7 +5,7 @@
     xmlns:local="using:SuGarToolkit.Controls.Dialogs">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/MessageBoxHeader/MessageBoxHeader_themeresources.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/MessageBox/MessageBoxHeader_themeresources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="MessageBoxHeaderDefaultStyle" TargetType="local:MessageBoxHeader">

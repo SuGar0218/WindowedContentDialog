@@ -5,7 +5,7 @@
     xmlns:local="using:SuGarToolkit.Controls.Dialogs">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/Themes/ContentDialogContent/ContentDialogContent_themeresources.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.Controls.Dialogs/ContentDialog/ContentDialogContent_themeresources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ContentDialogContentDefaultStyle" TargetType="local:ContentDialogContent">
