@@ -1,9 +1,12 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 using SuGarToolkit.Controls.Dialogs.Strings;
 
 using System.Threading.Tasks;
+
+using Windows.System;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
@@ -83,43 +86,90 @@ public abstract class MessageBoxBase
         switch (_buttons)
         {
             case MessageBoxButtons.OK:
-                _dialog.CloseButtonText = NativeMessageBoxButtonTextLoader.OK;
+            {
+                MessageBoxButtonString okString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.OK);
+                _dialog.CloseButtonText = okString.Text;
+                _dialog.CloseButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = okString.Key });
                 _dialog.DefaultButton = ContentDialogButton.Close;
                 break;
+            }
 
             case MessageBoxButtons.OKCancel:
-                _dialog.PrimaryButtonText = NativeMessageBoxButtonTextLoader.OK;
-                _dialog.SecondaryButtonText = NativeMessageBoxButtonTextLoader.Cancel;
+            {
+                MessageBoxButtonString okString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.OK);
+                MessageBoxButtonString cancelString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Cancel);
+                _dialog.PrimaryButtonText = okString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = okString.Key });
+                _dialog.PrimaryButtonText = cancelString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = cancelString.Key });
+                _dialog.SecondaryButtonText = NativeMessageBoxButtonStringLoader.Cancel;
                 break;
+            }
 
             case MessageBoxButtons.YesNo:
-                _dialog.PrimaryButtonText = NativeMessageBoxButtonTextLoader.Yes;
-                _dialog.SecondaryButtonText = NativeMessageBoxButtonTextLoader.No;
+            {
+                MessageBoxButtonString yesString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Yes);
+                MessageBoxButtonString noString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.No);
+                _dialog.PrimaryButtonText = yesString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = yesString.Key });
+                _dialog.SecondaryButtonText = noString.Text;
+                _dialog.SecondaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = noString.Key });
                 break;
+            }
 
             case MessageBoxButtons.YesNoCancel:
-                _dialog.PrimaryButtonText = NativeMessageBoxButtonTextLoader.Yes;
-                _dialog.SecondaryButtonText = NativeMessageBoxButtonTextLoader.No;
-                _dialog.CloseButtonText = NativeMessageBoxButtonTextLoader.Cancel;
+            {
+                MessageBoxButtonString yesString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Yes);
+                MessageBoxButtonString noString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.No);
+                MessageBoxButtonString cancelString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Cancel);
+                _dialog.PrimaryButtonText = yesString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = yesString.Key });
+                _dialog.SecondaryButtonText = noString.Text;
+                _dialog.SecondaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = noString.Key });
+                _dialog.CloseButtonText = cancelString.Text;
+                _dialog.CloseButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = cancelString.Key });
                 break;
+            }
 
             case MessageBoxButtons.AbortRetryIgnore:
-                _dialog.PrimaryButtonText = NativeMessageBoxButtonTextLoader.Abort;
-                _dialog.SecondaryButtonText = NativeMessageBoxButtonTextLoader.Retry;
-                _dialog.CloseButtonText = NativeMessageBoxButtonTextLoader.Ignore;
+            {
+                MessageBoxButtonString abortString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Abort);
+                MessageBoxButtonString retryString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Retry);
+                MessageBoxButtonString ignoreString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Ignore);
+                _dialog.PrimaryButtonText = abortString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = abortString.Key });
+                _dialog.SecondaryButtonText = retryString.Text;
+                _dialog.SecondaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = retryString.Key });
+                _dialog.CloseButtonText = ignoreString.Text;
+                _dialog.CloseButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = ignoreString.Key });
                 break;
+            }
 
             case MessageBoxButtons.RetryCancel:
-                _dialog.PrimaryButtonText = NativeMessageBoxButtonTextLoader.Retry;
-                _dialog.SecondaryButtonText = NativeMessageBoxButtonTextLoader.Cancel;
+            {
+                MessageBoxButtonString retryString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Retry);
+                MessageBoxButtonString cancelString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Cancel);
+                _dialog.PrimaryButtonText = retryString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = retryString.Key });
+                _dialog.SecondaryButtonText = cancelString.Text;
+                _dialog.SecondaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = cancelString.Key });
                 break;
+            }
 
             case MessageBoxButtons.CancelTryContinue:
-                _dialog.PrimaryButtonText = NativeMessageBoxButtonTextLoader.Continue;
-                _dialog.SecondaryButtonText = NativeMessageBoxButtonTextLoader.TryAgain;
-                _dialog.CloseButtonText = NativeMessageBoxButtonTextLoader.Cancel;
+            {
+                MessageBoxButtonString continueString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Continue);
+                MessageBoxButtonString tryString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.TryAgain);
+                MessageBoxButtonString cancelString = MessageBoxButtonString.FromUser32(NativeMessageBoxButtonStringLoader.Cancel);
+                _dialog.PrimaryButtonText = continueString.Text;
+                _dialog.PrimaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = continueString.Key });
+                _dialog.SecondaryButtonText = tryString.Text;
+                _dialog.SecondaryButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = tryString.Key });
+                _dialog.CloseButtonText = cancelString.Text;
+                _dialog.CloseButtonKeyboardAccelerators.Add(new KeyboardAccelerator { Key = cancelString.Key });
                 _dialog.DefaultButton = ContentDialogButton.Close;
                 break;
+            }
         }
     }
 
@@ -160,4 +210,35 @@ public abstract class MessageBoxBase
         TextWrapping = TextWrapping.Wrap,
         HorizontalAlignment = HorizontalAlignment.Stretch
     };
+
+    private struct MessageBoxButtonString
+    {
+        public MessageBoxButtonString(string text, VirtualKey virtualKey)
+        {
+            Text = text;
+            Key = virtualKey;
+        }
+
+        public static MessageBoxButtonString FromUser32(string loadedString)
+        {
+            string text;
+            VirtualKey key;
+            int i = loadedString.IndexOf('&');
+            if (i == -1)
+            {
+                text = loadedString;
+                key = VirtualKey.None;
+            }
+            else
+            {
+                text = loadedString.Remove(i, 1);
+                key = (VirtualKey) loadedString[i + 1];  // For letters, VirtualKey enum value is the same as unicode.
+            }
+            return new MessageBoxButtonString(text, key);
+        }
+
+        public string Text { get; }
+
+        public VirtualKey Key { get; }
+    }
 }
