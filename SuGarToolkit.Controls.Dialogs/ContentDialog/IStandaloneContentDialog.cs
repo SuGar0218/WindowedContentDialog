@@ -1,7 +1,9 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SuGarToolkit.Controls.Dialogs;
@@ -36,4 +38,8 @@ public interface IStandaloneContentDialog
     public ElementTheme RequestedTheme { get; set; }
 
     public ElementTheme DetermineTheme() => RequestedTheme;
+
+    public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators { get; }
+    public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators { get; }
+    public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators { get; }
 }

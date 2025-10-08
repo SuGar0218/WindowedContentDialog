@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
@@ -8,6 +9,7 @@ using Microsoft.UI.Xaml.Shapes;
 using SuGarToolkit.SourceGenerators;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -109,6 +111,10 @@ public partial class FlyoutContentDialog : Control, IStandaloneContentDialog
     public event TypedEventHandler<FlyoutContentDialog, CancelEventArgs>? PrimaryButtonClick;
     public event TypedEventHandler<FlyoutContentDialog, CancelEventArgs>? SecondaryButtonClick;
     public event TypedEventHandler<FlyoutContentDialog, CancelEventArgs>? CloseButtonClick;
+
+    public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators => ContentDialogContent.PrimaryButtonKeyboardAccelerators;
+    public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators => ContentDialogContent.SecondaryButtonKeyboardAccelerators;
+    public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators => ContentDialogContent.CloseButtonKeyboardAccelerators;
 
     /// <summary>
     /// 显示对话框窗口，关闭时返回用户选择结果。

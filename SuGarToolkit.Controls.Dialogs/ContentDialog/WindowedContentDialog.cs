@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
@@ -9,6 +10,7 @@ using Microsoft.UI.Xaml.Shapes;
 using SuGarToolkit.SourceGenerators;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -43,6 +45,10 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
     public event TypedEventHandler<WindowedContentDialog, CancelEventArgs>? PrimaryButtonClick;
     public event TypedEventHandler<WindowedContentDialog, CancelEventArgs>? SecondaryButtonClick;
     public event TypedEventHandler<WindowedContentDialog, CancelEventArgs>? CloseButtonClick;
+
+    public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators => ContentDialogContent.PrimaryButtonKeyboardAccelerators;
+    public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators => ContentDialogContent.SecondaryButtonKeyboardAccelerators;
+    public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators => ContentDialogContent.CloseButtonKeyboardAccelerators;
 
     #region properties
 

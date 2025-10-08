@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Input;
 using SuGarToolkit.SourceGenerators;
 
 using System;
+using System.Collections.Generic;
 
 using Windows.Foundation;
 
@@ -74,6 +75,10 @@ public partial class ContentDialogContent : ContentControl
     public event TypedEventHandler<ContentDialogContent, EventArgs>? SecondaryButtonClick;
     public event TypedEventHandler<ContentDialogContent, EventArgs>? CloseButtonClick;
 
+    public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators => field ??= [];
+    public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators => field ??= [];
+    public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators => field ??= [];
+
     public UIElement TitleArea { get; private set; }
     public Grid DialogSpace { get; private set; }
     public Grid CommandSpace { get; private set; }
@@ -97,6 +102,19 @@ public partial class ContentDialogContent : ContentControl
         PrimaryButton.Click += (sender, args) => PrimaryButtonClick?.Invoke(this, EventArgs.Empty);
         SecondaryButton.Click += (sender, args) => SecondaryButtonClick?.Invoke(this, EventArgs.Empty);
         CloseButton.Click += (sender, args) => CloseButtonClick?.Invoke(this, EventArgs.Empty);
+
+        foreach (KeyboardAccelerator keyboardAccelerator in PrimaryButtonKeyboardAccelerators)
+        {
+            PrimaryButton.KeyboardAccelerators.Add(keyboardAccelerator);
+        }
+        foreach (KeyboardAccelerator keyboardAccelerator in SecondaryButtonKeyboardAccelerators)
+        {
+            SecondaryButton.KeyboardAccelerators.Add(keyboardAccelerator);
+        }
+        foreach (KeyboardAccelerator keyboardAccelerator in CloseButtonKeyboardAccelerators)
+        {
+            CloseButton.KeyboardAccelerators.Add(keyboardAccelerator);
+        }
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
