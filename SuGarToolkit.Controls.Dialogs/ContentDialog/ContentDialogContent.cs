@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 
 using Windows.Foundation;
+using Windows.System;
 
 namespace SuGarToolkit.Controls.Dialogs;
 
@@ -78,6 +79,15 @@ public partial class ContentDialogContent : ContentControl
     public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators => field ??= [];
     public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators => field ??= [];
     public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators => field ??= [];
+
+    [DependencyProperty]
+    public partial string PrimaryButtonAccessKey { get; set; }
+
+    [DependencyProperty]
+    public partial string SecondaryButtonAccessKey { get; set; }
+
+    [DependencyProperty]
+    public partial string CloseButtonAccessKey { get; set; }
 
     public UIElement TitleArea { get; private set; }
     public Grid DialogSpace { get; private set; }

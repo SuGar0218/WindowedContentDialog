@@ -16,6 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 using Windows.Foundation;
+using Windows.System;
 using Windows.UI;
 
 namespace SuGarToolkit.Controls.Dialogs;
@@ -49,6 +50,15 @@ public partial class WindowedContentDialog : Control, IStandaloneContentDialog
     public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators => ContentDialogContent.PrimaryButtonKeyboardAccelerators;
     public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators => ContentDialogContent.SecondaryButtonKeyboardAccelerators;
     public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators => ContentDialogContent.CloseButtonKeyboardAccelerators;
+
+    [RelayProperty("ContentDialogContent.PrimaryButtonAccessKey")]
+    public partial string PrimaryButtonAccessKey { get; set; }
+
+    [RelayProperty("ContentDialogContent.SecondaryButtonAccessKey")]
+    public partial string SecondaryButtonAccessKey { get; set; }
+
+    [RelayProperty("ContentDialogContent.CloseButtonAccessKey")]
+    public partial string CloseButtonAccessKey { get; set; }
 
     #region properties
 

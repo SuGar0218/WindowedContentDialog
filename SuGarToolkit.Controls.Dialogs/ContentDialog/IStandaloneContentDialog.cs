@@ -6,6 +6,8 @@ using Microsoft.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Windows.System;
+
 namespace SuGarToolkit.Controls.Dialogs;
 
 public interface IStandaloneContentDialog
@@ -42,4 +44,8 @@ public interface IStandaloneContentDialog
     public IList<KeyboardAccelerator> PrimaryButtonKeyboardAccelerators { get; }
     public IList<KeyboardAccelerator> SecondaryButtonKeyboardAccelerators { get; }
     public IList<KeyboardAccelerator> CloseButtonKeyboardAccelerators { get; }
+
+    public string PrimaryButtonAccessKey { get; set; }
+    public string SecondaryButtonAccessKey { get; set; }
+    public string CloseButtonAccessKey { get; set; }
 }

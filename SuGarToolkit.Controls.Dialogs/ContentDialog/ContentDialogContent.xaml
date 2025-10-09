@@ -117,6 +117,7 @@
                                 <Button
                                     x:Name="PrimaryButton"
                                     HorizontalAlignment="Stretch"
+                                    AccessKey="{TemplateBinding PrimaryButtonAccessKey}"
                                     Content="{TemplateBinding PrimaryButtonText}"
                                     ElementSoundMode="FocusOnly"
                                     IsEnabled="{TemplateBinding IsPrimaryButtonEnabled}"
@@ -126,6 +127,7 @@
                                 <Button
                                     x:Name="SecondaryButton"
                                     HorizontalAlignment="Stretch"
+                                    AccessKey="{TemplateBinding SecondaryButtonAccessKey}"
                                     Content="{TemplateBinding SecondaryButtonText}"
                                     ElementSoundMode="FocusOnly"
                                     IsEnabled="{TemplateBinding IsSecondaryButtonEnabled}"
@@ -136,6 +138,7 @@
                                     x:Name="CloseButton"
                                     Grid.Column="4"
                                     HorizontalAlignment="Stretch"
+                                    AccessKey="{TemplateBinding CloseButtonAccessKey}"
                                     Content="{TemplateBinding CloseButtonText}"
                                     ElementSoundMode="FocusOnly"
                                     IsTabStop="True"
