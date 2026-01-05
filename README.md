@@ -1,5 +1,11 @@
 # WindowedContentDialog and MessageBox
 
+## ⚠️ DEPRECATED
+
+This repository is deprecated. Features are integrated into [SuGarToolkit.WinUI3](https://github.com/SuGar0218/SuGarToolkit.WinUI3).
+
+---
+
 **WindowedContentDialog**: Show ContentDialog in separate window.
 
 **MessageBox**: Show MessageBox in WinUI 3 Style.
